@@ -1,0 +1,5 @@
+pnpm-lock.yaml
+docs/
+assets/
+CLAUDE.md
+apps/server/worker-configuration.d.ts

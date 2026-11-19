@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Só estes pacotes podem rodar scripts de instalação (baixam binários nativos).
+allowBuilds:
+  esbuild: true
+  workerd: true
+
+# Só instala versões publicadas há pelo menos 1 dia (em minutos): proteção contra pacotes comprometidos.
+minimumReleaseAge: 1440
