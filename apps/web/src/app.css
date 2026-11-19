@@ -1,0 +1,52 @@
+/* Paleta dos mockups (spec, seção 9). Tema escuro é o padrão dos mockups. */
+:root {
+  --color-bg: #0e2433;
+  --color-panel: #16364a;
+  --color-cream: #f3ebd8;
+  --color-gold: #f2b84b;
+  --color-ink: #10263b;
+  --color-water: #4da3d9;
+  --color-water-deep: #2a6aa3;
+  --color-text: var(--color-cream);
+  --color-muted: #c9d8e3;
+  --color-focus: var(--color-gold);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #f3ebd8;
+    --color-panel: #ffffff;
+    --color-text: var(--color-ink);
+    --color-muted: #2f4a5f;
+    --color-focus: var(--color-water-deep);
+    color-scheme: light;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
