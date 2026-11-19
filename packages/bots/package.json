@@ -1,0 +1,16 @@
+{
+  "name": "@village-flood/bots",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Bots (botMove e suggest): funções puras com informação pública",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@village-flood/engine": "workspace:*"
+  }
+}

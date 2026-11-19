@@ -1,0 +1,13 @@
+{
+  "name": "@village-flood/kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Salas, assentos, reconexão, limites e modo mesa, agnóstico de jogo",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}
