@@ -1,0 +1,21 @@
+# Atualizações de dependências semanais. O cooldown evita versões recém-publicadas
+# (proteção contra pacotes comprometidos), como o minimumReleaseAge do pnpm.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      dev-tools:
+        dependency-type: development
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
