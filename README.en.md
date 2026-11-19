@@ -1,0 +1,80 @@
+# Village Flood
+
+[Versão em português](README.md)
+
+A **cooperative** board game for the browser, for 2 to 4 seats (people or bots). Heavy rain makes the river rise: the team brings the residents to the church and, at the end, all volunteers board the boat at the dock. The team wins or loses together.
+
+Planned modes: single device, multiple devices (private room with code and password) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
+
+> **Status:** in development. Stage 0 (foundation) in progress. No game rules are implemented yet. See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+
+## Documentation
+
+The project documents are written in Portuguese (Brazil).
+
+- [Rules](docs/village-flood-rules.md), with the decision log at the end
+- [Technical specification](docs/village-flood-tech-spec.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Mockups](docs/mockups/)
+
+## Structure
+
+A pnpm monorepo with clean architecture: dependencies point inwards, and the engine depends on nothing. ESLint blocks imports that break this rule.
+
+| Folder              | Contents                                                 |
+| ------------------- | -------------------------------------------------------- |
+| `packages/engine`   | Pure TypeScript rules engine, no I/O                     |
+| `packages/protocol` | Client/server message types                              |
+| `packages/kit`      | Rooms, seats, reconnection and table mode, game-agnostic |
+| `packages/bots`     | Bots (`botMove` and `suggest`)                           |
+| `packages/sim`      | Batch simulation with bots                               |
+| `apps/web`          | User interface (Svelte 5 + Vite, PWA)                    |
+| `apps/server`       | Room server (Cloudflare Worker + Durable Object)         |
+
+## Requirements
+
+- Node.js 22.12 or newer (CI uses the version in `.nvmrc`)
+- pnpm, at the version in the `packageManager` field of `package.json`. The simplest way is Corepack:
+
+```bash
+corepack enable
+```
+
+## Commands
+
+```bash
+pnpm install        # install dependencies
+pnpm test           # unit tests (Vitest)
+pnpm lint           # ESLint and Prettier
+pnpm typecheck      # TypeScript and svelte-check
+pnpm build          # build the interface and the server
+pnpm e2e            # E2E tests (Playwright + axe-core)
+pnpm simulate       # bot simulation (not part of pnpm test)
+pnpm format         # format the code with Prettier
+```
+
+Before the first `pnpm e2e`, install the Playwright browser:
+
+```bash
+pnpm --filter @village-flood/web exec playwright install chromium
+```
+
+To run the interface in development mode:
+
+```bash
+pnpm --filter @village-flood/web dev
+```
+
+## Security and privacy
+
+- No secrets in the repository. The `.env.example` file holds only fictitious values.
+- The game stores nicknames only: no accounts, analytics or tracking.
+- pnpm only installs versions published at least 1 day ago and only lets `esbuild` and `workerd` run install scripts. CI runs with read-only permissions and uses actions pinned to a commit SHA.
+
+## Contributing
+
+`main` is the published version. Each task is done on a `develop/task-name` branch, and CI runs lint, types, tests, build and E2E on every push. Commit messages are in Portuguese, in the imperative mood.
+
+## Originality
+
+The name, art, texts and sounds are original.

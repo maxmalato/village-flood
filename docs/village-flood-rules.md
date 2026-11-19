@@ -211,6 +211,14 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 10. **Igreja como porto seguro pode deixar o jogo fácil?** Como a igreja nunca alaga e o morador entregue fica salvo para sempre, o jogo vira uma corrida de entregas (casa → igreja), e a dificuldade vem só do relógio da água. Medir nas simulações: quantos turnos sobram quando a equipe vence, taxa de vitória por dificuldade e quanto a Barqueira transportando 2 moradores encurta o trajeto. Se o jogo ficar fácil, as alavancas são: aumentar a meta, subir a média de chuva, aumentar o custo extra da Barqueira com 2 moradores ou afastar o cais/a igreja no mapa. Se ficar difícil demais, o caminho é o inverso.
 11. Legenda na mesa: a TV costuma não ter toque. Definir como abrir a legenda completa na TV (controle remoto/teclado, ou pelo celular de quem controla) e se a legenda rápida basta na TV.
 12. Marcas "✓" e "✗" nas casas: confirmar nos testes com pessoas se o símbolo é entendido sem explicação ou se precisa de texto curto.
+13. **Mockup "Sua vez" contradiz a regra do Bombeiro.** O Bruno é Bombeiro e o texto diz "pegar o ferido custa 2", mas pela seção 3 o Bombeiro paga 1 (a legenda do mockup está certa: "Bombeiro: 1"). Confirmar que vale a regra e corrigir o texto do mockup.
+14. **Imagens exportadas dos mockups incompletas.** Em `Main.dc.png` e `SuaVez.dc.png` o tabuleiro não aparece (ficaram marcadores como `{{c.label}}`), e os `.dc.html` dependem de um `support.js` que não está no repositório. Reexportar as telas com o tabuleiro desenhado antes da Etapa 3. O `docs/mockups/LEIA-ME.md` também cita nomes de arquivo antigos.
+15. **Vizinhança da água.** A ligação com o rio (seção 5, regra 1) não diz se a busca em largura usa só vizinhas ortogonais ou também as diagonais. Também não diz se a igreja e o cais, que nunca molham, bloqueiam a passagem da água. Decidir antes da Etapa 1.
+16. **Morador ferido em quadra que seca ou continua alagada.** Se um saco de areia faz a quadra secar, o morador ferido volta a saudável? E o morador curado pela Médica numa quadra que continua alagada fica saudável (a transição só ocorre na mudança seca → alagada)? Decidir antes da Etapa 1.
+17. **Desfazer depois do Alerta de temporal.** O alerta não pode ser desfeito (seção 7), mas não está claro se as ações feitas antes dele no mesmo turno ainda podem ser desfeitas. Sugestão a confirmar: o alerta vira um ponto sem volta, e o desfazer só alcança as ações feitas depois dele.
+18. **Valores fora do `RoleParams`.** Custo do saco de areia (2, ou 1 para o Engenheiro), bônus de +3 por saco, máximo de 2 sacos, custos de andar, fórmula dos limiares, 3 ações por turno, nível máximo 24 e limite de 4 ilhados não aparecem no schema da especificação (seção 6). Pela regra do `CLAUDE.md`, também devem ficar nos dados. Definir o schema completo na Etapa 1.
+19. **Tipos sem definição na especificação.** `SeatId`, `Snapshot`, `Ctx` e `Result` são usados na seção 4 da especificação, mas não definidos. Definir na Etapa 1.
+20. **Three.js no acabamento.** O `CLAUDE.md` e a especificação dizem "tabuleiro em HTML/SVG, sem engine 3D", mas o Three.js pode entrar no acabamento (ver Registro de decisões). Decidir na Etapa 6.
 
 ## 14. Acessibilidade
 
@@ -239,3 +247,32 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 | Casa de origem do morador | `homeTileId` |
 | Marca da casa (✓, ✗) | `houseMark`: `cleared`, `lost` |
 | Legenda (rápida, completa) | `legend`, `quickLegend` |
+
+## 16. Registro de decisões
+
+Decisão nova entra no topo, com data e motivo.
+
+### 19/11/2026: Three.js fica em avaliação para o acabamento
+
+- **Decisão:** o Three.js pode ser usado no acabamento, e a decisão fica para a Etapa 6. Até lá, o tabuleiro segue em HTML/SVG, como na especificação.
+- **Motivo:** pedido do dono do projeto. Decidir no fim evita atrasar o motor e as telas. Como a interface só desenha o estado, trocar ou somar uma camada 3D não muda o motor.
+- **Consequências:** o Three.js seria uma dependência de produção nova e precisa de aprovação. Na decisão, avaliar o desempenho em aparelhos modestos e em Smart TV, a acessibilidade (rótulos por quadra, `prefers-reduced-motion`) e o tamanho do pacote. Registrado também em "Pontos em aberto" (item 20).
+
+### 19/11/2026: stack da Etapa 0 confirmada
+
+- **Decisão:** TypeScript, Svelte 5, Vite, Vitest, fast-check, Playwright com axe-core, ESLint, Prettier e Cloudflare Workers com Durable Objects (SQLite), num monorepo pnpm, como propõe a especificação. Versões e ajustes:
+  - **TypeScript 6.0**, não o 7: o typescript-eslint e o svelte-check ainda não aceitam o TypeScript 7. Rever quando aceitarem.
+  - **Vitest 5** com **`@cloudflare/vitest-plugin`** para os testes do servidor dentro do runtime dos Workers. O pacote antigo, `@cloudflare/vitest-pool-workers`, foi descontinuado e renomeado.
+  - **Tipos do Worker gerados pelo `wrangler types`**, como recomenda a documentação da Cloudflare, em vez do pacote `@cloudflare/workers-types`. O arquivo gerado não é versionado e é criado de novo a cada `pnpm typecheck`.
+  - **pnpm 12** pelo Corepack, com `minimumReleaseAge` de 1 dia e scripts de instalação permitidos só para `esbuild` e `workerd`.
+  - **Node.js 24 LTS** no CI (`.nvmrc`). Mínimo aceito: 22.12.
+  - Telemetria do Wrangler desligada (`send_metrics: false`).
+  - Actions do GitHub fixadas pelo SHA do commit, com permissão só de leitura no CI.
+  - Dependabot semanal com espera de 7 dias para versões novas.
+- **Motivo:** mesma stack do Senhorio Web, nas versões atuais e compatíveis entre si, seguindo as documentações oficiais e evitando pacotes descontinuados.
+- **Ainda não incluído:** o `vite-plugin-pwa` entra na Etapa 5 (PWA). O `packages/kit` será extraído do `senhorio-web` na Etapa 4.
+
+### 19/11/2026: primeiro commit direto na `main`
+
+- **Decisão:** o repositório estava vazio, e a `main` foi criada com um único commit com os arquivos do pacote inicial (documentação, mockups e logo), sem alterações. Todo o resto vai para branches `develop/...`.
+- **Motivo:** a branch `develop/foundation` precisa partir de uma `main` existente. Exceção única, aprovada pelo dono do projeto.

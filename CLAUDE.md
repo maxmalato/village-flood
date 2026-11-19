@@ -11,7 +11,7 @@ Enchente na Vila (`village-flood`): jogo de tabuleiro **cooperativo** para o nav
 - Situação das etapas: `docs/ROADMAP.md`. Confira antes de começar e atualize ao começar ou fechar uma etapa.
 - Mockups: `docs/mockups/` (código-fonte das telas em `docs/mockups/source/`, como referência de layout, cores e textos; os arquivos `.dc.html` não abrem sozinhos no navegador, e as imagens exportadas ficam em `docs/mockups/`).
 - Logo e ícones: `assets/logo/`.
-- Decisões: registro no fim de `docs/village-flood-rules.md`, na seção "Registro de decisões". Decisão nova entra no topo, com data e motivo. **(a seção ainda precisa ser criada na primeira tarefa)**
+- Decisões: registro no fim de `docs/village-flood-rules.md`, na seção "Registro de decisões". Decisão nova entra no topo, com data e motivo.
 
 Ordem de leitura: regras, especificação técnica, roadmap.
 
@@ -46,7 +46,8 @@ Arquitetura limpa: dependências apontam para dentro (UI e servidor dependem do 
 - `packages/sim`: simulação em lote (fora do `pnpm test`).
 - `apps/web`: Svelte 5 + Vite + PWA. Só desenha o estado, envia ações e anima eventos. Nunca calcula regra.
 - `apps/server`: Cloudflare Worker + um Durable Object por sala. Roda o mesmo motor e valida quem envia cada ação.
-- Tabuleiro em HTML/SVG, sem engine 3D.
+- Tabuleiro em HTML/SVG, sem engine 3D. (O Three.js está em avaliação para a Etapa 6; ver "Registro de decisões".)
+- O ESLint barra imports que quebram as camadas (motor sem dependências, kit sem o jogo, bots só com o motor).
 
 ## Comandos
 
@@ -57,10 +58,15 @@ pnpm lint
 pnpm typecheck
 pnpm build
 pnpm e2e
-pnpm --filter @village-flood/sim simulate   # simulação com bots (fora do pnpm test)
+pnpm simulate     # simulação com bots (fora do pnpm test)
+pnpm format       # formata com o Prettier
 ```
 
-(Ajuste os nomes dos pacotes na Etapa 0.)
+- pnpm pelo Corepack (`corepack enable`), na versão do campo `packageManager`. Node.js 22.12 ou mais novo; o CI usa o `.nvmrc`.
+- Pacotes: `@village-flood/engine`, `protocol`, `kit`, `bots`, `sim`, `web` e `server`.
+- E2E: instale o navegador com `pnpm --filter @village-flood/web exec playwright install chromium`. Se já houver um Chromium instalado, aponte para ele com a variável `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
+- Dependência nova precisa respeitar o `minimumReleaseAge` do `pnpm-workspace.yaml`. Não adicione exceções a ele sem aprovação.
+- O `apps/server/worker-configuration.d.ts` é gerado pelo `wrangler types` (dentro do `pnpm typecheck`) e não é versionado.
 
 ## Regras de trabalho
 
