@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Enchente na Vila – legenda completa</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 20px; background: #0E2433; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px; line-height: 1">Legenda</h1>
+<button type="button" style="height: 44px; padding: 0 16px; border-radius: 999px; border: 2px solid #8FA6BB; background: transparent; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; font-size: 16px; font-weight: 800; cursor: pointer">Fechar</button>
+</div>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3; color: #C9D8E3; padding-bottom: 4px">Como ler o mapa: o número no canto de cada quadra é a altura dela.</span>
+<sc-for list="{{items}}" as="c" hint-placeholder-count="15">
+<sc-if value="{{c.isHeader}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3; padding-top: 6px">{{c.title}}</span>
+</sc-if>
+<sc-if value="{{c.isRow}}" hint-placeholder-val="{{ true }}">
+<div style="box-sizing: border-box; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 4px 10px; border-radius: 12px; background: #16364A">
+<span style="width: 34px; height: 34px; flex: none; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{c.k_dry}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; gap: 2px"><span style="width: 9px; height: 28px; border-radius: 3px; background: #E9DDB5"></span><span style="width: 9px; height: 28px; border-radius: 3px; background: #D6BC83"></span><span style="width: 9px; height: 28px; border-radius: 3px; background: #BE9660"></span></span>
+</sc-if>
+<sc-if value="{{c.k_swatch}}" hint-placeholder-val="{{ false }}">
+<span style="width: 30px; height: 30px; border-radius: 7px; background: {{c.swatchBg}}; box-shadow: inset 0 0 0 2px rgba(243, 235, 216, 0.5)"></span>
+</sc-if>
+<sc-if value="{{c.k_church}}" hint-placeholder-val="{{ false }}">
+<span style="width: 30px; height: 30px; border-radius: 8px; background: #F2B84B; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v6M9.5 4.5h5" fill="none" stroke="#10263B" stroke-width="2.2" stroke-linecap="round"></path><path d="M6 21V12l6-4 6 4v9z" fill="none" stroke="#10263B" stroke-width="2.2" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.k_dock}}" hint-placeholder-val="{{ false }}">
+<span style="width: 30px; height: 30px; border-radius: 8px; background: #F2B84B; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15h18l-3 5H6z" fill="none" stroke="#10263B" stroke-width="2.2" stroke-linejoin="round"></path><path d="M12 3v12M12 4l6 8h-6" fill="none" stroke="#10263B" stroke-width="2.2" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.k_injured}}" hint-placeholder-val="{{ false }}">
+<span style="height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #FFFFFF; border: 2px solid #B3401F; color: #10263B; font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 3px"><svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1v8M1 5h8" fill="none" stroke="#B3401F" stroke-width="2.5" stroke-linecap="round"></path></svg>1</span>
+</sc-if>
+<sc-if value="{{c.k_ok}}" hint-placeholder-val="{{ false }}">
+<span style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 2px solid #1F6F66; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.6 2.6L10 3.5" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.k_lost}}" hint-placeholder-val="{{ false }}">
+<span style="width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 2px solid #B3401F; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6" fill="none" stroke="#B3401F" stroke-width="2" stroke-linecap="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.k_pawn}}" hint-placeholder-val="{{ false }}">
+<span style="width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%; background: #4FC3F7; border: 3px solid #F2B84B; box-shadow: 0 0 0 2px #F3EBD8; color: #10263B; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px">L</span>
+</sc-if>
+<sc-if value="{{c.k_carry}}" hint-placeholder-val="{{ false }}">
+<span style="height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 10px; background: #10263B; border: 1.5px solid #F3EBD8; color: #F3EBD8; font-size: 13px; font-weight: 800; display: flex; align-items: center">+1</span>
+</sc-if>
+<sc-if value="{{c.k_pin}}" hint-placeholder-val="{{ false }}">
+<span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 6px; background: #4FC3F7; border: 2px solid #10263B; color: #10263B; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">L</span>
+</sc-if>
+<sc-if value="{{c.k_cost}}" hint-placeholder-val="{{ false }}">
+<span style="min-width: 22px; height: 22px; padding: 0 4px; box-sizing: border-box; border-radius: 11px; background: #F2B84B; color: #10263B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">2</span>
+</sc-if>
+</span>
+<div style="display: flex; flex-direction: column; min-width: 0">
+<span style="font-size: 16px; font-weight: 800; line-height: 1.15">{{c.label}}</span>
+<span style="font-size: 14px; font-weight: 600; line-height: 1.25; color: #C9D8E3">{{c.desc}}</span>
+</div>
+</div>
+</sc-if>
+</sc-for>
+<div style="flex: 1"></div>
+<button type="button" style="height: 52px; border: 0; border-radius: 16px; background: #F2B84B; color: #10263B; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px; outline: 3px solid #F3EBD8; outline-offset: 3px; cursor: pointer">Voltar ao jogo</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const flooded = 'radial-gradient(circle at 50% 100%, transparent 4px, rgba(16,38,59,0.38) 4px 6px, transparent 6px) 0 0 / 12px 8px, #8FD0EC';
+    const submerged = 'repeating-linear-gradient(45deg, rgba(255,255,255,0.20) 0 3px, transparent 3px 8px), radial-gradient(circle at 50% 100%, transparent 4px, rgba(255,255,255,0.6) 4px 6px, transparent 6px) 0 0 / 12px 8px, #2A6AA3';
+    const KINDS = ['dry', 'swatch', 'church', 'dock', 'injured', 'ok', 'lost', 'pawn', 'carry', 'pin', 'cost'];
+    const row = (kind, label, desc, extra) => {
+      const o = { isHeader: false, isRow: true, label: label, desc: desc, swatchBg: 'transparent' };
+      KINDS.forEach((k) => { o['k_' + k] = (k === kind); });
+      return Object.assign(o, extra || {});
+    };
+    const head = (title) => ({ isHeader: true, isRow: false, title: title });
+    return {
+      items: [
+        head('QUADRAS'),
+        row('dry', 'Seca', 'Anda normal, 1 ação'),
+        row('swatch', 'Alagada', 'Andar custa 2 ações (Bombeiro: 1)', { swatchBg: flooded }),
+        row('swatch', 'Submersa', 'Só a Barqueira passa', { swatchBg: submerged }),
+        head('LUGARES'),
+        row('church', 'Igreja', 'Abrigo dos moradores. Entregue = salvo'),
+        row('dock', 'Cais', 'Saída da equipe. Todos aqui para vencer'),
+        row('injured', 'Casa com morador ferido', 'O número é a quantidade de feridos'),
+        row('ok', 'Casa vazia com ✓', 'Todos foram retirados da casa'),
+        row('lost', 'Casa vazia com ✗', 'Algum morador ficou ilhado'),
+        head('PESSOAS E AVISOS'),
+        row('pawn', 'Voluntário', 'O anel dourado marca quem joga agora'),
+        row('carry', '+1 em fundo preto', 'Voluntário carregando 1 morador'),
+        row('pin', 'Quadrado com inicial', 'Sugestão (ping) de um jogador'),
+        row('cost', 'Número dourado', 'Ações para andar até a quadra')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

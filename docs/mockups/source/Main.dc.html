@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Enchente na Vila – tela da mesa</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 24px 40px; background: #0E2433; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px">
+<div style="display: flex; align-items: baseline; gap: 16px">
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 36px; line-height: 1">Enchente na Vila</h1>
+<span style="font-size: 20px; font-weight: 700; color: #C9D8E3">Turno 13 · Vez do Bruno</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="padding: 8px 16px; border-radius: 999px; background: #16364A; font-size: 17px; font-weight: 800; color: #F2B84B">Normal</span>
+<span style="padding: 8px 16px; border-radius: 999px; background: #16364A; font-size: 17px; font-weight: 700">Meta: salvar 10 moradores</span>
+<button type="button" style="height: 44px; padding: 0 20px; border-radius: 999px; border: 2px solid #8FA6BB; background: transparent; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; font-size: 17px; font-weight: 800; cursor: pointer">Legenda</button>
+</div>
+</div>
+<div style="display: flex; gap: 28px; flex: 1; min-height: 0">
+<div style="flex: none; width: 522px">
+<div style="display: grid; grid-template-columns: 18px repeat(6, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="49">
+<sc-if value="{{c.isLabel}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; justify-content: center; min-height: 18px; font-size: 14px; font-weight: 800; color: #C9D8E3">{{c.label}}</div>
+</sc-if>
+<sc-if value="{{c.isTile}}" hint-placeholder-val="{{ true }}">
+<div role="img" aria-label="{{c.aria}}" style="position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: {{c.bg}}; box-shadow: inset 0 0 0 2px rgba(16, 38, 59, 0.35)">
+<span style="position: absolute; top: 4px; left: 4px; min-width: 20px; height: 20px; border-radius: 6px; background: #F3EBD8; color: #10263B; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{c.h}}</span>
+<sc-if value="{{c.hasHouseFull}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 14px; left: 24px; width: 32px; height: 32px; border-radius: 10px; background: #F3EBD8; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path><path d="M10 20v-5h4v5" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.hasHouseEmpty}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 14px; left: 24px; width: 32px; height: 32px; border-radius: 10px; background: rgba(243, 235, 216, 0.75); display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z" fill="none" stroke="#5B6B78" stroke-width="2" stroke-linejoin="round" stroke-dasharray="3 2"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.isChurch}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 14px; left: 24px; width: 32px; height: 32px; border-radius: 10px; background: #F2B84B; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v6M9.5 4.5h5" fill="none" stroke="#10263B" stroke-width="2" stroke-linecap="round"></path><path d="M6 21V12l6-4 6 4v9z" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path><path d="M10.5 21v-4h3v4" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.isDock}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 14px; left: 24px; width: 32px; height: 32px; border-radius: 10px; background: #F2B84B; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15h18l-3 5H6z" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path><path d="M12 3v12M12 4l6 8h-6" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.markOk}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; bottom: 4px; right: 4px; width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 2px solid #1F6F66; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.6 2.6L10 3.5" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.markLost}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; bottom: 4px; right: 4px; width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 2px solid #B3401F; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6" fill="none" stroke="#B3401F" stroke-width="2" stroke-linecap="round"></path></svg></span>
+</sc-if>
+<sc-if value="{{c.hasRes}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; bottom: 4px; right: 4px; height: 22px; padding: 0 6px; border-radius: 11px; background: #FFFFFF; border: 2px solid #B3401F; color: #10263B; font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 3px"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1v8M1 5h8" fill="none" stroke="#B3401F" stroke-width="2.5" stroke-linecap="round"></path></svg>1</span>
+</sc-if>
+<sc-if value="{{c.hasPawn}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; bottom: 4px; left: 4px; width: 28px; height: 28px; box-sizing: border-box; border-radius: 50%; background: {{c.pawnBg}}; border: {{c.pawnRing}}; box-shadow: 0 0 0 2px #F3EBD8; color: #10263B; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px">{{c.pawnInitial}}</span>
+</sc-if>
+<sc-if value="{{c.hasCarry}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; bottom: 30px; left: 26px; height: 18px; padding: 0 5px; border-radius: 9px; background: #10263B; color: #F3EBD8; font-size: 13px; font-weight: 800; display: flex; align-items: center">+1</span>
+</sc-if>
+<sc-if value="{{c.hasPin}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; box-sizing: border-box; border-radius: 6px; background: {{c.pinBg}}; border: 2px solid #10263B; color: #10263B; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">{{c.pinInitial}}</span>
+</sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</div>
+<div style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-content: start">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">NÍVEL DO RIO</span>
+<div style="display: flex; align-items: baseline; gap: 8px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 44px; line-height: 1; color: #F2B84B">14</span>
+<span style="font-size: 18px; font-weight: 700; color: #C9D8E3">de 24</span>
+</div>
+<div style="position: relative; height: 18px; border-radius: 9px; background: #0E2433; overflow: hidden">
+<div style="position: absolute; top: 0; bottom: 0; left: 0; width: 58.3%; background: #4DA3D9"></div>
+<div style="position: absolute; top: 0; bottom: 0; left: 20.8%; width: 2px; background: #F3EBD8"></div>
+<div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #F3EBD8"></div>
+<div style="position: absolute; top: 0; bottom: 0; left: 79.2%; width: 2px; background: #F3EBD8"></div>
+</div>
+<div style="position: relative; height: 20px; font-size: 14px; font-weight: 800; color: #C9D8E3">
+<span style="position: absolute; left: 20.8%; transform: translateX(-50%)">5</span>
+<span style="position: absolute; left: 50%; transform: translateX(-50%)">12</span>
+<span style="position: absolute; left: 79.2%; transform: translateX(-50%)">19</span>
+<span style="position: absolute; right: 0; color: #FF8A65">24</span>
+</div>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.35; color: #C9D8E3">Altura 1 alaga em 5 e submerge em 12. Altura 2: 12 e 19. Altura 3: 19. Em 24, a equipe perde.</span>
+</div>
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">MORADORES</span>
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<span style="font-size: 18px; font-weight: 800">Salvos</span>
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 30px; line-height: 1">7 <span style="font-size: 18px; color: #C9D8E3">de 10</span></span>
+</div>
+<div style="height: 12px; border-radius: 6px; background: #0E2433; overflow: hidden"><div style="width: 70%; height: 12px; background: #81C784"></div></div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-size: 18px; font-weight: 800">Ilhados</span>
+<div style="display: flex; align-items: center; gap: 6px">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="4">
+<span style="width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; background: {{d.bg}}; border: 2px solid #FF8A65"></span>
+</sc-for>
+</div>
+</div>
+<span style="font-size: 15px; font-weight: 600; color: #C9D8E3">O 4º ilhado derrota a equipe. Carregando agora: 1 (Lia).</span>
+</div>
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">PREVISÃO DO DIEGO</span>
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 11a3.5 3.5 0 0 1-.5 7z" fill="none" stroke="#F2B84B" stroke-width="2" stroke-linejoin="round"></path><path d="M9 21l1-2M13 21l1-2" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 18px; font-weight: 800">Próxima carta: Chuva, +2</span>
+</div>
+<span style="font-size: 16px; font-weight: 700; color: #C9D8E3">O nível vai de 14 para 16.</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">EQUIPE</span>
+<sc-for list="{{team}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px; border-radius: 12px; border: {{p.border}}">
+<div style="width: 36px; height: 36px; flex: none; border-radius: 50%; background: {{p.dot}}; color: #10263B; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px">{{p.initial}}</div>
+<div style="display: flex; flex-direction: column; min-width: 0">
+<span style="font-size: 18px; font-weight: 800; line-height: 1.15">{{p.name}} <span style="font-size: 16px; font-weight: 700; color: #C9D8E3">{{p.role}}</span></span>
+<span style="font-size: 15px; font-weight: 700; color: {{p.noteInk}}">{{p.note}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">SUGESTÕES DA EQUIPE</span>
+<sc-for list="{{pings}}" as="g" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 24px; height: 24px; flex: none; box-sizing: border-box; border-radius: 6px; background: {{g.dot}}; border: 2px solid #10263B; color: #10263B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">{{g.initial}}</span>
+<span style="font-size: 17px; font-weight: 700">{{g.text}}</span>
+</div>
+</sc-for>
+</div>
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">LEGENDA RÁPIDA</span>
+<div style="display: flex; align-items: center; gap: 12px">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 6px">
+<span style="width: 22px; height: 22px; flex: none; border-radius: 6px; background: {{l.bg}}; box-shadow: inset 0 0 0 2px rgba(243, 235, 216, 0.5)"></span>
+<span style="font-size: 16px; font-weight: 700">{{l.label}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="font-size: 16px; font-weight: 700"><span style="color: #F2B84B">Igreja:</span> abrigo</span>
+<span style="font-size: 16px; font-weight: 700"><span style="color: #F2B84B">Cais:</span> saída</span>
+</div>
+<button type="button" style="height: 44px; border-radius: 12px; border: 2px solid #8FA6BB; background: transparent; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; font-size: 16px; font-weight: 800; cursor: pointer">Ver legenda completa</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const COLS = 'ABCDEF';
+    const H = [[1,1,2,2,1,1],[1,2,2,3,2,1],[1,2,3,3,2,1],[1,2,3,2,2,1],[1,1,2,2,1,1],[1,1,1,1,1,1]];
+    const houses = ['A2','A4','B1','B5','F3','E5','C2','C5','E2','E4'];
+    const residents = { C2: 1, E4: 1, C5: 1 };
+    const pawns = {
+      C4: { i: 'B', bg: '#B39DDB', active: true },
+      A3: { i: 'L', bg: '#4FC3F7', carry: true },
+      D2: { i: 'C', bg: '#FF8A65' },
+      C3: { i: 'D', bg: '#81C784' }
+    };
+    const pins = { C5: { i: 'C', bg: '#FF8A65' }, E4: { i: 'L', bg: '#4FC3F7' } };
+    const dryBg = { 1: '#E9DDB5', 2: '#D6BC83', 3: '#BE9660' };
+    const floodedBg = 'radial-gradient(circle at 50% 100%, transparent 5px, rgba(16,38,59,0.38) 5px 7px, transparent 7px) 0 0 / 14px 9px, #8FD0EC';
+    const submergedBg = 'repeating-linear-gradient(45deg, rgba(255,255,255,0.20) 0 3px, transparent 3px 9px), radial-gradient(circle at 50% 100%, transparent 5px, rgba(255,255,255,0.6) 5px 7px, transparent 7px) 0 0 / 14px 9px, #2A6AA3';
+    const names = { dry: 'seca', flooded: 'alagada', submerged: 'submersa' };
+    const cells = [{ isLabel: true, isTile: false, label: '' }];
+    for (let x = 0; x < 6; x++) cells.push({ isLabel: true, isTile: false, label: COLS[x] });
+    for (let y = 0; y < 6; y++) {
+      cells.push({ isLabel: true, isTile: false, label: String(y + 1) });
+      for (let x = 0; x < 6; x++) {
+        const id = COLS[x] + (y + 1);
+        const h = H[y][x];
+        const kind = id === 'D3' ? 'church' : id === 'B3' ? 'dock' : houses.indexOf(id) >= 0 ? 'house' : 'plain';
+        const safe = kind === 'church' || kind === 'dock';
+        const state = safe ? 'dry' : h === 1 ? 'submerged' : h === 2 ? 'flooded' : 'dry';
+        const pawn = pawns[id];
+        const pin = pins[id];
+        const res = residents[id];
+        cells.push({
+          isLabel: false, isTile: true, id: id, h: h,
+          bg: state === 'dry' ? dryBg[h] : state === 'flooded' ? floodedBg : submergedBg,
+          hasHouseFull: kind === 'house' && !!res,
+          hasHouseEmpty: kind === 'house' && !res,
+          markOk: kind === 'house' && !res && ['A2', 'B1', 'F3', 'E5', 'E2'].indexOf(id) >= 0,
+          markLost: kind === 'house' && !res && ['A4', 'B5'].indexOf(id) >= 0,
+          isChurch: kind === 'church', isDock: kind === 'dock',
+          hasRes: !!res,
+          hasPawn: !!pawn, pawnInitial: pawn ? pawn.i : '', pawnBg: pawn ? pawn.bg : 'transparent',
+          pawnRing: pawn && pawn.active ? '3px solid #F2B84B' : '2px solid #10263B',
+          hasCarry: !!(pawn && pawn.carry),
+          hasPin: !!pin, pinInitial: pin ? pin.i : '', pinBg: pin ? pin.bg : 'transparent',
+          aria: id + ', altura ' + h + ', ' + names[state] + (kind === 'house' ? ', casa' : kind === 'church' ? ', igreja' : kind === 'dock' ? ', cais' : '') + (res ? ', 1 morador ferido' : '') + (kind === 'house' && !res ? (['A4', 'B5'].indexOf(id) >= 0 ? ', casa vazia, algum morador ficou ilhado' : ', casa vazia, todos retirados') : '')
+        });
+      }
+    }
+    return {
+      cells: cells,
+      dots: [
+        { bg: '#FF8A65' }, { bg: '#FF8A65' }, { bg: 'transparent' }, { bg: 'transparent' }
+      ],
+      team: [
+        { name: 'Bruno', role: 'Bombeiro', initial: 'B', dot: '#B39DDB', note: 'Sua vez: 3 ações', noteInk: '#F2B84B', border: '2px solid #F2B84B' },
+        { name: 'Lia', role: 'Barqueira', initial: 'L', dot: '#4FC3F7', note: 'Carrega 1 morador', noteInk: '#C9D8E3', border: '2px solid transparent' },
+        { name: 'Carla', role: 'Médica', initial: 'C', dot: '#FF8A65', note: 'Pode curar ao lado', noteInk: '#C9D8E3', border: '2px solid transparent' },
+        { name: 'Diego', role: 'Radialista', initial: 'D', dot: '#81C784', note: 'Previsão ativa', noteInk: '#C9D8E3', border: '2px solid transparent' }
+      ],
+      pings: [
+        { initial: 'C', dot: '#FF8A65', text: 'Carla: pegar daqui, em C5' },
+        { initial: 'L', dot: '#4FC3F7', text: 'Lia: cuidado em E4' }
+      ],
+      legend: [
+        { bg: '#D6BC83', label: 'Seca' },
+        { bg: floodedBg, label: 'Alagada' },
+        { bg: submergedBg, label: 'Submersa' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

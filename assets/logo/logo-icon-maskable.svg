@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Enchente na Vila">
+  <title>Enchente na Vila</title>
+  <rect width="512" height="512" fill="#0E2433"/>
+  <clipPath id="c"><rect width="512" height="512"/></clipPath>
+  <g clip-path="url(#c)"><g transform="translate(51.2 51.2) scale(.8)">
+  <g>
+    <polygon points="208,198 256,152 304,198" fill="#F2B84B"/>
+    <rect x="216" y="194" width="80" height="116" fill="#F3EBD8"/>
+    <rect x="252" y="112" width="8" height="46" rx="2" fill="#F2B84B"/>
+    <rect x="238" y="126" width="36" height="8" rx="2" fill="#F2B84B"/>
+    <path d="M242 312V266a14 14 0 0 1 28 0V312Z" fill="#10263B"/>
+    <circle cx="256" cy="226" r="9" fill="#10263B"/>
+  </g>
+  <path d="M56 424C130 296 196 300 256 300S382 296 456 424V470H56Z" fill="#D6BC83"/>
+  <path d="M-280 386Q-212 354 -144 386T-8 386T128 386T264 386T400 386T536 386T672 386T808 386V760H-280Z" fill="#4DA3D9"/>
+  <path d="M-280 386Q-212 354 -144 386T-8 386T128 386T264 386T400 386T536 386T672 386T808 386" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="7" stroke-linecap="round"/>
+  <path d="M-280 436Q-212 404 -144 436T-8 436T128 436T264 436T400 436T536 436T672 436T808 436V760H-280Z" fill="#2A6AA3"/>
+  <path d="M-280 436Q-212 404 -144 436T-8 436T128 436T264 436T400 436T536 436T672 436T808 436" fill="none" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="6" stroke-linecap="round"/>
+</g></g>
+</svg>

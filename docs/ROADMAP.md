@@ -1,0 +1,111 @@
+# Enchente na Vila: roadmap
+
+Cada etapa termina com testes passando, commit e tag. Uma etapa só começa quando a anterior fechou. Atualize a tabela de situação sempre que uma etapa começar ou fechar.
+
+## Ordem e motivo
+
+A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ainda abertos (regras marcadas "a testar", a dúvida sobre a igreja deixar o jogo fácil, equipes de 2 assentos) são calibrados na Etapa 2, quando mudar custa quase nada. A interface só começa depois disso.
+
+## Situação
+
+| Etapa | Situação | Tag |
+| --- | --- | --- |
+| 0 – Fundação | Não iniciada | `v0.1-foundation` |
+| 1 – Motor | Não iniciada | `v0.2-engine` |
+| 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
+| 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
+| 4 – Vários aparelhos (online) | Não iniciada | `v0.5-online` |
+| 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
+| 6 – Acabamento | Não iniciada | `v0.9-polish` |
+| 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
+
+## Etapa 0 – Fundação
+
+Deixa o projeto pronto para receber código.
+
+- Confirmar a stack com o dono do projeto.
+- `CLAUDE.md`, `README.md` (PT-BR) e `README.en.md` (inglês), `docs/` com regras, especificação técnica e este roadmap, `docs/mockups/` com as telas exportadas e `assets/logo/` com a logo.
+- Monorepo pnpm com `packages/engine`, `protocol`, `kit`, `bots`, `sim` e `apps/web`, `apps/server`, ainda sem lógica de jogo.
+- TypeScript estrito, ESLint, Prettier, Vitest, fast-check e Playwright configurados, com um teste mínimo em cada pacote.
+- CI no GitHub Actions: instalação, lint, tipos, testes e build.
+- Seção "Registro de decisões" criada no fim do documento de regras.
+
+**Pronto quando:** CI verde na `main`.
+
+## Etapa 1 – Motor
+
+`packages/engine`, sem I/O. Segue as seções 4 a 6 da especificação.
+
+- Tipos, estado e eventos. `homeTileId` em cada morador.
+- Dados validados por schema: mapa "Vila do Rio", baralho de chuva, tabela de dificuldades e `RoleParams`.
+- `WaterModel` com a implementação `river-level` (limiares por altura, sacos de areia, ligação com o rio por busca em largura).
+- `transition` com todas as ações: `move`, `pick-up`, `heal`, `reinforce`, `forecast`, `undo`, `end-turn`.
+- Chuva, transições de ferido e ilhado, entrega automática na igreja, voluntário apanhado pela água, `checkOutcome` e `houseMark`.
+- Testes de unidade e propriedades da seção 10 da especificação.
+
+**Pronto quando:** testes de unidade e de propriedades passam; mesma semente e mesmas ações geram o mesmo resultado; nenhuma regra fica fixa no código (tudo vem dos dados).
+
+## Etapa 2 – Bots e simulação
+
+`packages/bots` e `packages/sim`.
+
+- `botMove` (busca de até 3 ações, só informação pública, determinística) e `suggest`.
+- CLI de simulação em lote: milhares de partidas por dificuldade × tamanho da equipe (2, 3, 4) × composição de papéis.
+- Métricas: taxa de vitória, duração, causa de derrota, ilhados, voluntários apanhados pela água e **turnos que sobram quando a equipe vence**.
+- Relatório em tabela e primeira calibração, **só mexendo nos dados**, nunca no código das regras.
+
+**Pronto quando:** o relatório existe e foi apresentado ao dono do projeto, com recomendação para cada ponto aberto: Barqueira e Bombeiro (itens 3 e 4 da seção 13 das regras), igreja como porto seguro (item 10), equipes de 2 assentos (item 7) e voluntário apanhado pela água (item 2). As taxas de vitória por dificuldade ficam dentro das faixas alvo ou a diferença está explicada. **Portão:** a Etapa 3 só começa depois da aprovação do dono.
+
+## Etapa 3 – Telas (um aparelho)
+
+`apps/web`, modo local, com bots completando a equipe.
+
+- Tabuleiro em HTML/SVG, quadras de pelo menos 44 px, alcançáveis com custo, painel de ações, desfazer, "Encerrar turno", nível do rio com limiares, previsão, aviso de voluntário apanhado.
+- Marcas ✓/✗ nas casas, legenda rápida e legenda completa (mesa e celular).
+- Telas de início, lobby (papéis, bots, dificuldade) e fim de partida com dica.
+- i18n PT-BR e inglês, acessibilidade (`aria-live`, `prefers-reduced-motion`).
+- Telas fiéis aos mockups em `docs/mockups/`.
+
+**Pronto quando:** uma partida completa no celular e no desktop, de ponta a ponta, sem erro; axe-core sem violações graves; testes E2E do fluxo básico.
+
+## Etapa 4 – Vários aparelhos (online)
+
+`packages/kit` (extraído do `senhorio-web`), `apps/server`, `packages/protocol`.
+
+- Salas com código e senha, assentos, token como hash, limites e expiração.
+- Desconexão: bot assume, aviso à equipe, volta do jogador no início do próprio turno.
+- Opinar (ping): 3 por jogador, efêmero, limpo ao fim do turno.
+- `resync` na reconexão. O servidor valida toda ação.
+
+**Pronto quando:** E2E com dois ou mais navegadores cobrindo criar sala, entrar, jogar um turno, desfazer, ping, desconexão com bot assumindo e volta do jogador; teste de que ação de quem não é da vez é recusada.
+
+## Etapa 5 – Mesa e PWA
+
+- Modo mesa: tabuleiro grande na TV ou notebook, celulares como controle.
+- Decidir como abrir a legenda completa na TV sem toque (regras, item 11 da seção 13).
+- PWA: instalável, funciona offline no modo local. Ícones a partir de `assets/logo/`.
+- Teste no navegador de uma Smart TV real.
+
+**Pronto quando:** partida completa em modo mesa (TV + celulares) e o modo local funcionando sem internet depois do primeiro acesso.
+
+## Etapa 6 – Acabamento
+
+- Revisão de acessibilidade, sons (originais), animações com `prefers-reduced-motion`, desempenho em aparelhos modestos.
+- `README.md` e `README.en.md` finais, com os dois idiomas equivalentes.
+
+**Pronto quando:** checklist de acessibilidade e de desempenho cumprido; READMEs revisados.
+
+## Etapa 7 – Calibração com partidas reais e publicação
+
+- Partidas com pessoas (família e amigos) em cada dificuldade e tamanho de equipe; ajuste dos valores iniciais e das regras "a testar" **nos dados**.
+- Publicação na Cloudflare e tag `v1.0`.
+
+**Pronto quando:** taxas de vitória reais próximas das faixas alvo e nenhum ponto "a testar" sem decisão registrada.
+
+## Depois da v1
+
+Modelo de água B (chuva que escorre), registrado na seção 12 das regras e da especificação. Só começa depois que a v1 estiver finalizada.
+
+## Prompt sugerido para a primeira sessão
+
+> Leia `CLAUDE.md`, `docs/village-flood-rules.md`, `docs/village-flood-tech-spec.md` e `docs/ROADMAP.md`. Faça a **Etapa 0 – Fundação**. Antes de criar qualquer arquivo, confirme comigo a stack proposta e liste dúvidas ou contradições que encontrar nos documentos. Trabalhe numa branch `develop/foundation`. Não comece a Etapa 1 sem eu aprovar.

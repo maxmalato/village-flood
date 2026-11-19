@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Enchente na Vila – fim de partida</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 20px; background: #0E2433; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px">Enchente na Vila</span>
+<span style="padding: 6px 12px; border-radius: 999px; background: #16364A; font-size: 14px; font-weight: 800; color: #F2B84B">Normal</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 8px; text-align: center">
+<div style="width: 96px; height: 96px; border-radius: 50%; background: {{heroBg}}; color: #10263B; display: flex; align-items: center; justify-content: center; border: 4px solid #F3EBD8" role="img" aria-label="{{heroLabel}}">
+<sc-if value="{{isWin}}" hint-placeholder-val="{{ true }}">
+<svg width="52" height="52" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15h18l-3 5H6z" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path><path d="M12 3v12M12 4l6 8h-6" fill="none" stroke="#10263B" stroke-width="2" stroke-linejoin="round"></path></svg>
+</sc-if>
+<sc-if value="{{isLoss}}" hint-placeholder-val="{{ false }}">
+<svg width="52" height="52" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c3-3 6 3 9 0s6 3 9 0M3 15c3-3 6 3 9 0s6 3 9 0" fill="none" stroke="#F3EBD8" stroke-width="2" stroke-linecap="round"></path></svg>
+</sc-if>
+</div>
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #C9D8E3">{{kicker}}</span>
+<h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 34px; line-height: 1.1">{{heading}}</h1>
+<span style="font-size: 18px; font-weight: 700; line-height: 1.35; color: #DCE7F2">{{sub}}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; text-align: center">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="3">
+<div style="box-sizing: border-box; background: #16364A; border-radius: 14px; padding: 10px 6px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 24px; color: #F2B84B; line-height: 1.1">{{s.value}}</span>
+<span style="font-size: 14px; font-weight: 700; color: #C9D8E3">{{s.label}}</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{isWin}}" hint-placeholder-val="{{ true }}">
+<div style="box-sizing: border-box; background: #F3EBD8; color: #10263B; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 800; letter-spacing: 0.08em; color: #3F566B">DESTAQUES DA EQUIPE</span>
+<sc-for list="{{highlights}}" as="h" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 1px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px">{{h.title}}</span>
+<span style="font-size: 16px; font-weight: 700; line-height: 1.3; color: #3F566B">{{h.text}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{isLoss}}" hint-placeholder-val="{{ false }}">
+<div style="box-sizing: border-box; background: #16364A; border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px; color: #F2B84B">Dica para a próxima partida</span>
+<span style="font-size: 17px; font-weight: 600; line-height: 1.4; color: #DCE7F2">As casas de altura 1 submergem quando o rio chega a 12. Salvem esses moradores primeiro e deixem as de altura 2 para depois.</span>
+</div>
+</sc-if>
+<div style="flex: 1"></div>
+<button type="button" style="height: 56px; border: 0; border-radius: 16px; background: #F2B84B; color: #10263B; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; outline: 3px solid #F3EBD8; outline-offset: 3px; cursor: pointer">Jogar de novo</button>
+<button type="button" style="height: 48px; border-radius: 14px; border: 2px solid #8FA6BB; background: transparent; color: #F3EBD8; font-family: 'Nunito', system-ui, sans-serif; font-size: 16px; font-weight: 800; cursor: pointer">Voltar ao início</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"resultado":{"editor":"enum","options":["Vitória","Derrota"],"default":"Vitória"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const win = (this.props.resultado ?? 'Vitória') === 'Vitória';
+    return {
+      isWin: win,
+      isLoss: !win,
+      heroBg: win ? '#F2B84B' : '#2A6AA3',
+      heroLabel: win ? 'Barco de resgate' : 'Água do rio',
+      kicker: win ? 'VITÓRIA' : 'O RIO VENCEU DESTA VEZ',
+      heading: win ? 'A vila foi salva!' : 'A água chegou ao nível 24',
+      sub: win ? '11 moradores a salvo e toda a equipe no barco.' : '8 moradores foram salvos. A meta era 10. Vamos tentar de novo?',
+      stats: win
+        ? [{ value: '11 de 13', label: 'salvos' }, { value: '19', label: 'nível final' }, { value: 'T21', label: 'turno final' }]
+        : [{ value: '8 de 10', label: 'salvos' }, { value: '3', label: 'ilhados' }, { value: 'T24', label: 'turno final' }],
+      highlights: [
+        { title: 'Mais resgates', text: 'Lia levou 4 moradores para a igreja.' },
+        { title: 'Mais curas', text: 'Carla curou 3 moradores feridos.' },
+        { title: 'Previsão certeira', text: 'Diego avisou os 2 temporais antes de chegarem.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
