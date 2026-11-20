@@ -5,11 +5,12 @@ import {
   type Difficulty,
   type GameState,
   type RoleId,
+  waterModelFor,
 } from '@village-flood/engine'
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { botMove, scoreState, suggest } from './bot.ts'
-import { rainOutlook } from './outlook.ts'
+import { projectedRise, rainOutlook } from './outlook.ts'
 
 const names = ['ana', 'bruno', 'carla', 'diego']
 
@@ -81,6 +82,11 @@ describe('botMove', () => {
     expect(botMove(reversed, reversed.activeSeat)).toEqual(botMove(s, s.activeSeat))
   })
 
+  it('projeta a subida com as cartas conhecidas e a média', () => {
+    expect(projectedRise({ known: [3, 0], mean: 1 }, 4)).toBe(5)
+    expect(projectedRise({ known: [], mean: 1 }, Infinity)).toBe(Infinity)
+  })
+
   it('usa as cartas reveladas pela previsão', () => {
     const s = { ...setup(['radio-host', 'medic']), rainDeck: ['storm', 'cloudy'] as const }
     expect(rainOutlook(s as GameState).known).toEqual([3])
@@ -137,5 +143,18 @@ describe('botMove', () => {
 
   it('recusa jogar fora da própria vez', () => {
     expect(() => botMove(setup(), 'bruno')).toThrow(/vez/)
+  })
+
+  it('decide mesmo com morador inalcançável (sem laço infinito)', () => {
+    // Nível 19: altura 1 e 2 submersas; a Médica em E4 (com sacos) não alcança ninguém.
+    let s = setup(['medic', 'engineer'])
+    s = {
+      ...s,
+      riverLevel: 19,
+      tiles: s.tiles.map((t) => (t.id === 'E4' ? { ...t, sandbags: 2 } : t)),
+    }
+    s = { ...s, tiles: waterModelFor(s.config).recompute(s.tiles, 19) }
+    s = patch(s, 'ana', 'E4')
+    expect(botMove(s, 'ana')).toBeDefined()
   })
 })

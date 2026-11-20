@@ -53,9 +53,11 @@ export function rainOutlook(state: GameState): RainOutlook {
   return { known, mean: meanOf(unknown) }
 }
 
-/** Subida esperada nas próximas `rains` chuvas. */
+/** Subida esperada nas próximas `rains` chuvas (infinito se `rains` for infinito). */
 export function projectedRise(outlook: RainOutlook, rains: number): number {
+  if (!Number.isFinite(rains)) return Infinity
+  const count = Math.max(0, Math.floor(rains))
   let total = 0
-  for (let i = 0; i < rains; i++) total += outlook.known[i] ?? outlook.mean
-  return total
+  for (let i = 0; i < Math.min(count, outlook.known.length); i++) total += outlook.known[i] ?? 0
+  return total + Math.max(0, count - outlook.known.length) * outlook.mean
 }

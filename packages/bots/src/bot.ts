@@ -120,12 +120,17 @@ function createContext(state: GameState, seat: SeatId, weights: BotWeights): Dec
   for (const r of state.residents) {
     if (!isWaiting(r) || r.tileId === null) continue
     const mine = myCosts.get(r.tileId) ?? Infinity
-    // Chuvas até chegar: uma por assento a cada turno completo deste voluntário.
-    const turns = Math.ceil(Math.max(0, mine - me.actionsLeft) / perTurn)
-    const arrival = state.riverLevel + projectedRise(outlook, turns * rainsUntilNextTurn)
     const submerge = dangers.get(r.tileId)?.submerge ?? Infinity
-    let penalty = Math.min(4, Math.max(0, (submerge - arrival) / 4)) // os urgentes primeiro
-    if (submerge <= arrival) penalty += 8 // provavelmente já perdido
+    let penalty: number
+    if (mine === Infinity) {
+      penalty = 12 // inalcançável agora: tratado como perdido
+    } else {
+      // Chuvas até chegar: uma por assento a cada turno completo deste voluntário.
+      const turns = Math.ceil(Math.max(0, mine - me.actionsLeft) / perTurn)
+      const arrival = state.riverLevel + projectedRise(outlook, turns * rainsUntilNextTurn)
+      penalty = Math.min(4, Math.max(0, (submerge - arrival) / 4)) // os urgentes primeiro
+      if (submerge <= arrival) penalty += 8 // provavelmente já perdido
+    }
     const tile = r.tileId
     if (otherCosts.some((costs) => (costs.get(tile) ?? Infinity) < mine)) penalty += 3
     residentPenalty.set(r.id, penalty)
