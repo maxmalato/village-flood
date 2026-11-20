@@ -1,0 +1,45 @@
+{
+  "description": "Pacote A, Barqueira carrega só 1 (item 3).",
+  "patch": {
+    "difficulties": {
+      "easy": {
+        "goal": 8,
+        "extraResidents": 1,
+        "startLevel": 0,
+        "deck": {
+          "cloudy": 10,
+          "drizzle": 12,
+          "rain": 3,
+          "storm": 0
+        }
+      },
+      "normal": {
+        "goal": 9,
+        "extraResidents": 2,
+        "startLevel": 0,
+        "deck": {
+          "cloudy": 13,
+          "drizzle": 8,
+          "rain": 3,
+          "storm": 1
+        }
+      },
+      "storm": {
+        "goal": 10,
+        "extraResidents": 3,
+        "startLevel": 0,
+        "deck": {
+          "cloudy": 16,
+          "drizzle": 4,
+          "rain": 2,
+          "storm": 3
+        }
+      }
+    },
+    "rules": {
+      "roleParams": {
+        "boatPilotCarryCapacity": 1
+      }
+    }
+  }
+}
