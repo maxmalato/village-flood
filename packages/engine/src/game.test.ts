@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   actorsOf,
+  adjacentTileIds,
   countResidents,
   forecastView,
   houseMark,
@@ -620,5 +621,13 @@ describe('legalActions', () => {
 
   it('nenhuma ação depois do fim', () => {
     expect(legalActions({ ...setup(), phase: 'lost', lossReason: 'level' })).toEqual([])
+  })
+})
+
+describe('adjacentTileIds', () => {
+  it('lista as vizinhas ortogonais e, se pedido, as diagonais', () => {
+    expect(adjacentTileIds(setup(), 'B3', false).sort()).toEqual(['A3', 'B2', 'B4', 'C3'])
+    expect(adjacentTileIds(setup(), 'A1', true).sort()).toEqual(['A2', 'B1', 'B2'])
+    expect(adjacentTileIds(setup(), 'Z9', false)).toEqual([])
   })
 })

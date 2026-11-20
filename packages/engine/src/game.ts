@@ -129,6 +129,16 @@ export function reinforceCost(state: GameState, volunteer: Volunteer): number {
   return volunteer.role === 'engineer' ? roleParams.engineerReinforceCost : costs.reinforce
 }
 
+/**
+ * Quadras vizinhas de uma quadra: as 4 ortogonais e, se pedido, as 4 diagonais
+ * (só a Vizinha anda na diagonal). Usada por bots e pela interface para calcular caminhos.
+ */
+export function adjacentTileIds(state: GameState, tileId: TileId, diagonals: boolean): TileId[] {
+  const tile = findTile(state, tileId)
+  if (!tile) return []
+  return neighborIds(tile, indexTiles(state.tiles), diagonals)
+}
+
 /** Quadras vizinhas onde o voluntário pode entrar agora, com o custo de cada uma. */
 export function reachableMoves(state: GameState, seat: SeatId): { to: TileId; cost: number }[] {
   const volunteer = findVolunteer(state, seat)

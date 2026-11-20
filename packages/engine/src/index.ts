@@ -11,6 +11,7 @@ export * from './types.ts'
 export { defaultGameData } from './data.ts'
 export {
   actorsOf,
+  adjacentTileIds,
   carryCapacity,
   countResidents,
   findTile,
