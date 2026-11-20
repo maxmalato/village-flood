@@ -16,7 +16,7 @@ Uma chuva forte faz o rio transbordar. A equipe de voluntários leva os moradore
 | Água | Opção A: nível do rio (seção 5). A opção B (chuva que escorre) fica como extra da v2 (seção 12). |
 | Moradores feridos | Opção 1: ferido pelo nível da água (seção 6). |
 | Voluntário apanhado pela água | Penalidade em vez de derrota (seção 8). **(a testar)** |
-| Equilíbrio dos papéis | Barqueira com +1 ação por passo enquanto carrega 2 moradores, e Bombeiro pegando ferido por 1 ação (seção 3). **(a testar)** |
+| Equilíbrio dos papéis | Barqueira com +1 ação por passo enquanto carrega 2 moradores; Bombeiro paga 2 para pegar ferido; Médica cura de graça e pega ferido por 1; Radialista tem o Chamado pelo rádio (seção 3). Calibrado por simulação em 20/11/2026. **(a testar com pessoas)** |
 | Bots | Entram na v1. Completam a equipe, substituem quem desconecta e permitem jogo solo. |
 | Desconexão | Bot assume e todos são avisados. A pessoa pode voltar a qualquer momento e retoma o controle no início do próprio turno seguinte. |
 | Opinar no online | Qualquer jogador pode "apontar" quadras (ping) durante o turno de outro. Quem tem a vez decide. |
@@ -32,16 +32,16 @@ Cada assento tem um papel diferente, escolhido livremente na ordem de entrada (b
 
 | Papel (`RoleId`) | Habilidade |
 | --- | --- |
-| Bombeiro (`firefighter`) | Anda em quadra alagada gastando 1 ação em vez de 2. Pega morador ferido gastando 1 ação em vez de 2. **(a testar)** |
+| Bombeiro (`firefighter`) | Anda em quadra alagada gastando 1 ação em vez de 2. |
 | Barqueira (`boat-pilot`) | Única que entra em quadra submersa (de barco, custo 1). Carrega até 2 moradores, mas cada passo custa +1 ação enquanto ela carrega 2. **(a testar)** Imune à penalidade de quadra submersa. |
 | Engenheiro (`engineer`) | Coloca saco de areia gastando 1 ação, na quadra atual ou vizinha. |
-| Médica (`medic`) | Cura 1 morador ferido na mesma quadra ou numa quadra vizinha, por 1 ação. |
-| Radialista (`radio-host`) | Habilita a previsão da chuva para toda a equipe. |
+| Médica (`medic`) | Cura 1 morador ferido na mesma quadra ou numa quadra vizinha, **sem gastar ação**. Pega morador ferido gastando 1 ação em vez de 2. |
+| Radialista (`radio-host`) | Habilita a previsão da chuva para toda a equipe. **Chamado pelo rádio:** uma vez por turno, por 1 ação, o próximo voluntário na ordem ganha 1 ação extra no turno dele (perdida se o turno dele for perdido). **(inicial)** |
 | Vizinha (`neighbor`) | Anda também na diagonal. |
 
 Todos podem carregar 1 morador por vez, exceto a Barqueira (2).
 
-> **Observação (a testar):** os ajustes da Barqueira e do Bombeiro são hipóteses de equilíbrio. Precisam ser testados com simulações de bots (comparando a taxa de vitória por composição de equipe) e com partidas reais, e **podem mudar**. Critério inicial: nenhuma composição de equipe deve ter mais de 10 pontos de diferença na taxa de vitória em relação às demais. Alternativas já pensadas, caso o ajuste não baste: passar a capacidade 2 para a Vizinha, ou dar a qualquer voluntário um jeito caro de cruzar quadra submersa (3 ações), que foi analisado como pouco útil neste mapa.
+> **Observação (a testar):** os ajustes da Barqueira e do Bombeiro são hipóteses de equilíbrio. Precisam ser testados com simulações de bots (comparando a taxa de vitória por composição de equipe) e com partidas reais, e **podem mudar**. Critério (decidido em 20/11/2026): o efeito de cada papel na taxa de vitória (com o papel × sem ele) fica entre −10 e +10 pontos. O critério anterior (nenhuma composição com mais de 10 pontos de diferença) é impossível com equipes de 2. Alternativas já pensadas, caso o ajuste não baste: passar a capacidade 2 para a Vizinha, ou dar a qualquer voluntário um jeito caro de cruzar quadra submersa (3 ações), que foi analisado como pouco útil neste mapa.
 
 ## 4. Tabuleiro
 
@@ -63,7 +63,7 @@ Alturas:
 
 - Igreja: D3 (altura 3). Cais: B3 (altura 2). Todos os voluntários começam no cais.
 - Casas (10): A2, A4, B1, B5, F3, E5 (altura 1) e C2, C5, E2, E4 (altura 2). Cada casa começa com 1 morador.
-- Moradores extras, nesta ordem de casas: A4, B5, F3, E5, C5. Tranquilo usa 1 extra, Normal usa 3 e Tempestade usa 5.
+- Moradores extras, nesta ordem de casas: A4, B5, F3, E5, C5. Tranquilo usa 1 extra, Normal usa 2 e Tempestade usa 3.
 
 ### Igreja e cais: funções diferentes
 
@@ -119,11 +119,11 @@ Exemplo: o nível está em 10 e sai uma carta Chuva (+2), levando-o a 12. As qua
 | Estado (`ResidentStatus`) | Significado |
 | --- | --- |
 | Saudável (`healthy`) | Na casa, esperando resgate. |
-| Ferido (`injured`) | A quadra dele ficou alagada. Pegar um ferido custa 2 ações (1 para o Bombeiro). A Médica cura (volta a saudável). |
+| Ferido (`injured`) | A quadra dele ficou alagada. Pegar um ferido custa 2 ações (1 para a Médica). A Médica cura (volta a saudável). |
 | Ilhado (`stranded`) | A quadra dele ficou submersa. Está perdido e conta para a derrota. |
 | Salvo (`safe`) | Entregue na igreja. |
 
-- Moradores são carregados: pegar um morador na mesma quadra custa 1 ação (2 se estiver ferido; o Bombeiro paga 1).
+- Moradores são carregados: pegar um morador na mesma quadra custa 1 ação (2 se estiver ferido; a Médica paga 1).
 - Ao entrar na igreja, todo morador carregado é entregue automaticamente, sem gastar ação. O morador entregue fica salvo para sempre e não precisa ir ao cais.
 - Morador carregado não sofre efeito da água. O voluntário sofre (seção 8).
 - **Ferimento e isolamento acontecem na transição da quadra**, não por ela estar molhada. Quando a quadra passa para um estado mais molhado, os moradores saudáveis dela ficam feridos (seca → alagada) ou todos ficam ilhados (→ submersa). Estar alagada, por si só, não fere ninguém de novo.
@@ -145,10 +145,11 @@ Ordem fixa por assento. O jogador da vez tem 3 ações (as que não usar são pe
 | Ação (`ActionType`) | Custo | Quem |
 | --- | --- | --- |
 | Andar (`move`) | pelo estado da quadra de destino (seção 5), mais 1 se a Barqueira carrega 2. | Todos |
-| Pegar morador (`pick-up`) | 1 (2 se ferido; Bombeiro paga 1). | Todos |
-| Curar (`heal`) | 1. | Médica |
+| Pegar morador (`pick-up`) | 1 (2 se ferido; Médica paga 1). | Todos |
+| Curar (`heal`) | 0. | Médica |
 | Saco de areia (`reinforce`) | 2 (Engenheiro 1, e pode ser em quadra vizinha). | Todos |
 | Alerta de temporal (`forecast`) | 1. | Radialista, só na Tempestade |
+| Chamado pelo rádio (`radio-call`) | 1 (uma vez por turno). | Radialista |
 | Desfazer (`undo`) | 0. | Quem tem a vez |
 
 A altura não afeta o movimento na v1.
@@ -170,11 +171,11 @@ Cartas de chuva (`RainCardKind`): Nublado (`cloudy`, +0), Garoa (`drizzle`, +1),
 
 | | Tranquilo (`easy`) | Normal (`normal`) | Tempestade (`storm`) |
 | --- | --- | --- | --- |
-| Meta de moradores salvos | 8 | 10 | 12 |
-| Moradores no mapa | 11 | 13 | 15 |
-| Nível inicial | 0 | 0 | 4 |
-| Cartas Nublado / Garoa / Chuva / Temporal | 12 / 8 / 4 / 1 | 8 / 8 / 6 / 3 | 4 / 8 / 8 / 5 |
-| Subida média por carta | 0,76 | 1,16 | 1,56 |
+| Meta de moradores salvos | 8 | 9 | 10 |
+| Moradores no mapa | 11 | 12 | 13 |
+| Nível inicial | 0 | 0 | 0 |
+| Cartas Nublado / Garoa / Chuva / Temporal | 10 / 12 / 3 / 0 | 13 / 8 / 3 / 1 | 16 / 4 / 2 / 3 |
+| Subida média por carta | 0,72 (garoa constante) | 0,68 | 0,68 (mais Temporais: imprevisível) |
 | Previsão (com Radialista) | próximas 2 cartas, grátis | próxima carta, grátis | só "vem Temporal?" (sim/não), custa 1 ação |
 | Taxa de vitória alvo (inicial) | 70 a 80% | 45 a 60% | 20 a 35% |
 
@@ -205,15 +206,15 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 13. Pontos em aberto e hipóteses a validar
 
 1. Valores do mapa e do baralho: tudo **(inicial)**, calibrar por simulação.
-2. Voluntário apanhado pela água: a penalidade foi decidida (seção 8). Validar se a carta de chuva deve mesmo ser comprada no turno perdido e se a derrota imediata deve voltar só na Tempestade.
-3. Barqueira dominante: no mapa v1, atravessar quadra submersa vale pouco, porque os moradores dessas quadras já viraram ilhados e as quadras de altura 2 e 3 ficam ligadas em volta do morro. O que mais pesa é a capacidade 2. Os ajustes leves já aplicados (+1 ação por passo com 2 moradores) são hipóteses. Medir a taxa de vitória por composição de equipe, inclusive sem Barqueira.
-4. Bombeiro pegando ferido por 1 ação pode torná-lo forte demais nas quadras alagadas. Medir junto com o item 3.
+2. ~~Voluntário apanhado pela água.~~ **Decidido (20/11/2026):** manter a penalidade como está, com a chuva caindo no turno perdido e sem derrota imediata. Nas simulações, acontece de 0,01 a 0,04 vez por partida e as variantes não mudaram o resultado. Rever com pessoas (Etapa 7).
+3. ~~Barqueira dominante.~~ **Decidido (20/11/2026):** manter capacidade 2 e +1 por passo; ela não é dominante (+16 pontos no Normal). Contexto original: no mapa v1, atravessar quadra submersa vale pouco, porque os moradores dessas quadras já viraram ilhados e as quadras de altura 2 e 3 ficam ligadas em volta do morro. O que mais pesa é a capacidade 2. Os ajustes leves já aplicados (+1 ação por passo com 2 moradores) são hipóteses. Medir a taxa de vitória por composição de equipe, inclusive sem Barqueira.
+4. ~~Bombeiro pegando ferido por 1 ação.~~ **Decidido (20/11/2026):** era o papel mais forte (+30 pontos no Normal); passa a pagar 2, e a vantagem de pegar ferido por 1 vai para a Médica.
 5. Entrega automática na igreja é uma escolha para reduzir toques no celular. Confirmar nos testes.
 6. Nível inicial 4 na Tempestade e +3 por saco de areia são hipóteses.
-7. Equipes de 2 assentos podem precisar de meta reduzida.
+7. ~~Equipes de 2 assentos.~~ **Decidido (20/11/2026):** não mudar a regra agora. Tranquilo e Tempestade ficaram nas faixas; o Normal com 2 assentos ficou baixo, mas a meta reduzida passou do ponto. Manter a recomendação de 3 ou 4 assentos e reavaliar com pessoas (Etapa 7).
 8. Tempo limite opcional por turno no online.
 9. Mockups no celular: validar tamanho das quadras (6 colunas em 390 px) e a legibilidade dos estados sem depender de cor.
-10. **Igreja como porto seguro pode deixar o jogo fácil?** Como a igreja nunca alaga e o morador entregue fica salvo para sempre, o jogo vira uma corrida de entregas (casa → igreja), e a dificuldade vem só do relógio da água. Medir nas simulações: quantos turnos sobram quando a equipe vence, taxa de vitória por dificuldade e quanto a Barqueira transportando 2 moradores encurta o trajeto. Se o jogo ficar fácil, as alavancas são: aumentar a meta, subir a média de chuva, aumentar o custo extra da Barqueira com 2 moradores ou afastar o cais/a igreja no mapa. Se ficar difícil demais, o caminho é o inverso.
+10. ~~Igreja como porto seguro pode deixar o jogo fácil?~~ **Decidido (20/11/2026):** manter. As derrotas são quase todas por ilhados e nas vitórias ainda sobram de 6 a 10 níveis; a pressão vem de tirar os moradores a tempo. Contexto original: Como a igreja nunca alaga e o morador entregue fica salvo para sempre, o jogo vira uma corrida de entregas (casa → igreja), e a dificuldade vem só do relógio da água. Medir nas simulações: quantos turnos sobram quando a equipe vence, taxa de vitória por dificuldade e quanto a Barqueira transportando 2 moradores encurta o trajeto. Se o jogo ficar fácil, as alavancas são: aumentar a meta, subir a média de chuva, aumentar o custo extra da Barqueira com 2 moradores ou afastar o cais/a igreja no mapa. Se ficar difícil demais, o caminho é o inverso.
 11. Legenda na mesa: a TV costuma não ter toque. Definir como abrir a legenda completa na TV (controle remoto/teclado, ou pelo celular de quem controla) e se a legenda rápida basta na TV.
 12. Marcas "✓" e "✗" nas casas: confirmar nos testes com pessoas se o símbolo é entendido sem explicação ou se precisa de texto curto.
 13. ~~Mockup "Sua vez" contradiz a regra do Bombeiro.~~ **Decidido (20/11/2026):** vale a regra (o Bombeiro paga 1 para pegar ferido). O texto do mockup não muda; se um mockup contradisser as regras, valem as regras.
