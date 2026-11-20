@@ -24,6 +24,8 @@ Uma variante é um arquivo JSON com `description` e `patch`. O `patch` é mescla
 }
 ```
 
+As variantes de 20/11/2026 usadas na calibração foram removidas depois de aplicadas (estão no histórico do git e descritas nos relatórios): elas eram alterações sobre os dados antigos. Sobre os dados atuais, `radio-bonus-2.json` testa o Chamado pelo rádio com +2.
+
 As variantes mudam **só dados**. Mudar a estrutura das regras é mudança de código e precisa de aprovação.
 
 ## Como ler o relatório
