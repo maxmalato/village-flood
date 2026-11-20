@@ -44,6 +44,8 @@ export interface BotWeights {
   injured: number
   /** Margem de segurança, em níveis, além da subida esperada. */
   riskMargin: number
+  /** Valor de cada ação extra dada a um colega (Chamado pelo rádio). */
+  bonusAction: number
 }
 
 export const defaultWeights: BotWeights = {
@@ -59,8 +61,11 @@ export const defaultWeights: BotWeights = {
   rescueUrgencyCap: 30,
   injured: 4,
   riskMargin: 2,
+  bonusAction: 8,
 }
 
+/** Profundidade máxima da busca, em ações. */
+const MAX_DEPTH = 3
 const WON = 1e9
 const LOST = -1e9
 const UNREACHABLE = 60
@@ -163,6 +168,8 @@ function evaluate(state: GameState, ctx: DecisionContext): number {
   const level = state.riverLevel
 
   let score = w.safe * counts.safe + w.carried * counts.carried
+  // Ações extras dadas aos colegas pelo Chamado pelo rádio.
+  for (const v of state.volunteers) score += w.bonusAction * v.bonusActions
   // Bônus por ter tirado de casa quem corria mais risco (a casa de origem mostra a urgência).
   for (const r of state.residents) {
     if (r.carriedBy === null) continue
@@ -237,6 +244,7 @@ function candidates(state: GameState, me: Volunteer): Action[] {
       }
     }
   }
+  if (me.role === 'radio-host' && !state.radioCalled) actions.push({ type: 'radio-call' })
   // Saco de areia só onde faz diferença: casas com morador esperando ou a quadra do voluntário.
   const reach =
     me.role === 'engineer' ? [me.tileId, ...adjacentTileIds(state, me.tileId, false)] : [me.tileId]
@@ -272,7 +280,8 @@ export function plan(state: GameState, seat: SeatId, weights: BotWeights = defau
 
   const explore = (current: GameState, path: Action[]) => {
     const me = findVolunteer(current, seat)
-    if (!me || me.actionsLeft <= 0) return
+    // Até 3 ações por decisão (spec, seção 8). Ações sem custo (curar) valem mesmo sem ações.
+    if (!me || path.length >= MAX_DEPTH) return
     for (const action of candidates(current, me)) {
       const result = transition(current, action, { seat })
       if (!result.ok) continue

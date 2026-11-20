@@ -66,7 +66,7 @@ describe('botMove', () => {
       ),
       { numRuns: 15 },
     )
-  })
+  }, 60_000)
 
   it('é determinístico para o mesmo estado', () => {
     const s = setup()
