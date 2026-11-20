@@ -5,8 +5,8 @@
     "startLevel": 0,
     "deck": {
       "cloudy": 10,
-      "drizzle": 12,
-      "rain": 3,
+      "drizzle": 11,
+      "rain": 4,
       "storm": 0
     },
     "forecast": {

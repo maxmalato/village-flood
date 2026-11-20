@@ -174,8 +174,8 @@ Cartas de chuva (`RainCardKind`): Nublado (`cloudy`, +0), Garoa (`drizzle`, +1),
 | Meta de moradores salvos | 8 | 9 | 10 |
 | Moradores no mapa | 11 | 12 | 13 |
 | Nível inicial | 0 | 0 | 0 |
-| Cartas Nublado / Garoa / Chuva / Temporal | 10 / 12 / 3 / 0 | 13 / 8 / 3 / 1 | 16 / 4 / 2 / 3 |
-| Subida média por carta | 0,72 (garoa constante) | 0,68 | 0,68 (mais Temporais: imprevisível) |
+| Cartas Nublado / Garoa / Chuva / Temporal | 10 / 11 / 4 / 0 | 13 / 8 / 3 / 1 | 16 / 4 / 2 / 3 |
+| Subida média por carta | 0,76 (sem Temporal) | 0,68 | 0,68 (mais Temporais: imprevisível) |
 | Previsão (com Radialista) | próximas 2 cartas, grátis | próxima carta, grátis | só "vem Temporal?" (sim/não), custa 1 ação |
 | Taxa de vitória alvo (inicial) | 70 a 80% | 45 a 60% | 20 a 35% |
 
