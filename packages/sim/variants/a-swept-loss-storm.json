@@ -38,9 +38,7 @@
     },
     "rules": {
       "roleParams": {
-        "immediateLossOnSwept": [
-          "storm"
-        ]
+        "immediateLossOnSwept": ["storm"]
       }
     }
   }
