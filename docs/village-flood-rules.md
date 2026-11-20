@@ -225,7 +225,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 18. ~~Valores fora do `RoleParams`.~~ **Decidido (20/11/2026):** todos os números vão para os dados; só a estrutura das regras fica no código. O schema completo será apresentado para aprovação no início da Etapa 1, antes de implementar.
 19. ~~Tipos sem definição na especificação.~~ **Decidido (20/11/2026):** `SeatId`, `Snapshot`, `Ctx` e `Result` serão propostos e aprovados no início da Etapa 1. O motor continua puro: sem relógio e sem acesso a nada externo.
 20. ~~Three.js no acabamento.~~ **Decidido (20/11/2026):** a v1 é em SVG; o 3D só entra se for avaliado e aprovado na Etapa 6 (ver Registro de decisões).
-21. **Ajustes de tela vistos nos mockups (resolver na Etapa 3).**
+21. **Ajustes de tela vistos nos mockups.** Situação em 20/11/2026 (Etapa 3): o "+1" com dois sentidos foi resolvido (ferido: caixa de primeiros socorros vermelha com o número; carregando: ícone de pessoa com o número, em fundo escuro); o painel "Equipe" mostra a ordem real dos assentos; a contagem do bot e a sobreposição de textos em "Opinar" ficam para a Etapa 4 (telas online); o "+1" de quem carrega aparece igual em todas as telas, porque todas usam o mesmo componente. Pontos originais:
     - O "+1" tem dois sentidos: na casa (borda vermelha), número de feridos; no voluntário (fundo escuro), carregando 1 morador. A diferença é quase só de cor e posição. Avaliar um símbolo diferente para ferido, porque os estados não podem depender só de cor.
     - Ordem dos turnos: no painel "Equipe" da mesa a ordem é Bruno, Lia, Carla, Diego; nas telas "Bot assumiu" e "Diego volta", depois do Bruno (T13) vem o Diego (T14) e depois a Lia (T15). O painel deve mostrar a ordem real dos assentos.
     - Em "Bot assumiu", o aviso diz que o bot já joga, mas a contagem "Esperando o Diego voltar 0:12" mostra que ele ainda não entrou (o bot só entra após cerca de 20 s, seção 10). O texto deve acompanhar a contagem.
@@ -264,6 +264,15 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 20/11/2026: telas da Etapa 3 (um aparelho)
+
+- **Decisão:**
+  1. **Fontes:** a interface usa fontes do sistema com estilo parecido com Fredoka e Nunito. Carregar fontes do Google Fonts expõe o IP de quem joga (LGPD) e não funciona offline no PWA. Para usar as fontes dos mockups, a alternativa é servi-las do próprio site com o pacote `@fontsource` (dependência nova, aguarda aprovação).
+  2. **Ferido × carregando:** o morador ferido aparece como uma caixa de primeiros socorros vermelha com o número; o voluntário carregando mostra um ícone de pessoa com o número, em fundo escuro (ponto em aberto 21). As formas são diferentes, a cor só reforça.
+  3. **Números nas quadras** (altura, custo, iniciais) são desenhados por CSS e o nome acessível da quadra vem do `aria-label` completo, para cumprir a regra "rótulo no nome" (WCAG 2.5.3).
+  4. **Modo local:** os bots jogam com um intervalo curto (0,7 s) para que se veja cada jogada; a Dica mostra a sequência sugerida pelo bot, destaca a quadra e tem o botão "Fazer a jogada sugerida".
+- **Motivo:** privacidade e funcionamento offline (fontes), acessibilidade (ícones e rótulos) e jogo mais fácil de acompanhar (bots e dica).
 
 ### 20/11/2026: calibração da Etapa 2 e ajustes de papéis
 
