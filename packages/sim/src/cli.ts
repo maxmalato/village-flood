@@ -9,6 +9,7 @@
 import { difficulties, type Difficulty } from '@village-flood/engine'
 import { writeFileSync } from 'node:fs'
 import { availableParallelism } from 'node:os'
+import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
 import { planJobs, type Mode } from './plan.ts'
 import { renderReport } from './report.ts'
@@ -34,7 +35,10 @@ const chosen = values.difficulties.split(',') as Difficulty[]
 for (const d of chosen) if (!difficulties.includes(d)) throw new Error(`Dificuldade inválida: ${d}`)
 const sizes = values.sizes.split(',').map(Number)
 const games = Number(values.games)
-const variants = [baseline, ...values.variant.map(loadVariant)]
+// O pnpm roda o script dentro de packages/sim; caminhos relativos valem a partir de onde o
+// comando foi digitado (INIT_CWD).
+const fromCaller = (path: string) => resolve(process.env['INIT_CWD'] ?? process.cwd(), path)
+const variants = [baseline, ...values.variant.map((path) => loadVariant(fromCaller(path)))]
 
 const jobs = planJobs({ variants: variants.length, difficulties: chosen, sizes, games, mode })
 const started = Date.now()
@@ -58,8 +62,8 @@ const report = renderReport(
   new Date().toISOString().slice(0, 10),
 )
 if (values.out) {
-  writeFileSync(values.out, report)
-  process.stderr.write(`Relatório gravado em ${values.out}\n`)
+  writeFileSync(fromCaller(values.out), report)
+  process.stderr.write(`Relatório gravado em ${fromCaller(values.out)}\n`)
 } else {
   process.stdout.write(report)
 }
