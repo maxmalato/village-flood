@@ -6,7 +6,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 
 Planned modes: single device, multiple devices (private room with code and password) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
 
-> **Status:** in development. Stage 0 (foundation) in progress. No game rules are implemented yet. See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+> **Status:** in development. Stage 0 (foundation) is done; next is Stage 1 (rules engine). No game rules are implemented yet. See the [roadmap](docs/ROADMAP.md) (in Portuguese).
 
 ## Documentation
 

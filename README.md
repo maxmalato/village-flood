@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código e senha) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapa 0 (fundação) em andamento. Ainda não há regras do jogo implementadas. Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapa 0 (fundação) concluída; a próxima é a Etapa 1 (motor de regras). Ainda não há regras do jogo implementadas. Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 
