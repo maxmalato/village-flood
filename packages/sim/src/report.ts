@@ -89,7 +89,7 @@ function roleTable(input: ReportInput, variant: number): string[] {
   for (const difficulty of input.difficulties) {
     lines.push('', `#### ${difficultyLabel[difficulty]}: com e sem cada papel`, '')
     lines.push(
-      '| Papel | Vitória com | Vitória sem | Diferença | Entregas duplas por partida (com) |',
+      '| Papel | Vitória com | Vitória sem | Diferença | Por partida, com o papel: entregas duplas / curas / chamados pelo rádio |',
     )
     lines.push('| --- | ---: | ---: | ---: | ---: |')
     for (const role of roleIds) {
@@ -105,7 +105,7 @@ function roleTable(input: ReportInput, variant: number): string[] {
       const no = summarize(collect(input.results, withoutKeys), max)
       const diff = Math.round((yes.winRate - no.winRate) * 100)
       lines.push(
-        `| ${roleLabel[role]} | ${pct(yes.winRate)} | ${pct(no.winRate)} | ${diff > 0 ? '+' : ''}${diff} p.p. | ${num(yes.avgDoubleDeliveries, 2)} |`,
+        `| ${roleLabel[role]} | ${pct(yes.winRate)} | ${pct(no.winRate)} | ${diff > 0 ? '+' : ''}${diff} p.p. | ${num(yes.avgDoubleDeliveries, 2)} / ${num(yes.avgHeals, 2)} / ${num(yes.avgRadioCalls, 2)} |`,
       )
     }
     lines.push(

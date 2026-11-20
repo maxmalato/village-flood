@@ -17,6 +17,8 @@ export interface Summary {
   readonly avgSwept: number
   readonly avgSkipped: number
   readonly avgDoubleDeliveries: number
+  readonly avgRadioCalls: number
+  readonly avgHeals: number
   /** Nas vitórias: níveis que ainda faltavam até a derrota por nível. */
   readonly avgLevelMarginOnWin: number | null
 }
@@ -53,6 +55,8 @@ export function summarize(games: readonly GameMetrics[], maxRiverLevel: number):
     avgSwept: mean(games.map((g) => g.swept)),
     avgSkipped: mean(games.map((g) => g.skippedTurns)),
     avgDoubleDeliveries: mean(games.map((g) => g.doubleDeliveries)),
+    avgRadioCalls: mean(games.map((g) => g.radioCalls)),
+    avgHeals: mean(games.map((g) => g.heals)),
     avgLevelMarginOnWin:
       wins.length === 0 ? null : mean(wins.map((g) => maxRiverLevel - g.finalLevel)),
   }

@@ -73,6 +73,8 @@ describe('estatística', () => {
       swept: 1,
       skippedTurns: 0,
       doubleDeliveries: 0,
+      radioCalls: 0,
+      heals: 0,
     })
     const s = summarize([game(true, 14), game(false, 12)], 24)
     expect(s).toMatchObject({ games: 2, wins: 1, winRate: 0.5, lossStranded: 0.5, avgSwept: 1 })

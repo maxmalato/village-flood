@@ -23,6 +23,10 @@ export interface GameMetrics {
   readonly skippedTurns: number
   /** Entregas na igreja com 2 moradores de uma vez (Barqueira). */
   readonly doubleDeliveries: number
+  /** Chamados pelo rádio (Radialista). */
+  readonly radioCalls: number
+  /** Curas (Médica). */
+  readonly heals: number
 }
 
 /** Limite de segurança: nenhuma partida real chega perto disso. */
@@ -42,6 +46,8 @@ export function playGame(
   let swept = 0
   let skippedTurns = 0
   let doubleDeliveries = 0
+  let radioCalls = 0
+  let heals = 0
   while (state.phase === 'playing' && state.turn <= MAX_TURNS) {
     const seat = state.activeSeat
     const result = transition(state, botMove(state, seat, weights), { seat })
@@ -50,6 +56,8 @@ export function playGame(
       if (event.type === 'volunteer-swept') swept++
       else if (event.type === 'turn-skipped') skippedTurns++
       else if (event.type === 'delivered' && event.residentIds.length >= 2) doubleDeliveries++
+      else if (event.type === 'radio-called') radioCalls++
+      else if (event.type === 'healed') heals++
     }
     state = result.state
   }
@@ -69,5 +77,7 @@ export function playGame(
     swept,
     skippedTurns,
     doubleDeliveries,
+    radioCalls,
+    heals,
   }
 }
