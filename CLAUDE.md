@@ -9,7 +9,7 @@ Enchente na Vila (`village-flood`): jogo de tabuleiro **cooperativo** para o nav
 - Regras: `docs/village-flood-rules.md`.
 - Especificação técnica: `docs/village-flood-tech-spec.md`.
 - Situação das etapas: `docs/ROADMAP.md`. Confira antes de começar e atualize ao começar ou fechar uma etapa.
-- Mockups: `docs/mockups/` (código-fonte das telas em `docs/mockups/source/`, como referência de layout, cores e textos; os arquivos `.dc.html` não abrem sozinhos no navegador, e as imagens exportadas ficam em `docs/mockups/`).
+- Mockups: `docs/mockups/` (código-fonte das telas em `docs/mockups/source/`, como referência de layout, cores e textos; os arquivos `.dc.html` não abrem sozinhos no navegador, e as imagens exportadas ficam em `docs/mockups/`). **Se um mockup contradisser as regras, valem as regras.**
 - Logo e ícones: `assets/logo/`.
 - Decisões: registro no fim de `docs/village-flood-rules.md`, na seção "Registro de decisões". Decisão nova entra no topo, com data e motivo.
 
@@ -46,7 +46,7 @@ Arquitetura limpa: dependências apontam para dentro (UI e servidor dependem do 
 - `packages/sim`: simulação em lote (fora do `pnpm test`).
 - `apps/web`: Svelte 5 + Vite + PWA. Só desenha o estado, envia ações e anima eventos. Nunca calcula regra.
 - `apps/server`: Cloudflare Worker + um Durable Object por sala. Roda o mesmo motor e valida quem envia cada ação.
-- Tabuleiro em HTML/SVG, sem engine 3D. (O Three.js está em avaliação para a Etapa 6; ver "Registro de decisões".)
+- Tabuleiro em HTML/SVG, sem engine 3D. A v1 é em SVG; o Three.js só entra se for avaliado e aprovado na Etapa 6 (ver "Registro de decisões").
 - O ESLint barra imports que quebram as camadas (motor sem dependências, kit sem o jogo, bots só com o motor).
 
 ## Comandos
