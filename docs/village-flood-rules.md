@@ -231,6 +231,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
     - Em "Bot assumiu", o aviso diz que o bot já joga, mas a contagem "Esperando o Diego voltar 0:12" mostra que ele ainda não entrou (o bot só entra após cerca de 20 s, seção 10). O texto deve acompanhar a contagem.
     - Em "Opinar", "Vez do Bruno" e "Você é a Carla, Médica" ficam colados em 390 px. Quebrar a linha em telas estreitas.
     - Na mesa (T13), a Lia aparece carregando 1 morador ("+1" em A3), mas nas telas do celular do mesmo turno o "+1" não aparece.
+22. **Vizinha fraca e Engenheiro forte (simulação de 20/11/2026).** Depois dos ajustes, o efeito de cada papel (com × sem) ficou dentro de ±10 pontos para Bombeiro, Médica e Radialista, mas a Vizinha ficou em −21 (Tranquilo), −8 (Normal) e −13 (Tempestade), e o Engenheiro em +10, +19 e +17; a Barqueira ficou em +15 no Normal. Andar na diagonal economiza pouco neste mapa, e o saco de areia por 1 ação, também em quadra vizinha, segura as casas por mais tempo. Decidir antes da Etapa 7 (ideias: dar à Vizinha uma segunda habilidade; Engenheiro pagando 1 só na própria quadra e 2 na vizinha). Ver `docs/simulation/2026-11-20-summary.md`.
 
 ## 14. Acessibilidade
 
@@ -263,6 +264,18 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 20/11/2026: calibração da Etapa 2 e ajustes de papéis
+
+- **Decisão:** aprovados pelo dono do projeto, com base na simulação com bots (`docs/simulation/2026-11-20-summary.md`):
+  1. **Dificuldades (pacote A):** metas 8 / 9 / 10 (moradores no mapa 11 / 12 / 13), todas começam no nível 0, baralhos 10/11/4/0 (Tranquilo, média 0,76, sem Temporal), 13/8/3/1 (Normal, 0,68) e 16/4/2/3 (Tempestade, 0,68, mais Temporais e mais imprevisível). O baralho do Tranquilo foi reajustado de 10/12/3/0 para 10/11/4/0 depois dos ajustes de papéis, para voltar à faixa.
+  2. **Bombeiro** paga 2 para pegar ferido (era 1). Continua andando por 1 em quadra alagada.
+  3. **Médica:** curar não gasta ação e ela pega ferido por 1.
+  4. **Radialista:** além da previsão, ganha o **Chamado pelo rádio** (uma vez por turno, por 1 ação, o próximo voluntário na ordem ganha +1 ação no turno dele; perdida se o turno for perdido). Com +2, a Radialista passou a ser o papel mais forte (+21 pontos no Normal).
+  5. **Pontos em aberto 2, 3, 7 e 10:** manter como estão.
+  6. **Critério de equilíbrio:** o efeito de cada papel (com × sem) fica entre −10 e +10 pontos.
+- **Motivo:** com os dados iniciais, o Normal e a Tempestade venciam 0% (faltavam ações para tirar os moradores das casas de altura 1 antes do nível 12), o Bombeiro era forte demais (+30) e a Médica (−9) e a Radialista (−13) eram fracas. Resultado final da simulação: Tranquilo 74%, Normal 51%, Tempestade 26% (todos nas faixas); Bombeiro +8, Médica +4 e Radialista +1 no Normal.
+- **Consequências:** com metas mais próximas, a dificuldade passa a vir mais da meta que da média da chuva; a Tempestade se distingue pelo formato do baralho. Vizinha fraca e Engenheiro forte ficam no ponto em aberto 22. Os números continuam **(inicial)** até as partidas com pessoas (Etapa 7).
 
 ### 20/11/2026: dados, tipos e detalhes de regra do motor aprovados
 
