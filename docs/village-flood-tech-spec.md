@@ -67,11 +67,13 @@ interface GameState {
 }
 ```
 
+> **Tipos finais:** a proposta aprovada em `docs/engine-data-proposal.md` (20/11/2026) atualiza esta seção: `config` dentro do estado (no lugar de `difficulty`, `goal` e `maxRiverLevel`), `stormWarning`, `lossReason: 'swept'` e os tipos `SeatId`, `Ctx`, `Result` e `Snapshot`. Vale a proposta.
+
 `homeTileId` é a casa de origem do morador e nunca muda. Ele serve para derivar as marcas das casas (seção 5).
 
 Ações (união discriminada): `move`, `pick-up`, `heal`, `reinforce`, `forecast`, `undo`, `end-turn`.
 
-Eventos (para UI, som e log): `moved`, `picked-up`, `delivered`, `healed`, `sandbag-placed`, `rain-drawn`, `level-rose`, `tile-flooded`, `tile-submerged`, `tile-dried`, `resident-injured`, `resident-stranded`, `volunteer-swept`, `turn-skipped`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `lost`.
+Eventos (para UI, som e log; `bot-took-over` e `player-returned` são emitidos pelo servidor, não pelo motor; o motor também emite `forecast-revealed`, `action-undone` e `turn-ended`): `moved`, `picked-up`, `delivered`, `healed`, `sandbag-placed`, `rain-drawn`, `level-rose`, `tile-flooded`, `tile-submerged`, `tile-dried`, `resident-injured`, `resident-stranded`, `volunteer-swept`, `turn-skipped`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `lost`.
 
 Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta o estado de entrada. `ctx` traz o assento que age e nada externo (sem relógio). Os tipos `SeatId`, `Snapshot`, `Ctx` e `Result` são propostos e aprovados no início da Etapa 1. Toda validação acontece aqui e no servidor; o cliente nunca é confiável.
 

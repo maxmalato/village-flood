@@ -263,6 +263,21 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 
 Decisão nova entra no topo, com data e motivo.
 
+### 20/11/2026: dados, tipos e detalhes de regra do motor aprovados
+
+- **Decisão:** aprovada a proposta `docs/engine-data-proposal.md`: arquivos de dados em `packages/engine/data/` (`rules.json`, `difficulties.json`, `maps/village-river.json`), validados por schema com **Zod 4** (nova dependência de produção do motor); tipos `SeatId`, `Ctx`, `Result` e `Snapshot`; números da partida guardados no estado (`config`); eventos novos `forecast-revealed`, `action-undone` e `turn-ended`. Detalhes de regra fixados:
+  1. O Alerta de temporal olha só a próxima carta.
+  2. O baralho é reembaralhado logo depois da compra que o esvazia; a previsão mostra só as cartas que restam.
+  3. Se a derrota e a vitória acontecem no mesmo momento, vale a derrota.
+  4. O voluntário levado ao cais pela água conta para a vitória.
+  5. A Médica cura só moradores em quadra (não os carregados), na quadra dela ou numa vizinha ortogonal.
+  6. O saco de areia vale em quadra submersa.
+  7. Igreja e cais têm custo de quadra seca.
+  8. Encerrar o turno com ações sobrando é permitido.
+  9. Não há limite de voluntários na mesma quadra.
+  10. A vitória é verificada depois de cada ação e depois da chuva.
+- **Motivo:** cumprir a decisão "todos os números nos dados" e fechar pontos que as regras não diziam com todas as letras antes de implementar o motor. Zod: o schema gera os tipos TypeScript (fonte única) e servirá para validar as mensagens do servidor na Etapa 4.
+
 ### 20/11/2026: Three.js só se for aprovado na Etapa 6
 
 - **Decisão:** a v1 é feita em SVG. O 3D só entra se for avaliado na Etapa 6 e cumprir três condições: rodar bem em Smart TV e em celular modesto, manter a acessibilidade e deixar o SVG como alternativa. Até lá, nenhuma dependência nova.

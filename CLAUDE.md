@@ -64,6 +64,7 @@ pnpm format       # formata com o Prettier
 
 - pnpm pelo Corepack (`corepack enable`), na versão do campo `packageManager`. Node.js 22.12 ou mais novo; o CI usa o `.nvmrc`.
 - Pacotes: `@village-flood/engine`, `protocol`, `kit`, `bots`, `sim`, `web` e `server`.
+- Dados do jogo: `packages/engine/data/`, validados por `packages/engine/src/schema.ts` (Zod). Referência dos dados e tipos: `docs/engine-data-proposal.md`. Helpers de teste do motor em `packages/engine/src/testing.ts`; `checkInvariants` verifica o estado inteiro.
 - E2E: instale o navegador com `pnpm --filter @village-flood/web exec playwright install chromium`. Se já houver um Chromium instalado, aponte para ele com a variável `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
 - Dependência nova precisa respeitar o `minimumReleaseAge` do `pnpm-workspace.yaml`. Não adicione exceções a ele sem aprovação.
 - O `apps/server/worker-configuration.d.ts` é gerado pelo `wrangler types` (dentro do `pnpm typecheck`) e não é versionado.
