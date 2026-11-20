@@ -12,7 +12,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | --- | --- | --- |
 | 0 – Fundação | Concluída | `v0.1-foundation` |
 | 1 – Motor | Concluída | `v0.2-engine` |
-| 2 – Bots e simulação | Pronta para revisão (branch `develop/bots-sim`; calibração aprovada em 20/11/2026) | `v0.3-bots-sim` |
+| 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Não iniciada | `v0.5-online` |
 | 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
