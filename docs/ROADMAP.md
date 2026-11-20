@@ -11,7 +11,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | Etapa | Situação | Tag |
 | --- | --- | --- |
 | 0 – Fundação | Concluída | `v0.1-foundation` |
-| 1 – Motor | Pronta para revisão (branch `develop/engine`) | `v0.2-engine` |
+| 1 – Motor | Concluída | `v0.2-engine` |
 | 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Não iniciada | `v0.5-online` |
