@@ -6,7 +6,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 
 Planned modes: single device, multiple devices (private room with code and password) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
 
-> **Status:** in development. Stage 0 (foundation) is done; next is Stage 1 (rules engine). No game rules are implemented yet. See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+> **Status:** in development. Stages 0 (foundation) and 1 (rules engine) are ready; next is Stage 2 (bots and simulation). There are no game screens yet. See the [roadmap](docs/ROADMAP.md) (in Portuguese).
 
 ## Documentation
 
@@ -21,15 +21,15 @@ The project documents are written in Portuguese (Brazil).
 
 A pnpm monorepo with clean architecture: dependencies point inwards, and the engine depends on nothing. ESLint blocks imports that break this rule.
 
-| Folder              | Contents                                                 |
-| ------------------- | -------------------------------------------------------- |
-| `packages/engine`   | Pure TypeScript rules engine, no I/O                     |
-| `packages/protocol` | Client/server message types                              |
-| `packages/kit`      | Rooms, seats, reconnection and table mode, game-agnostic |
-| `packages/bots`     | Bots (`botMove` and `suggest`)                           |
-| `packages/sim`      | Batch simulation with bots                               |
-| `apps/web`          | User interface (Svelte 5 + Vite, PWA)                    |
-| `apps/server`       | Room server (Cloudflare Worker + Durable Object)         |
+| Folder              | Contents                                                                               |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `packages/engine`   | Pure TypeScript rules engine, no I/O. The game numbers live in `packages/engine/data/` |
+| `packages/protocol` | Client/server message types                                                            |
+| `packages/kit`      | Rooms, seats, reconnection and table mode, game-agnostic                               |
+| `packages/bots`     | Bots (`botMove` and `suggest`)                                                         |
+| `packages/sim`      | Batch simulation with bots                                                             |
+| `apps/web`          | User interface (Svelte 5 + Vite, PWA)                                                  |
+| `apps/server`       | Room server (Cloudflare Worker + Durable Object)                                       |
 
 ## Requirements
 

@@ -11,7 +11,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | Etapa | Situação | Tag |
 | --- | --- | --- |
 | 0 – Fundação | Concluída | `v0.1-foundation` |
-| 1 – Motor | Em andamento (branch `develop/engine`; proposta dos dados aguardando aprovação) | `v0.2-engine` |
+| 1 – Motor | Pronta para revisão (branch `develop/engine`) | `v0.2-engine` |
 | 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Não iniciada | `v0.5-online` |
@@ -36,7 +36,7 @@ Deixa o projeto pronto para receber código.
 
 `packages/engine`, sem I/O. Segue as seções 4 a 6 da especificação.
 
-- **Antes de implementar:** apresentar ao dono do projeto, para aprovação, o schema completo dos dados e os tipos `SeatId`, `Snapshot`, `Ctx` e `Result`. Proposta em `docs/engine-data-proposal.md`.
+- **Antes de implementar:** apresentar ao dono do projeto, para aprovação, o schema completo dos dados e os tipos `SeatId`, `Snapshot`, `Ctx` e `Result`. Proposta aprovada em 20/11/2026: `docs/engine-data-proposal.md`.
 - Tipos, estado e eventos. `homeTileId` em cada morador.
 - Dados validados por schema: mapa "Vila do Rio", baralho de chuva, tabela de dificuldades e `RoleParams`.
 - `WaterModel` com a implementação `river-level` (limiares por altura, sacos de areia, ligação com o rio por busca em largura).

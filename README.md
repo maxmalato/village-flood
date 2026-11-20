@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código e senha) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapa 0 (fundação) concluída; a próxima é a Etapa 1 (motor de regras). Ainda não há regras do jogo implementadas. Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapas 0 (fundação) e 1 (motor de regras) prontas; a próxima é a Etapa 2 (bots e simulação). Ainda não há telas do jogo. Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 
@@ -19,15 +19,15 @@ Modos previstos: um aparelho, vários aparelhos (sala privada com código e senh
 
 Monorepo pnpm com arquitetura limpa: as dependências apontam para dentro, e o motor não depende de ninguém. O ESLint barra imports que quebram essa regra.
 
-| Pasta               | Conteúdo                                                  |
-| ------------------- | --------------------------------------------------------- |
-| `packages/engine`   | Motor de regras em TypeScript puro, sem I/O               |
-| `packages/protocol` | Tipos das mensagens entre cliente e servidor              |
-| `packages/kit`      | Salas, assentos, reconexão e modo mesa, agnóstico de jogo |
-| `packages/bots`     | Bots (`botMove` e `suggest`)                              |
-| `packages/sim`      | Simulação em lote com bots                                |
-| `apps/web`          | Interface (Svelte 5 + Vite, PWA)                          |
-| `apps/server`       | Servidor de salas (Cloudflare Worker + Durable Object)    |
+| Pasta               | Conteúdo                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `packages/engine`   | Motor de regras em TypeScript puro, sem I/O. Os números do jogo ficam em `packages/engine/data/` |
+| `packages/protocol` | Tipos das mensagens entre cliente e servidor                                                     |
+| `packages/kit`      | Salas, assentos, reconexão e modo mesa, agnóstico de jogo                                        |
+| `packages/bots`     | Bots (`botMove` e `suggest`)                                                                     |
+| `packages/sim`      | Simulação em lote com bots                                                                       |
+| `apps/web`          | Interface (Svelte 5 + Vite, PWA)                                                                 |
+| `apps/server`       | Servidor de salas (Cloudflare Worker + Durable Object)                                           |
 
 ## Requisitos
 

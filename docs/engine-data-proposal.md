@@ -1,6 +1,13 @@
 # Etapa 1: proposta dos dados e dos tipos do motor
 
-Status: **proposta, aguardando aprovação do dono do projeto** (20/11/2026). Nada disto foi implementado ainda. Depois de aprovada, a proposta vira a referência do motor e as decisões entram no "Registro de decisões" das regras.
+Status: **aprovada em 20/11/2026 e implementada** em `packages/engine`. É a referência dos dados e dos tipos do motor; as decisões estão no "Registro de decisões" das regras.
+
+Notas da implementação:
+
+- No estado, `config` tem `difficulty`, `mapId`, `rules` e `settings` (as configurações da dificuldade).
+- Os eventos `bot-took-over` e `player-returned` da especificação não são do motor: dependem da conexão e serão emitidos pelo servidor (Etapa 4).
+- Vitória e derrota por ilhados nunca acontecem juntas, por causa da validação 5 (moradores = meta + 3). O conflito real é vitória junto com derrota por nível, e aí vale a derrota.
+- Validar os dados ao carregar o motor soma o Zod ao app web (cerca de 26 KB comprimidos). Se pesar na Smart TV (Etapa 5), avaliar `zod/mini`.
 
 Objetivo: cumprir a decisão de 20/11/2026 ("todos os números do jogo ficam nos dados; só a estrutura das regras fica no código") e definir os tipos `SeatId`, `Snapshot`, `Ctx` e `Result`.
 
