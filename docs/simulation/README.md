@@ -1,6 +1,6 @@
 # Simulação com bots
 
-Relatórios da simulação em lote (`packages/sim`). Os bots são a régua **relativa** entre configurações: comparam variantes dos dados com as mesmas partidas. A calibração final exige partidas com pessoas (Etapa 7).
+Relatórios da simulação em lote (`packages/sim`). Resumo mais recente com recomendações: [`2026-11-20-summary.md`](2026-11-20-summary.md). Os bots são a régua **relativa** entre configurações: comparam variantes dos dados com as mesmas partidas. A calibração final exige partidas com pessoas (Etapa 7).
 
 ## Como rodar
 
