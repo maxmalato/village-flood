@@ -1,0 +1,21 @@
+{
+  "name": "@village-flood/sim",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Simulação em lote com bots (fora do pnpm test)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "simulate": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@village-flood/bots": "workspace:*",
+    "@village-flood/engine": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}

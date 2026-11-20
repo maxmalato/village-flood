@@ -73,12 +73,12 @@ Ações (união discriminada): `move`, `pick-up`, `heal`, `reinforce`, `forecast
 
 Eventos (para UI, som e log): `moved`, `picked-up`, `delivered`, `healed`, `sandbag-placed`, `rain-drawn`, `level-rose`, `tile-flooded`, `tile-submerged`, `tile-dried`, `resident-injured`, `resident-stranded`, `volunteer-swept`, `turn-skipped`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `lost`.
 
-Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta o estado de entrada. `ctx` traz o assento que age. Toda validação acontece aqui e no servidor; o cliente nunca é confiável.
+Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta o estado de entrada. `ctx` traz o assento que age e nada externo (sem relógio). Os tipos `SeatId`, `Snapshot`, `Ctx` e `Result` são propostos e aprovados no início da Etapa 1. Toda validação acontece aqui e no servidor; o cliente nunca é confiável.
 
 ## 5. Regras como funções
 
-- `waterModel.recompute(tiles, level): Tile[]` implementa o modelo A: limiares `flood = 5 + 7*(h-1) + 3*sandbags` e `submerge = flood + 7` (para h=1 isso dá 5 e 12; para h=2, 12 e 19; para h=3, 19 e 26), mais a regra de ligação com o rio por busca em largura a partir da coluna A. Igreja e cais nunca molham. Isolar atrás de uma interface `WaterModel` para a v2.
-- `applyTransitions(before, after)`: dry→flooded fere moradores saudáveis da quadra; →submerged torna moradores da quadra ilhados. Moradores carregados são ignorados.
+- `waterModel.recompute(tiles, level): Tile[]` implementa o modelo A: limiares `flood = 5 + 7*(h-1) + 3*sandbags` e `submerge = flood + 7` (para h=1 isso dá 5 e 12; para h=2, 12 e 19; para h=3, 19 e 26), mais a regra de ligação com o rio por busca em largura a partir da coluna A, só pelas 4 vizinhas ortogonais. Igreja e cais nunca molham e não passam a água adiante. Isolar atrás de uma interface `WaterModel` para a v2.
+- `applyTransitions(before, after)`: só transições para um estado mais molhado têm efeito. dry→flooded fere moradores saudáveis da quadra; →submerged torna moradores da quadra ilhados. Moradores carregados são ignorados. Nada reverte quando a quadra seca: ferido continua ferido e ilhado continua ilhado. Morador curado numa quadra alagada fica saudável até a próxima transição para um estado mais molhado.
 - `moveCost(state, volunteer, tile)`: seca 1, alagada 2 (Bombeiro 1), submersa proibida (Barqueira 1). Vizinha anda na diagonal. **(a testar)** A Barqueira paga `+carryMoveSurcharge` (inicial: 1) por passo enquanto `carrying.length === 2`.
 - `pickUpCost(state, volunteer, resident)`: 1 para morador saudável; 2 para ferido, exceto o Bombeiro, que paga `firefighterInjuredPickUpCost` (inicial: 1). **(a testar)**
 - `endTurn`: compra a carta de chuva (reembaralha o descarte se vazio), sobe o nível, recalcula, aplica transições, chama `sweepVolunteers`, verifica `checkOutcome` e passa a vez.
@@ -87,11 +87,13 @@ Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, event
 - `checkOutcome`: vitória se `safe >= goal` e todos os voluntários no cais; derrota por 4 ilhados ou nível ≥ 24. Não existe mais derrota por voluntário sem saída. Só o cais entra na condição de vitória: a igreja apenas recebe moradores (eles ficam `safe` e não precisam ir ao cais).
 - Entrar na igreja entrega os moradores carregados, sem custo.
 - `houseMark(state, tileId): HouseMark | null` (função pura, derivada): para uma quadra `house`, considera os moradores com `homeTileId === tileId`. Se algum ainda está na quadra com status `healthy` ou `injured` e sem `carriedBy`, devolve `null` (a casa ainda tem morador). Caso contrário, devolve `'lost'` se algum deles estiver `stranded`, ou `'cleared'` se todos estiverem `safe` ou sendo carregados. Para quadras que não são casa, devolve `null`. Como `stranded` não aparece na quadra, `sweepVolunteers` muda a marca da casa de origem para `'lost'` quando ilha moradores carregados.
-- `undo` restaura o snapshot do turno. Não desfaz `forecast`, e é limpo em `end-turn`.
+- `undo` restaura o snapshot do turno. Não desfaz `forecast`: usar `forecast` limpa o `turnHistory`, então o desfazer só alcança as ações feitas depois dele. O histórico também é limpo em `end-turn`.
 
 ## 6. Dados de configuração
 
 Mapa e baralhos como dados (JSON validado por schema), não no código: alturas, igreja, cais, casas, ordem dos moradores extras e tabela de dificuldades (valores da seção 9 do documento de regras, todos **iniciais**).
+
+Todos os números do jogo ficam nos dados: 3 ações por turno, nível máximo 24, limite de 4 ilhados, limiares por altura, sacos de areia (bônus e máximo) e custos (andar, pegar, saco de areia, alerta). Só a estrutura das regras fica no código. O schema completo é aprovado pelo dono do projeto no início da Etapa 1, antes de implementar.
 
 Os parâmetros de papéis também ficam em dados, para ajustar sem mudar o código:
 

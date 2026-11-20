@@ -10,7 +10,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 
 | Etapa | Situação | Tag |
 | --- | --- | --- |
-| 0 – Fundação | Não iniciada | `v0.1-foundation` |
+| 0 – Fundação | Concluída | `v0.1-foundation` |
 | 1 – Motor | Não iniciada | `v0.2-engine` |
 | 2 – Bots e simulação | Não iniciada | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Não iniciada | `v0.4-local-ui` |
@@ -36,6 +36,7 @@ Deixa o projeto pronto para receber código.
 
 `packages/engine`, sem I/O. Segue as seções 4 a 6 da especificação.
 
+- **Antes de implementar:** apresentar ao dono do projeto, para aprovação, o schema completo dos dados e os tipos `SeatId`, `Snapshot`, `Ctx` e `Result`.
 - Tipos, estado e eventos. `homeTileId` em cada morador.
 - Dados validados por schema: mapa "Vila do Rio", baralho de chuva, tabela de dificuldades e `RoleParams`.
 - `WaterModel` com a implementação `river-level` (limiares por altura, sacos de areia, ligação com o rio por busca em largura).

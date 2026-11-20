@@ -1,0 +1,14 @@
+// Configuração do Worker. Nenhum segredo nem ID de conta aqui:
+// credenciais ficam no painel da Cloudflare, no `wrangler secret` ou nos segredos do GitHub Actions.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "village-flood-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "send_metrics": false,
+  "observability": { "enabled": true },
+  "durable_objects": {
+    "bindings": [{ "name": "ROOMS", "class_name": "Room" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+}

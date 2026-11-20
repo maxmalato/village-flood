@@ -1,0 +1,22 @@
+{
+  "name": "@village-flood/server",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Servidor de salas: Cloudflare Worker com um Durable Object por sala",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "types": "wrangler types",
+    "typecheck": "wrangler types && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@village-flood/engine": "workspace:*",
+    "@village-flood/kit": "workspace:*",
+    "@village-flood/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.8.4",
+    "wrangler": "^4.124.0"
+  }
+}

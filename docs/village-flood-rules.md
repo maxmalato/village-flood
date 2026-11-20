@@ -107,7 +107,7 @@ Cada quadra tem dois limiares, que dependem da altura:
 
 Regras:
 
-1. **Ligação com o rio:** uma quadra só molha se estiver encostada no rio (coluna A) ou numa quadra já molhada. Assim a água avança pelo vale e o morro protege o que está atrás dele.
+1. **Ligação com o rio:** uma quadra só molha se estiver encostada no rio (coluna A) ou numa quadra já molhada. Assim a água avança pelo vale e o morro protege o que está atrás dele. A ligação considera só as 4 vizinhas ortogonais, o mesmo critério do andar. A igreja e o cais nunca molham e, por isso, não passam a água adiante; as vizinhas deles ainda podem molhar por outros caminhos.
 2. **Estados da quadra:** seca, alagada ou submersa (`dry`, `flooded`, `submerged`). O estado é recalculado a cada subida do nível e a cada saco de areia.
 3. **Saco de areia:** cada saco soma +3 aos dois limiares da quadra (máximo 2 sacos por quadra). Não vale para igreja e cais. Se o recálculo fizer a quadra voltar a um estado menos molhado, ela seca.
 4. **Custo de andar** (pelo estado da quadra de destino): seca 1, alagada 2 (Bombeiro 1), submersa proibida (só a Barqueira, custo 1). A Barqueira paga +1 ação por passo enquanto carrega 2 moradores. **(a testar)**
@@ -126,6 +126,9 @@ Exemplo: o nível está em 10 e sai uma carta Chuva (+2), levando-o a 12. As qua
 - Moradores são carregados: pegar um morador na mesma quadra custa 1 ação (2 se estiver ferido; o Bombeiro paga 1).
 - Ao entrar na igreja, todo morador carregado é entregue automaticamente, sem gastar ação. O morador entregue fica salvo para sempre e não precisa ir ao cais.
 - Morador carregado não sofre efeito da água. O voluntário sofre (seção 8).
+- **Ferimento e isolamento acontecem na transição da quadra**, não por ela estar molhada. Quando a quadra passa para um estado mais molhado, os moradores saudáveis dela ficam feridos (seca → alagada) ou todos ficam ilhados (→ submersa). Estar alagada, por si só, não fere ninguém de novo.
+- O ferido continua ferido mesmo que a quadra seque depois (por saco de areia). O ilhado nunca volta, mesmo que a quadra seque.
+- O morador curado pela Médica fica saudável, mesmo numa quadra que continua alagada. Ele só volta a ficar ferido se a quadra passar de novo para um estado mais molhado (por exemplo, secar e alagar outra vez).
 - Não há contador de tempo: o perigo vem do nível da água.
 - Moradores no mapa = meta + 3. Assim, o 4º ilhado torna a meta impossível, e a regra da derrota por ilhados fica coerente.
 
@@ -149,6 +152,8 @@ Ordem fixa por assento. O jogador da vez tem 3 ações (as que não usar são pe
 | Desfazer (`undo`) | 0. | Quem tem a vez |
 
 A altura não afeta o movimento na v1.
+
+**Desfazer e Alerta de temporal:** o alerta é um ponto sem volta. Ao usá-lo, o histórico do turno é limpo, e o desfazer só alcança as ações feitas depois dele.
 
 ## 8. Vitória e derrota
 
@@ -211,6 +216,20 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 10. **Igreja como porto seguro pode deixar o jogo fácil?** Como a igreja nunca alaga e o morador entregue fica salvo para sempre, o jogo vira uma corrida de entregas (casa → igreja), e a dificuldade vem só do relógio da água. Medir nas simulações: quantos turnos sobram quando a equipe vence, taxa de vitória por dificuldade e quanto a Barqueira transportando 2 moradores encurta o trajeto. Se o jogo ficar fácil, as alavancas são: aumentar a meta, subir a média de chuva, aumentar o custo extra da Barqueira com 2 moradores ou afastar o cais/a igreja no mapa. Se ficar difícil demais, o caminho é o inverso.
 11. Legenda na mesa: a TV costuma não ter toque. Definir como abrir a legenda completa na TV (controle remoto/teclado, ou pelo celular de quem controla) e se a legenda rápida basta na TV.
 12. Marcas "✓" e "✗" nas casas: confirmar nos testes com pessoas se o símbolo é entendido sem explicação ou se precisa de texto curto.
+13. ~~Mockup "Sua vez" contradiz a regra do Bombeiro.~~ **Decidido (20/11/2026):** vale a regra (o Bombeiro paga 1 para pegar ferido). O texto do mockup não muda; se um mockup contradisser as regras, valem as regras.
+14. ~~Imagens exportadas dos mockups incompletas.~~ **Resolvido (20/11/2026):** as telas foram reexportadas com o tabuleiro desenhado.
+15. ~~Vizinhança da água.~~ **Decidido (20/11/2026):** só as 4 vizinhas ortogonais; igreja e cais não passam a água adiante (seção 5, regra 1).
+16. ~~Morador ferido em quadra que seca ou continua alagada.~~ **Decidido (20/11/2026):** ferido e ilhado não revertem quando a quadra seca; o curado só volta a ficar ferido numa nova transição para um estado mais molhado (seção 6).
+17. ~~Desfazer depois do Alerta de temporal.~~ **Decidido (20/11/2026):** o alerta é um ponto sem volta e limpa o histórico do turno (seção 7).
+18. ~~Valores fora do `RoleParams`.~~ **Decidido (20/11/2026):** todos os números vão para os dados; só a estrutura das regras fica no código. O schema completo será apresentado para aprovação no início da Etapa 1, antes de implementar.
+19. ~~Tipos sem definição na especificação.~~ **Decidido (20/11/2026):** `SeatId`, `Snapshot`, `Ctx` e `Result` serão propostos e aprovados no início da Etapa 1. O motor continua puro: sem relógio e sem acesso a nada externo.
+20. ~~Three.js no acabamento.~~ **Decidido (20/11/2026):** a v1 é em SVG; o 3D só entra se for avaliado e aprovado na Etapa 6 (ver Registro de decisões).
+21. **Ajustes de tela vistos nos mockups (resolver na Etapa 3).**
+    - O "+1" tem dois sentidos: na casa (borda vermelha), número de feridos; no voluntário (fundo escuro), carregando 1 morador. A diferença é quase só de cor e posição. Avaliar um símbolo diferente para ferido, porque os estados não podem depender só de cor.
+    - Ordem dos turnos: no painel "Equipe" da mesa a ordem é Bruno, Lia, Carla, Diego; nas telas "Bot assumiu" e "Diego volta", depois do Bruno (T13) vem o Diego (T14) e depois a Lia (T15). O painel deve mostrar a ordem real dos assentos.
+    - Em "Bot assumiu", o aviso diz que o bot já joga, mas a contagem "Esperando o Diego voltar 0:12" mostra que ele ainda não entrou (o bot só entra após cerca de 20 s, seção 10). O texto deve acompanhar a contagem.
+    - Em "Opinar", "Vez do Bruno" e "Você é a Carla, Médica" ficam colados em 390 px. Quebrar a linha em telas estreitas.
+    - Na mesa (T13), a Lia aparece carregando 1 morador ("+1" em A3), mas nas telas do celular do mesmo turno o "+1" não aparece.
 
 ## 14. Acessibilidade
 
@@ -239,3 +258,62 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 | Casa de origem do morador | `homeTileId` |
 | Marca da casa (✓, ✗) | `houseMark`: `cleared`, `lost` |
 | Legenda (rápida, completa) | `legend`, `quickLegend` |
+
+## 16. Registro de decisões
+
+Decisão nova entra no topo, com data e motivo.
+
+### 20/11/2026: Three.js só se for aprovado na Etapa 6
+
+- **Decisão:** a v1 é feita em SVG. O 3D só entra se for avaliado na Etapa 6 e cumprir três condições: rodar bem em Smart TV e em celular modesto, manter a acessibilidade e deixar o SVG como alternativa. Até lá, nenhuma dependência nova.
+- **Motivo:** detalha a decisão de 19/11/2026 com critérios objetivos.
+
+### 20/11/2026: tipos do motor e schema dos dados aprovados no início da Etapa 1
+
+- **Decisão:** todos os números do jogo ficam nos dados, não só os do `RoleParams`: 3 ações por turno, nível máximo 24, limite de 4 ilhados, limiares por altura, sacos de areia (bônus e máximo) e custos (andar, pegar, saco de areia, alerta). Só a estrutura das regras fica no código (por exemplo, "só a Barqueira entra em quadra submersa"). O schema completo e os tipos `SeatId`, `Snapshot`, `Ctx` e `Result` são apresentados ao dono do projeto e aprovados antes de implementar. O motor continua puro: sem relógio e sem acesso a nada externo.
+- **Motivo:** regra do `CLAUDE.md` (nenhum valor inicial fixo no código) e calibração da Etapa 2 só mexendo nos dados.
+
+### 20/11/2026: desfazer depois do Alerta de temporal
+
+- **Decisão:** o alerta é um ponto sem volta. Ao usá-lo, o histórico do turno é limpo, e o desfazer só alcança as ações feitas depois dele.
+- **Motivo:** o alerta revela informação (a próxima carta), e desfazer as ações anteriores permitiria refazer o turno sabendo o resultado.
+
+### 20/11/2026: ferido, ilhado e curado
+
+- **Decisão:** ferimento e isolamento acontecem só na transição da quadra para um estado mais molhado. O ferido continua ferido se a quadra secar (saco de areia), e o ilhado nunca volta. O curado pela Médica fica saudável mesmo numa quadra que continua alagada e só volta a ficar ferido numa nova transição para um estado mais molhado.
+- **Motivo:** mantém simples a regra "ferimento acontece na transição" e evita que o saco de areia desfaça perdas.
+
+### 20/11/2026: vizinhança da água
+
+- **Decisão:** a ligação com o rio usa só as 4 vizinhas ortogonais, o mesmo critério do andar (a Vizinha é a única exceção do jogo). A igreja e o cais nunca molham e, por isso, não passam a água adiante; as vizinhas deles ainda podem molhar por outros caminhos.
+- **Motivo:** coerência com o movimento e com a regra "a água só se espalha a partir de quadras molhadas".
+
+### 20/11/2026: mockups reexportados e prioridade das regras
+
+- **Decisão:** se um mockup contradisser as regras, valem as regras. O texto do mockup "Sua vez" ("pegar o ferido custa 2") fica como está; o Bombeiro paga 1. As imagens dos mockups foram reexportadas com o tabuleiro desenhado.
+- **Motivo:** os mockups são referência de layout, cores e textos, não de regras. Assim, essa dúvida não volta.
+
+### 19/11/2026: Three.js fica em avaliação para o acabamento
+
+- **Decisão:** o Three.js pode ser usado no acabamento, e a decisão fica para a Etapa 6. Até lá, o tabuleiro segue em HTML/SVG, como na especificação.
+- **Motivo:** pedido do dono do projeto. Decidir no fim evita atrasar o motor e as telas. Como a interface só desenha o estado, trocar ou somar uma camada 3D não muda o motor.
+- **Consequências:** o Three.js seria uma dependência de produção nova e precisa de aprovação. Na decisão, avaliar o desempenho em aparelhos modestos e em Smart TV, a acessibilidade (rótulos por quadra, `prefers-reduced-motion`) e o tamanho do pacote. Registrado também em "Pontos em aberto" (item 20).
+
+### 19/11/2026: stack da Etapa 0 confirmada
+
+- **Decisão:** TypeScript, Svelte 5, Vite, Vitest, fast-check, Playwright com axe-core, ESLint, Prettier e Cloudflare Workers com Durable Objects (SQLite), num monorepo pnpm, como propõe a especificação. Versões e ajustes:
+  - **TypeScript 6.0**, não o 7: o typescript-eslint e o svelte-check ainda não aceitam o TypeScript 7. Rever quando aceitarem.
+  - **Vitest 5** com **`@cloudflare/vitest-plugin`** para os testes do servidor dentro do runtime dos Workers. O pacote antigo, `@cloudflare/vitest-pool-workers`, foi descontinuado e renomeado.
+  - **Tipos do Worker gerados pelo `wrangler types`**, como recomenda a documentação da Cloudflare, em vez do pacote `@cloudflare/workers-types`. O arquivo gerado não é versionado e é criado de novo a cada `pnpm typecheck`.
+  - **pnpm 12** pelo Corepack, com `minimumReleaseAge` de 1 dia e scripts de instalação permitidos só para `esbuild` e `workerd`.
+  - **Node.js 24 LTS** no CI (`.nvmrc`). Mínimo aceito: 22.12.
+  - Telemetria do Wrangler desligada (`send_metrics: false`).
+  - Actions do GitHub fixadas pelo SHA do commit, com permissão só de leitura no CI.
+  - Dependabot semanal com espera de 7 dias para versões novas.
+- **Motivo:** mesma stack do Senhorio Web, nas versões atuais e compatíveis entre si, seguindo as documentações oficiais e evitando pacotes descontinuados.
+- **Ainda não incluído:** o `vite-plugin-pwa` entra na Etapa 5 (PWA). O `packages/kit` será extraído do `senhorio-web` na Etapa 4.
+
+### 19/11/2026: primeiro commit direto na `main`
+
+- **Decisão:** o repositório estava vazio, e a `main` foi criada com um único commit com os arquivos do pacote inicial (documentação, mockups e logo), sem alterações. Todo o resto vai para branches `develop/...`.
+- **Motivo:** a branch `develop/foundation` precisa partir de uma `main` existente. Exceção única, aprovada pelo dono do projeto.
