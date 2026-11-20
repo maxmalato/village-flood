@@ -71,9 +71,9 @@ interface GameState {
 
 `homeTileId` é a casa de origem do morador e nunca muda. Ele serve para derivar as marcas das casas (seção 5).
 
-Ações (união discriminada): `move`, `pick-up`, `heal`, `reinforce`, `forecast`, `undo`, `end-turn`.
+Ações (união discriminada): `move`, `pick-up`, `heal`, `reinforce`, `forecast`, `radio-call`, `undo`, `end-turn`.
 
-Eventos (para UI, som e log; `bot-took-over` e `player-returned` são emitidos pelo servidor, não pelo motor; o motor também emite `forecast-revealed`, `action-undone` e `turn-ended`): `moved`, `picked-up`, `delivered`, `healed`, `sandbag-placed`, `rain-drawn`, `level-rose`, `tile-flooded`, `tile-submerged`, `tile-dried`, `resident-injured`, `resident-stranded`, `volunteer-swept`, `turn-skipped`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `lost`.
+Eventos (para UI, som e log; `bot-took-over` e `player-returned` são emitidos pelo servidor, não pelo motor; o motor também emite `forecast-revealed`, `radio-called`, `action-undone` e `turn-ended`): `moved`, `picked-up`, `delivered`, `healed`, `sandbag-placed`, `rain-drawn`, `level-rose`, `tile-flooded`, `tile-submerged`, `tile-dried`, `resident-injured`, `resident-stranded`, `volunteer-swept`, `turn-skipped`, `turn-started`, `bot-took-over`, `player-returned`, `won`, `lost`.
 
 Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, events, reason }`. Nunca muta o estado de entrada. `ctx` traz o assento que age e nada externo (sem relógio). Os tipos `SeatId`, `Snapshot`, `Ctx` e `Result` são propostos e aprovados no início da Etapa 1. Toda validação acontece aqui e no servidor; o cliente nunca é confiável.
 
@@ -82,7 +82,8 @@ Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, event
 - `waterModel.recompute(tiles, level): Tile[]` implementa o modelo A: limiares `flood = 5 + 7*(h-1) + 3*sandbags` e `submerge = flood + 7` (para h=1 isso dá 5 e 12; para h=2, 12 e 19; para h=3, 19 e 26), mais a regra de ligação com o rio por busca em largura a partir da coluna A, só pelas 4 vizinhas ortogonais. Igreja e cais nunca molham e não passam a água adiante. Isolar atrás de uma interface `WaterModel` para a v2.
 - `applyTransitions(before, after)`: só transições para um estado mais molhado têm efeito. dry→flooded fere moradores saudáveis da quadra; →submerged torna moradores da quadra ilhados. Moradores carregados são ignorados. Nada reverte quando a quadra seca: ferido continua ferido e ilhado continua ilhado. Morador curado numa quadra alagada fica saudável até a próxima transição para um estado mais molhado.
 - `moveCost(state, volunteer, tile)`: seca 1, alagada 2 (Bombeiro 1), submersa proibida (Barqueira 1). Vizinha anda na diagonal. **(a testar)** A Barqueira paga `+carryMoveSurcharge` (inicial: 1) por passo enquanto `carrying.length === 2`.
-- `pickUpCost(state, volunteer, resident)`: 1 para morador saudável; 2 para ferido, exceto o Bombeiro, que paga `firefighterInjuredPickUpCost` (inicial: 1). **(a testar)**
+- `pickUpCost(state, volunteer, resident)`: 1 para morador saudável; 2 para ferido. O Bombeiro paga `firefighterInjuredPickUpCost` (2 desde 20/11/2026) e a Médica paga `medicInjuredPickUpCost` (1). Curar custa `medicHealCost` (0). **(a testar com pessoas)**
+- `radio-call` (Radialista, uma vez por turno, custo `radioCallCost`): o próximo assento na ordem ganha `radioCallBonus` ações extras (`bonusActions`) no próximo turno dele; o bônus se perde se esse turno for perdido. Pode ser desfeito.
 - `endTurn`: compra a carta de chuva (reembaralha o descarte se vazio), sobe o nível, recalcula, aplica transições, chama `sweepVolunteers`, verifica `checkOutcome` e passa a vez.
 - `sweepVolunteers`: **(a testar)** para cada voluntário, exceto a Barqueira, em quadra submersa após a chuva: move ao cais, marca `skipNextTurn = true`, os moradores carregados viram `stranded` (e contam para o limite de 4) e emite `volunteer-swept`. Deve rodar antes de `checkOutcome`, porque os moradores ilhados dessa forma podem causar a derrota.
 - Ao iniciar o turno de um voluntário com `skipNextTurn`, o engine emite `turn-skipped`, zera a marca, não concede ações, mas ainda compra a carta de chuva e passa a vez (hipótese: a água não espera).
@@ -103,12 +104,14 @@ Os parâmetros de papéis também ficam em dados, para ajustar sem mudar o códi
 interface RoleParams {
   boatPilotCarryCapacity: number        // inicial: 2
   carryMoveSurcharge: number            // inicial: 1 (custo extra por passo com 2 moradores)
-  firefighterInjuredPickUpCost: number  // inicial: 1
+  firefighterInjuredPickUpCost: number  // 2 (era 1 até 20/11/2026)
   sweptSkipsNextTurn: boolean           // inicial: true
   sweptDrawsRainOnSkippedTurn: boolean  // inicial: true
   immediateLossOnSwept: Difficulty[]    // inicial: [] (derrota imediata só nas dificuldades listadas)
 }
 ```
+
+Lista completa e valores atuais: `packages/engine/data/rules.json` (schema em `packages/engine/src/schema.ts`). Desde 20/11/2026 inclui também `medicHealCost` (0), `medicInjuredPickUpCost` (1), `radioCallCost` (1) e `radioCallBonus`.
 
 ## 7. Protocolo e salas
 

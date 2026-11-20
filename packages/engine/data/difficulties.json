@@ -3,21 +3,48 @@
     "goal": 8,
     "extraResidents": 1,
     "startLevel": 0,
-    "deck": { "cloudy": 12, "drizzle": 8, "rain": 4, "storm": 1 },
-    "forecast": { "kind": "peek", "cards": 2, "cost": 0 }
+    "deck": {
+      "cloudy": 10,
+      "drizzle": 11,
+      "rain": 4,
+      "storm": 0
+    },
+    "forecast": {
+      "kind": "peek",
+      "cards": 2,
+      "cost": 0
+    }
   },
   "normal": {
+    "goal": 9,
+    "extraResidents": 2,
+    "startLevel": 0,
+    "deck": {
+      "cloudy": 13,
+      "drizzle": 8,
+      "rain": 3,
+      "storm": 1
+    },
+    "forecast": {
+      "kind": "peek",
+      "cards": 1,
+      "cost": 0
+    }
+  },
+  "storm": {
     "goal": 10,
     "extraResidents": 3,
     "startLevel": 0,
-    "deck": { "cloudy": 8, "drizzle": 8, "rain": 6, "storm": 3 },
-    "forecast": { "kind": "peek", "cards": 1, "cost": 0 }
-  },
-  "storm": {
-    "goal": 12,
-    "extraResidents": 5,
-    "startLevel": 4,
-    "deck": { "cloudy": 4, "drizzle": 8, "rain": 8, "storm": 5 },
-    "forecast": { "kind": "storm-warning", "cards": 1, "cost": 1 }
+    "deck": {
+      "cloudy": 16,
+      "drizzle": 4,
+      "rain": 2,
+      "storm": 3
+    },
+    "forecast": {
+      "kind": "storm-warning",
+      "cards": 1,
+      "cost": 1
+    }
   }
 }

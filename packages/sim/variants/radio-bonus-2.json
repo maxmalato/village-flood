@@ -1,0 +1,4 @@
+{
+  "description": "Chamado pelo rádio dá +2 ações (em vez de +1).",
+  "patch": { "rules": { "roleParams": { "radioCallBonus": 2 } } }
+}

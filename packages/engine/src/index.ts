@@ -11,6 +11,7 @@ export * from './types.ts'
 export { defaultGameData } from './data.ts'
 export {
   actorsOf,
+  adjacentTileIds,
   carryCapacity,
   countResidents,
   findTile,
@@ -22,6 +23,7 @@ export {
   moveCost,
   newGame,
   pickUpCost,
+  radioCallTarget,
   reachableMoves,
   reinforceCost,
   transition,

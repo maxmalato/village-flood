@@ -2,6 +2,8 @@
 
 Status: **aprovada em 20/11/2026 e implementada** em `packages/engine`. É a referência dos dados e dos tipos do motor; as decisões estão no "Registro de decisões" das regras.
 
+> **Valores atuais:** os números abaixo são os da proposta original. Os valores em uso ficam em `packages/engine/data/` e mudaram na calibração da Etapa 2 (ver "Registro de decisões" das regras, 20/11/2026), incluindo novos parâmetros da Médica e do Chamado pelo rádio.
+
 Notas da implementação:
 
 - No estado, `config` tem `difficulty`, `mapId`, `rules` e `settings` (as configurações da dificuldade).
