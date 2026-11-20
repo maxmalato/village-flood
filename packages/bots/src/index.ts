@@ -1,6 +1,14 @@
-// Bots: `botMove` e `suggest` entram na Etapa 2.
-// Regra de arquitetura: só dependem do motor e só usam informação pública do estado.
-import { GAME_ID } from '@village-flood/engine'
-
-/** Jogo para o qual estes bots foram escritos. */
-export const BOTS_GAME_ID = GAME_ID
+// Bots do Enchente na Vila: funções puras, só com informação pública.
+// Regra de arquitetura: só dependem do motor.
+export {
+  botMove,
+  defaultWeights,
+  plan,
+  scoreState,
+  suggest,
+  type BotWeights,
+  type Plan,
+} from './bot.ts'
+export { tileDangers, type TileDanger } from './danger.ts'
+export { projectedRise, rainOutlook, type RainOutlook } from './outlook.ts'
+export { pathCosts } from './paths.ts'
