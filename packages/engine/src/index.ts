@@ -23,6 +23,7 @@ export {
   moveCost,
   newGame,
   pickUpCost,
+  radioCallTarget,
   reachableMoves,
   reinforceCost,
   transition,

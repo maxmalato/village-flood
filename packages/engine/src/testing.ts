@@ -152,8 +152,14 @@ export function checkInvariants(state: GameState, expectedResidents?: number): s
       const r = state.residents.find((x) => x.id === id)
       if (r?.carriedBy !== v.seat) problems.push(`${v.seat}: carrega ${id}, que não é dele`)
     }
-    if (v.actionsLeft < 0 || v.actionsLeft > rules.actionsPerTurn) {
+    if (
+      v.actionsLeft < 0 ||
+      v.actionsLeft > rules.actionsPerTurn + rules.roleParams.radioCallBonus
+    ) {
       problems.push(`${v.seat}: ações fora da faixa`)
+    }
+    if (v.bonusActions < 0 || v.bonusActions > rules.roleParams.radioCallBonus) {
+      problems.push(`${v.seat}: bônus de ações fora da faixa`)
     }
     if (v.seat !== state.activeSeat && v.actionsLeft !== 0) {
       problems.push(`${v.seat}: tem ações fora da sua vez`)

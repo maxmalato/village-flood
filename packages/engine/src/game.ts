@@ -118,9 +118,16 @@ export function moveCost(state: GameState, volunteer: Volunteer, to: Tile): numb
 export function pickUpCost(state: GameState, volunteer: Volunteer, resident: Resident): number {
   const { costs, roleParams } = state.config.rules
   if (resident.status !== 'injured') return costs.pickUp.healthy
-  return volunteer.role === 'firefighter'
-    ? roleParams.firefighterInjuredPickUpCost
-    : costs.pickUp.injured
+  if (volunteer.role === 'firefighter') return roleParams.firefighterInjuredPickUpCost
+  if (volunteer.role === 'medic') return roleParams.medicInjuredPickUpCost
+  return costs.pickUp.injured
+}
+
+/** Quem recebe o Chamado pelo rádio: o próximo assento na ordem. */
+export function radioCallTarget(state: GameState, seat: SeatId): SeatId | null {
+  const index = state.volunteers.findIndex((v) => v.seat === seat)
+  if (index < 0 || state.volunteers.length < 2) return null
+  return state.volunteers[(index + 1) % state.volunteers.length]?.seat ?? null
 }
 
 /** Custo do saco de areia para o voluntário. */
@@ -268,6 +275,7 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
     carrying: [],
     actionsLeft: i === 0 ? rules.actionsPerTurn : 0,
     skipNextTurn: false,
+    bonusActions: 0,
   }))
 
   const cards: RainCardKind[] = []
@@ -289,6 +297,7 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
     rainDeck: shuffled.items,
     rainDiscard: [],
     stormWarning: null,
+    radioCalled: false,
     turn: 1,
     activeSeat: first.seat,
     turnHistory: [],
@@ -332,6 +341,8 @@ export function transition(state: GameState, action: Action, ctx: Ctx): Transiti
       return withUndo(state, applyReinforce(state, action.tileId))
     case 'forecast':
       return applyForecast(state)
+    case 'radio-call':
+      return withUndo(state, applyRadioCall(state))
     case 'undo':
       return applyUndo(state)
     case 'end-turn':
@@ -489,6 +500,33 @@ function applyForecast(state: GameState): TransitionResult {
   }
 }
 
+/**
+ * Chamado pelo rádio (Radialista, uma vez por turno): o próximo voluntário na ordem ganha
+ * ações extras no turno dele. Pode ser desfeito (não revela informação).
+ */
+function applyRadioCall(state: GameState): TransitionResult {
+  const volunteer = activeVolunteer(state)
+  if (volunteer.role !== 'radio-host') return reject(state, 'role-required')
+  if (state.radioCalled) return reject(state, 'radio-call-used')
+  const target = radioCallTarget(state, volunteer.seat)
+  if (target === null) return reject(state, 'radio-call-used')
+  const { radioCallCost, radioCallBonus } = state.config.rules.roleParams
+  if (radioCallCost > volunteer.actionsLeft) return reject(state, 'not-enough-actions')
+
+  let next = updateVolunteer(state, volunteer.seat, {
+    actionsLeft: volunteer.actionsLeft - radioCallCost,
+  })
+  const receiver = findVolunteer(next, target)
+  next = updateVolunteer(next, target, {
+    bonusActions: (receiver?.bonusActions ?? 0) + radioCallBonus,
+  })
+  return {
+    ok: true,
+    state: { ...next, radioCalled: true },
+    events: [{ type: 'radio-called', seat: volunteer.seat, target, bonus: radioCallBonus }],
+  }
+}
+
 function applyUndo(state: GameState): TransitionResult {
   const previous = state.turnHistory.at(-1)
   if (!previous) return reject(state, 'nothing-to-undo')
@@ -506,6 +544,7 @@ function applyEndTurn(state: GameState): TransitionResult {
     ...updateVolunteer(state, volunteer.seat, { actionsLeft: 0 }),
     turnHistory: [],
     stormWarning: null,
+    radioCalled: false,
   }
   next = rainPhase(next, events)
   if (next.phase === 'playing') next = advanceTurn(next, events)
@@ -528,10 +567,18 @@ function advanceTurn(state: GameState, events: GameEvent[]): GameState {
     events.push({ type: 'turn-started', seat: upcoming.seat, turn })
 
     if (!upcoming.skipNextTurn) {
-      return updateVolunteer(next, upcoming.seat, { actionsLeft: rules.actionsPerTurn })
+      return updateVolunteer(next, upcoming.seat, {
+        actionsLeft: rules.actionsPerTurn + upcoming.bonusActions,
+        bonusActions: 0,
+      })
     }
     events.push({ type: 'turn-skipped', seat: upcoming.seat, turn })
-    next = updateVolunteer(next, upcoming.seat, { skipNextTurn: false, actionsLeft: 0 })
+    // O bônus do Chamado pelo rádio se perde junto com o turno.
+    next = updateVolunteer(next, upcoming.seat, {
+      skipNextTurn: false,
+      actionsLeft: 0,
+      bonusActions: 0,
+    })
     if (rules.roleParams.sweptDrawsRainOnSkippedTurn) {
       next = rainPhase(next, events)
       if (next.phase !== 'playing') return next
@@ -701,6 +748,7 @@ export function legalActions(state: GameState): Action[] {
       .map((r): Action => ({ type: 'heal', residentId: r.id })),
     ...[here.id, ...around].map((tileId): Action => ({ type: 'reinforce', tileId })),
     { type: 'forecast' },
+    { type: 'radio-call' },
     { type: 'undo' },
     { type: 'end-turn' },
   ]

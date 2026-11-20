@@ -1,34 +1,60 @@
 {
   "version": 1,
-  "seats": { "min": 2, "max": 4 },
+  "seats": {
+    "min": 2,
+    "max": 4
+  },
   "actionsPerTurn": 3,
   "maxRiverLevel": 24,
   "strandedLossCount": 4,
   "water": {
     "thresholds": {
-      "1": { "flood": 5, "submerge": 12 },
-      "2": { "flood": 12, "submerge": 19 },
-      "3": { "flood": 19, "submerge": 26 }
+      "1": {
+        "flood": 5,
+        "submerge": 12
+      },
+      "2": {
+        "flood": 12,
+        "submerge": 19
+      },
+      "3": {
+        "flood": 19,
+        "submerge": 26
+      }
     },
     "sandbagBonus": 3,
     "maxSandbagsPerTile": 2
   },
-  "rainCards": { "cloudy": 0, "drizzle": 1, "rain": 2, "storm": 3 },
+  "rainCards": {
+    "cloudy": 0,
+    "drizzle": 1,
+    "rain": 2,
+    "storm": 3
+  },
   "costs": {
-    "move": { "dry": 1, "flooded": 2 },
-    "pickUp": { "healthy": 1, "injured": 2 },
+    "move": {
+      "dry": 1,
+      "flooded": 2
+    },
+    "pickUp": {
+      "healthy": 1,
+      "injured": 2
+    },
     "reinforce": 2
   },
   "roleParams": {
     "defaultCarryCapacity": 1,
     "firefighterFloodedMoveCost": 1,
-    "firefighterInjuredPickUpCost": 1,
+    "firefighterInjuredPickUpCost": 2,
     "boatPilotSubmergedMoveCost": 1,
     "boatPilotCarryCapacity": 2,
     "carryMoveSurcharge": 1,
     "carrySurchargeFromCarried": 2,
     "engineerReinforceCost": 1,
-    "medicHealCost": 1,
+    "medicHealCost": 0,
+    "medicInjuredPickUpCost": 1,
+    "radioCallCost": 1,
+    "radioCallBonus": 1,
     "sweptSkipsNextTurn": true,
     "sweptDrawsRainOnSkippedTurn": true,
     "immediateLossOnSwept": []

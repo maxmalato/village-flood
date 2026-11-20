@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { defaultGameData } from './data.ts'
 import {
   actorsOf,
   adjacentTileIds,
@@ -39,26 +40,46 @@ const eventsOf = (state: GameState, action: Action) => {
 }
 
 describe('newGame', () => {
-  it('cria 13 moradores no Normal, com os extras em A4, B5 e F3', () => {
+  it('cria 12 moradores no Normal, com os extras em A4 e B5', () => {
     const s = setup()
-    expect(s.residents).toHaveLength(13)
+    expect(s.residents).toHaveLength(12)
     expect(s.residents.filter((r) => r.id.endsWith('-2')).map((r) => r.homeTileId)).toEqual([
       'A4',
       'B5',
-      'F3',
     ])
     expect(s.residents.every((r) => r.status === 'healthy' && r.tileId === r.homeTileId)).toBe(true)
   })
 
-  it('cria 11 moradores no Tranquilo e 15 na Tempestade', () => {
+  it('cria 11 moradores no Tranquilo e 13 na Tempestade', () => {
     expect(setup(undefined, 'easy').residents).toHaveLength(11)
-    expect(setup(undefined, 'storm').residents).toHaveLength(15)
+    expect(setup(undefined, 'storm').residents).toHaveLength(13)
   })
 
-  it('começa a Tempestade no nível 4, ainda sem quadras molhadas', () => {
-    const s = setup(undefined, 'storm')
-    expect(s.riverLevel).toBe(4)
-    expect(s.tiles.every((t) => t.water === 'dry')).toBe(true)
+  it('começa no nível inicial da dificuldade, com a água já calculada', () => {
+    for (const difficulty of ['easy', 'normal', 'storm'] as const) {
+      expect(setup(undefined, difficulty).riverLevel).toBe(0)
+    }
+    const data = {
+      ...defaultGameData,
+      difficulties: {
+        ...defaultGameData.difficulties,
+        storm: { ...defaultGameData.difficulties.storm, startLevel: 5 },
+      },
+    }
+    const s = newGame(
+      {
+        difficulty: 'storm',
+        seed: 1,
+        seats: [
+          { seat: 'ana', role: 'medic' },
+          { seat: 'bruno', role: 'engineer' },
+        ],
+      },
+      data,
+    )
+    expect(s.riverLevel).toBe(5)
+    expect(water(s, 'A1')).toBe('flooded')
+    expect(resident(s, 'B1-1').status).toBe('injured')
   })
 
   it('põe todos no cais, com 3 ações só para o primeiro assento', () => {
@@ -73,7 +94,9 @@ describe('newGame', () => {
     const s = setup()
     const count = (kind: string) => s.rainDeck.filter((c) => c === kind).length
     expect(s.rainDeck).toHaveLength(25)
-    expect([count('cloudy'), count('drizzle'), count('rain'), count('storm')]).toEqual([8, 8, 6, 3])
+    expect([count('cloudy'), count('drizzle'), count('rain'), count('storm')]).toEqual([
+      13, 8, 3, 1,
+    ])
   })
 
   it('é determinística pela semente', () => {
@@ -175,14 +198,14 @@ describe('pegar morador (regras, seção 6)', () => {
     expect(resident(s, 'C2-1')).toMatchObject({ tileId: null, carriedBy: 'ana' })
   })
 
-  it('pegar ferido custa 2, e 1 para o Bombeiro (a testar)', () => {
+  it('pegar ferido custa 2, inclusive para o Bombeiro; a Médica paga 1', () => {
     let s = patchResident(setup(), 'C2-1', { status: 'injured' })
     s = patchVolunteer(patchVolunteer(s, 'ana', { tileId: 'C2' }), 'bruno', { tileId: 'C2' })
-    expect(volunteer(act(s, { type: 'pick-up', residentId: 'C2-1' }), 'ana').actionsLeft).toBe(2)
+    expect(volunteer(act(s, { type: 'pick-up', residentId: 'C2-1' }), 'ana').actionsLeft).toBe(1)
     const medic = activate(s, 'bruno')
     expect(
       volunteer(act(medic, { type: 'pick-up', residentId: 'C2-1' }), 'bruno').actionsLeft,
-    ).toBe(1)
+    ).toBe(2)
   })
 
   it('cada voluntário carrega 1; a Barqueira carrega 2', () => {
@@ -217,13 +240,15 @@ describe('pegar morador (regras, seção 6)', () => {
 describe('curar (Médica)', () => {
   const base = activate(patchResident(setup(), 'C2-1', { status: 'injured' }), 'bruno')
 
-  it('cura ferido na quadra vizinha por 1 ação', () => {
+  it('cura ferido na quadra vizinha de graça, mesmo sem ações', () => {
     const s = act(patchVolunteer(base, 'bruno', { tileId: 'C3' }), {
       type: 'heal',
       residentId: 'C2-1',
     })
     expect(resident(s, 'C2-1').status).toBe('healthy')
-    expect(volunteer(s, 'bruno').actionsLeft).toBe(2)
+    expect(volunteer(s, 'bruno').actionsLeft).toBe(3)
+    const tired = patchVolunteer(base, 'bruno', { tileId: 'C3', actionsLeft: 0 })
+    expect(rejectReason(tired, { type: 'heal', residentId: 'C2-1' })).toBe('ok')
   })
 
   it('cura na mesma quadra, mas não na diagonal', () => {
@@ -435,7 +460,7 @@ describe('água e moradores (regras, seção 6)', () => {
       tileId: 'A4',
       cause: 'water',
     })
-    expect(countResidents(next).stranded).toBe(9)
+    expect(countResidents(next).stranded).toBe(8)
     expect(next).toMatchObject({ phase: 'lost', lossReason: 'stranded' })
     expect(events.at(-1)).toEqual({ type: 'lost', reason: 'stranded' })
     expect(houseMark(next, 'A4')).toBe('lost')
@@ -565,7 +590,7 @@ describe('vitória e derrota', () => {
   it('não vence sem a meta', () => {
     let s = activate(saveAllExcept(setup(), ['A2-1', 'B1-1', 'E5-1', 'E2-1']), 'bruno')
     s = patchVolunteer(s, 'bruno', { tileId: 'C3' })
-    expect(countResidents(s).safe).toBe(9)
+    expect(countResidents(s).safe).toBe(8)
     expect(act(s, { type: 'move', to: 'B3' }).phase).toBe('playing')
   })
 
@@ -629,5 +654,49 @@ describe('adjacentTileIds', () => {
     expect(adjacentTileIds(setup(), 'B3', false).sort()).toEqual(['A3', 'B2', 'B4', 'C3'])
     expect(adjacentTileIds(setup(), 'A1', true).sort()).toEqual(['A2', 'B1', 'B2'])
     expect(adjacentTileIds(setup(), 'Z9', false)).toEqual([])
+  })
+})
+
+describe('Chamado pelo rádio (Radialista)', () => {
+  const base = setup(['radio-host', 'medic', 'engineer'])
+
+  it('por 1 ação, o próximo voluntário ganha 1 ação no turno dele', () => {
+    const events = transition(base, { type: 'radio-call' }, { seat: 'ana' })
+    expect(events.ok && events.events).toEqual([
+      { type: 'radio-called', seat: 'ana', target: 'bruno', bonus: 1 },
+    ])
+    let s = act(base, { type: 'radio-call' })
+    expect(volunteer(s, 'ana').actionsLeft).toBe(2)
+    expect(volunteer(s, 'bruno').bonusActions).toBe(1)
+    s = act(withDeck(s, ['cloudy', 'cloudy']), { type: 'end-turn' })
+    expect(volunteer(s, 'bruno')).toMatchObject({ actionsLeft: 4, bonusActions: 0 })
+    s = act(s, { type: 'end-turn' })
+    expect(volunteer(s, 'carla').actionsLeft).toBe(3)
+  })
+
+  it('uma vez por turno, só a Radialista', () => {
+    const used = act(base, { type: 'radio-call' })
+    expect(rejectReason(used, { type: 'radio-call' })).toBe('radio-call-used')
+    expect(rejectReason(activate(base, 'bruno'), { type: 'radio-call' })).toBe('role-required')
+    const tired = patchVolunteer(base, 'ana', { actionsLeft: 0 })
+    expect(rejectReason(tired, { type: 'radio-call' })).toBe('not-enough-actions')
+  })
+
+  it('pode ser desfeito', () => {
+    expect(act(act(base, { type: 'radio-call' }), { type: 'undo' })).toEqual(base)
+  })
+
+  it('volta a valer no turno seguinte da Radialista', () => {
+    let s = act(withDeck(base, ['cloudy', 'cloudy', 'cloudy', 'cloudy']), { type: 'radio-call' })
+    for (let i = 0; i < 3; i++) s = act(s, { type: 'end-turn' })
+    expect(s.activeSeat).toBe('ana')
+    expect(rejectReason(s, { type: 'radio-call' })).toBe('ok')
+  })
+
+  it('o bônus se perde se o turno do voluntário for perdido', () => {
+    let s = patchVolunteer(base, 'bruno', { skipNextTurn: true, bonusActions: 1 })
+    s = act(withDeck(s, ['cloudy', 'cloudy', 'cloudy']), { type: 'end-turn' })
+    expect(s.activeSeat).toBe('carla')
+    expect(volunteer(s, 'bruno').bonusActions).toBe(0)
   })
 })

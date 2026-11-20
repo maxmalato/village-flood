@@ -55,6 +55,8 @@ export interface Volunteer {
   readonly carrying: readonly ResidentId[]
   readonly actionsLeft: number
   readonly skipNextTurn: boolean
+  /** Ações extras para o próximo turno (Chamado pelo rádio). Perdidas se o turno for perdido. */
+  readonly bonusActions: number
 }
 
 /** Números desta partida, copiados dos dados na criação (a partida não muda se os dados mudarem). */
@@ -79,6 +81,8 @@ export interface GameState {
   readonly rainDiscard: readonly RainCardKind[]
   /** Resposta do Alerta de temporal neste turno (null = não usado). */
   readonly stormWarning: boolean | null
+  /** Se a Radialista já usou o Chamado pelo rádio neste turno. */
+  readonly radioCalled: boolean
   readonly turn: number
   readonly activeSeat: SeatId
   readonly turnHistory: readonly Snapshot[]
@@ -100,6 +104,7 @@ export type Action =
   | { readonly type: 'heal'; readonly residentId: ResidentId }
   | { readonly type: 'reinforce'; readonly tileId: TileId }
   | { readonly type: 'forecast' }
+  | { readonly type: 'radio-call' }
   | { readonly type: 'undo' }
   | { readonly type: 'end-turn' }
 
@@ -112,6 +117,7 @@ export type GameEvent =
   | { type: 'healed'; seat: SeatId; residentId: ResidentId }
   | { type: 'sandbag-placed'; seat: SeatId; tileId: TileId; sandbags: number }
   | { type: 'forecast-revealed'; seat: SeatId; stormComing: boolean; cards: number }
+  | { type: 'radio-called'; seat: SeatId; target: SeatId; bonus: number }
   | { type: 'action-undone'; seat: SeatId }
   | { type: 'turn-ended'; seat: SeatId; turn: number }
   | { type: 'rain-drawn'; card: RainCardKind; rise: number }
@@ -155,6 +161,7 @@ export const rejectReasons = [
   'sandbag-limit',
   'tile-not-reinforceable',
   'forecast-unavailable',
+  'radio-call-used',
   'nothing-to-undo',
 ] as const
 export type RejectReason = (typeof rejectReasons)[number]

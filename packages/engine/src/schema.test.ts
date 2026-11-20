@@ -23,8 +23,8 @@ describe('dados do repositório', () => {
   it('têm moradores = meta + 3 em cada dificuldade (regras, seção 6)', () => {
     const base = map.houses.length * map.residentsPerHouse
     expect(base + difficulties.easy.extraResidents).toBe(11)
-    expect(base + difficulties.normal.extraResidents).toBe(13)
-    expect(base + difficulties.storm.extraResidents).toBe(15)
+    expect(base + difficulties.normal.extraResidents).toBe(12)
+    expect(base + difficulties.storm.extraResidents).toBe(13)
   })
 
   it('têm baralhos de 25 cartas', () => {

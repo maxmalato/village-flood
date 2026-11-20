@@ -56,7 +56,12 @@ export const RoleParamsSchema = z.strictObject({
   carryMoveSurcharge: nonNegativeInt,
   carrySurchargeFromCarried: positiveInt,
   engineerReinforceCost: positiveInt,
-  medicHealCost: positiveInt,
+  /** Curar pode ser de graça (0). */
+  medicHealCost: nonNegativeInt,
+  medicInjuredPickUpCost: positiveInt,
+  /** Chamado pelo rádio: custo para a Radialista e ações extras para o próximo voluntário. */
+  radioCallCost: positiveInt,
+  radioCallBonus: positiveInt,
   sweptSkipsNextTurn: z.boolean(),
   sweptDrawsRainOnSkippedTurn: z.boolean(),
   immediateLossOnSwept: z.array(DifficultySchema),
