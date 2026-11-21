@@ -29,6 +29,8 @@
   --mark-ok: #1f6f66;
   --mark-lost: #b3401f;
 
+  /* Seta das listas (select): desenhada pelo jogo, com a cor do texto de cada tema. */
+  --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5l5.5 5.5 5.5-5.5' fill='none' stroke='%23F3EBD8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --font-title: 'Fredoka', 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
   --font-body: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color-scheme: dark;
@@ -51,6 +53,7 @@
     --danger: #a33a16;
     --ok: #2e7d32;
     --focus: #1d5a8f;
+    --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5l5.5 5.5 5.5-5.5' fill='none' stroke='%2310263B' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     color-scheme: light;
   }
 }
@@ -85,6 +88,21 @@ select {
 }
 
 button {
+  cursor: pointer;
+}
+
+/* Listas: seta própria com folga à direita (a seta nativa fica colada na borda). */
+select {
+  appearance: none;
+  min-height: 44px;
+  padding: 0 44px 0 12px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background-color: var(--bg);
+  background-image: var(--select-arrow);
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 14px 9px;
   cursor: pointer;
 }
 

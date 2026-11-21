@@ -70,7 +70,7 @@
   {/if}
 
   {#if tile.pawns.length > 0}
-    <span class="pawns" aria-hidden="true">
+    <span class="pawns" class:many={tile.pawns.length >= 3} aria-hidden="true">
       {#each tile.pawns as pawn (pawn.seat)}
         <span
           class="pawn txt"
@@ -236,6 +236,27 @@
     line-height: 16px;
     z-index: 1;
   }
+  /* 3 ou 4 voluntários na mesma quadra: peões menores e mais sobrepostos, sem sair da quadra. */
+  .many .pawn {
+    width: 16px;
+    height: 16px;
+    margin-right: -5px;
+    border-width: 1.5px;
+    font-size: 0.6rem;
+    line-height: 13px;
+  }
+  .many .pawn.active {
+    border-width: 2px;
+    line-height: 12px;
+  }
+  .many .carry {
+    top: -11px;
+    left: 4px;
+    height: 12px;
+    font-size: 0.6rem;
+    line-height: 12px;
+  }
+
   .carry {
     position: absolute;
     top: -13px;
@@ -289,6 +310,16 @@
     }
     .pawn.active {
       line-height: 22px;
+    }
+    .many .pawn {
+      width: 22px;
+      height: 22px;
+      margin-right: -6px;
+      font-size: 0.8rem;
+      line-height: 19px;
+    }
+    .many .pawn.active {
+      line-height: 18px;
     }
     .badge,
     .mark {

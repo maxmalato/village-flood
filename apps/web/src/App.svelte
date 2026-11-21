@@ -96,13 +96,6 @@
     justify-content: flex-end;
     padding: 8px 16px 0;
   }
-  select {
-    min-height: 44px;
-    padding: 0 10px;
-    border-radius: 10px;
-    border: 2px solid var(--border);
-    background: var(--bg);
-  }
   .app :global(h1) {
     outline: none;
   }

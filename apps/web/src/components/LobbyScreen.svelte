@@ -183,8 +183,7 @@
     gap: 4px;
     font-weight: 700;
   }
-  input[type='text'],
-  select {
+  input[type='text'] {
     min-height: 44px;
     padding: 0 10px;
     border-radius: 10px;
