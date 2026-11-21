@@ -265,6 +265,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 
 Decisão nova entra no topo, com data e motivo.
 
+### 21/11/2026: Dica só no Tranquilo
+
+- **Decisão:** o botão "Dica" (jogada sugerida pelo bot) aparece só na dificuldade Tranquilo. No Normal e na Tempestade, a equipe joga sem sugestão.
+- **Motivo:** pedido do dono do projeto. A dica ajuda quem está aprendendo; nas dificuldades maiores, o desafio é a equipe planejar sozinha. É uma escolha da interface (`hintDifficulties` em `apps/web/src/lib/game.svelte.ts`), não uma regra do motor.
+
 ### 20/11/2026: telas da Etapa 3 (um aparelho)
 
 - **Decisão:**

@@ -65,7 +65,7 @@ To play in the browser (development mode), run the command below and open the ad
 pnpm --filter @village-flood/web dev
 ```
 
-In the lobby, pick the difficulty, the roles and which seats are bots. In the game, tap a tile to see the actions; "Hint" shows the move the bot would make. For tests, `?botDelay=0&seed=42` in the URL makes bots play instantly and fixes the seed.
+In the lobby, pick the difficulty, the roles and which seats are bots. In the game, tap a tile to see the actions; on Calm, "Hint" shows the move the bot would make. For tests, `?botDelay=0&seed=42` in the URL makes bots play instantly and fixes the seed.
 
 ## Security and privacy
 

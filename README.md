@@ -63,7 +63,7 @@ Para jogar no navegador (modo de desenvolvimento), rode o comando abaixo e abra 
 pnpm --filter @village-flood/web dev
 ```
 
-No lobby, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
+No lobby, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; no Tranquilo, "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
 
 ## Segurança e privacidade
 

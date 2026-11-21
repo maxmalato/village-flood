@@ -4,6 +4,7 @@ import {
   newGame,
   transition,
   type Action,
+  type Difficulty,
   type GameEvent,
   type GameState,
   type SeatId,
@@ -17,6 +18,12 @@ export interface SeatStats {
   heals: number
   radioCalls: number
 }
+
+/**
+ * Dificuldades em que a Dica aparece (decisão do dono do projeto, 21/11/2026: só no Tranquilo).
+ * É uma escolha da interface, não uma regra do jogo.
+ */
+export const hintDifficulties: readonly Difficulty[] = ['easy']
 
 export interface Hint {
   readonly actions: readonly Action[]
@@ -97,8 +104,12 @@ export class LocalGame {
   }
 
   /** Dica: a mesma lógica do bot, para quem tem a vez. */
+  get hintAvailable(): boolean {
+    return hintDifficulties.includes(this.state.config.difficulty)
+  }
+
   showHint() {
-    if (!this.isHumanTurn) return
+    if (!this.isHumanTurn || !this.hintAvailable) return
     const plan = suggest(this.state, this.state.activeSeat)
     this.hint = { actions: plan.actions }
     const first = plan.actions[0]

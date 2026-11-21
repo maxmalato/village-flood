@@ -84,7 +84,7 @@
     </div>
   {/if}
 
-  <div class="row">
+  <div class="row" class:two={!game.hintAvailable}>
     <button
       type="button"
       class="btn"
@@ -93,9 +93,11 @@
     >
       {t(locale, 'action.undo')}
     </button>
-    <button type="button" class="btn" disabled={!human} onclick={() => game.showHint()}>
-      {t(locale, 'action.hint')}
-    </button>
+    {#if game.hintAvailable}
+      <button type="button" class="btn" disabled={!human} onclick={() => game.showHint()}>
+        {t(locale, 'action.hint')}
+      </button>
+    {/if}
     <button
       type="button"
       class="btn"
@@ -196,6 +198,9 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
+  }
+  .row.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .row .btn {
     min-height: 48px;
