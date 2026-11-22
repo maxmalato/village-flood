@@ -15,7 +15,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Concluída | `v0.5-online` |
-| 5 – Mesa e PWA | Em andamento (branch `develop/table-pwa`; falta o teste em aparelhos reais) | `v0.6-table-pwa` |
+| 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
@@ -106,7 +106,7 @@ Deixa o projeto pronto para receber código.
 - PWA (`vite-plugin-pwa`): manifesto, ícones de `assets/logo/`, service worker com o jogo em cache; o modo local funciona offline e a tela inicial avisa quando não há internet.
 - Testes: kit (mesa e legenda), integração no servidor (mesa), E2E da mesa (TV + celular, legenda pelo celular e pelo teclado, TV recarregando) e do PWA (manifesto e jogo offline), axe-core nos temas claro e escuro.
 
-**Falta para fechar:** teste em aparelho real (celular, tablet e navegador de Smart TV), feito pelo dono do projeto.
+**Teste em aparelhos reais:** feito pelo dono do projeto em 22/11/2026, pela rede local (mesa e online); a instalação do PWA no celular será conferida com HTTPS na publicação (Etapa 7).
 
 ## Etapa 6 – Acabamento
 
