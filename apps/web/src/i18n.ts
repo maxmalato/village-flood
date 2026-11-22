@@ -29,6 +29,7 @@ const ptBR = {
   'lobby.errorHuman': 'Pelo menos 1 assento precisa ser de uma pessoa.',
   'lobby.errorRoles': 'Cada voluntário precisa de um papel diferente.',
   'lobby.errorNames': 'Todo voluntário precisa de um apelido.',
+  'lobby.errorNamesRepeated': 'Cada voluntário precisa de um apelido diferente.',
   'lobby.recommend': 'Recomendado: 3 ou 4 voluntários.',
 
   'difficulty.easy': 'Tranquilo',
@@ -276,6 +277,7 @@ const en: Record<MessageKey, string> = {
   'lobby.errorHuman': 'At least 1 seat must be a person.',
   'lobby.errorRoles': 'Each volunteer needs a different role.',
   'lobby.errorNames': 'Every volunteer needs a nickname.',
+  'lobby.errorNamesRepeated': 'Each volunteer needs a different nickname.',
   'lobby.recommend': 'Recommended: 3 or 4 volunteers.',
 
   'difficulty.easy': 'Calm',

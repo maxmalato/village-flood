@@ -30,4 +30,17 @@ describe('setup do lobby', () => {
       'errorNames',
     )
   })
+
+  it('novo assento recebe um apelido livre, mesmo depois de remover outro', () => {
+    // Ana, Bruno, Carla -> remove Bruno -> Ana, Carla -> adiciona: não pode ser outra Carla.
+    const s = addSeat(removeSeat(defaultSetup(), 1))
+    expect(s.seats.map((x) => x.name)).toEqual(['Ana', 'Carla', 'Bruno'])
+    expect(validateSetup(s)).toEqual([])
+  })
+
+  it('recusa apelidos repetidos, sem diferenciar maiúsculas e espaços', () => {
+    const s = defaultSetup()
+    const repeated = { ...s, seats: s.seats.map((x, i) => (i === 1 ? { ...x, name: ' ana ' } : x)) }
+    expect(validateSetup(repeated)).toContain('errorNamesRepeated')
+  })
 })
