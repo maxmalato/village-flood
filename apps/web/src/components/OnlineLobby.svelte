@@ -6,6 +6,7 @@
   import { roomLink } from '../lib/online/link.ts'
   import { MAX_SEATS, MIN_SEATS } from '../lib/setup.ts'
   import { initialOf } from '../lib/view.ts'
+  import QrCode from './QrCode.svelte'
 
   let { game, locale, onleave }: { game: OnlineGame; locale: Locale; onleave: () => void } =
     $props()
@@ -43,14 +44,27 @@
 
     <section class="code-box" aria-labelledby="code-title">
       <h2 id="code-title" class="panel-title">{t(locale, 'room.code')}</h2>
-      <p class="code" aria-label={room.code.split('').join(' ')}>{formatCode(room.code)}</p>
-      <p class="hint">{t(locale, 'room.codeHint')}</p>
+      <div class="code-row">
+        <div>
+          <p class="code" aria-label={room.code.split('').join(' ')}>{formatCode(room.code)}</p>
+          <p class="hint">{t(locale, 'room.codeHint')}</p>
+        </div>
+        <QrCode
+          text={link}
+          label={t(locale, 'table.qr', { code: formatCode(room.code) })}
+          size={132}
+        />
+      </div>
       <div class="link">
         <input type="text" readonly value={link} aria-label={t(locale, 'room.copyLink')} />
         <button type="button" class="btn" onclick={copy}>{t(locale, 'room.copyLink')}</button>
       </div>
       <p class="hint" role="status">{copied ? t(locale, 'room.copied') : ''}</p>
     </section>
+
+    {#if room.table?.connected}
+      <p class="banner" role="status">{t(locale, 'room.tableConnected')}</p>
+    {/if}
 
     {#if game.connection.status !== 'open'}
       <p class="banner" role="status">{t(locale, 'online.reconnecting')}</p>
@@ -195,6 +209,13 @@
     font-family: var(--font-title);
     font-size: 2.6rem;
     letter-spacing: 0.12em;
+  }
+  .code-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
   }
   .link {
     display: flex;

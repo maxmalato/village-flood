@@ -6,7 +6,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 
 Planned modes: single device, multiple devices (private room with a code) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
 
-> **Status:** in development. Stages 0 to 4 are ready: you can already play **on one device** or **online, each person on their own device** (private room with a 6-symbol code), 2 to 4 volunteers, with bots filling the team. Next is Stage 5 (table mode and PWA). Each game draws which houses get the extra residents and whether the map is mirrored. The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+> **Status:** in development. Stages 0 to 5 are ready: you can play **on one device**, **online, each person on their own device** (private room with a 6-symbol code and a QR code) or in **table mode** (board on the TV or laptop, phones as controllers), 2 to 4 volunteers, with bots filling the team. The game can be installed (PWA), and the one-device mode works offline. Each game draws which houses get the extra residents and whether the map is mirrored. The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
 
 ## Documentation
 
@@ -70,6 +70,8 @@ To play online at home (development mode), also run the room server in a second 
 ```bash
 pnpm --filter @village-flood/server dev
 ```
+
+For table mode, open the game on the TV or laptop and choose "Open the table (TV or laptop)": the screen shows the code and the QR code, and the first person to join on a phone runs the room. The full legend opens on the TV with the remote or with the "Show the legend on the TV" button on a phone.
 
 On the start screen, "Create an online room" gives the code and the link (`?sala=CODE`); the others use "Join with a code" or open the link. If the connection drops, the device rejoins the same seat on its own.
 

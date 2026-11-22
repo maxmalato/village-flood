@@ -1,7 +1,7 @@
 // Conexão de um aparelho com a sala: WebSocket, entrada (hello), reconexão automática e o
 // estado da sala como o servidor mandou. Não calcula regra: só guarda e repassa.
 import type { GameEvent } from '@village-flood/engine'
-import type { ClientMessage, Notice, SeatId } from '@village-flood/kit'
+import { TABLE_SEAT, type ClientMessage, type Notice, type SeatId } from '@village-flood/kit'
 import type { VillageRoomView, VillageServerMessage } from '@village-flood/protocol'
 import { forgetRoom, saveRoom } from './link.ts'
 
@@ -64,7 +64,8 @@ export class RoomConnection {
 
   /** Sai da sala de vez (avisa o servidor e esquece a sala neste aparelho). */
   leave() {
-    this.send({ type: 'leave' })
+    // a mesa não ocupa assento: basta fechar a conexão
+    if (this.seat !== TABLE_SEAT) this.send({ type: 'leave' })
     forgetRoom()
     this.close()
   }
@@ -113,7 +114,11 @@ export class RoomConnection {
         this.token = message.token
         this.retries = 0
         this.status = 'open'
-        saveRoom({ code: this.code, token: message.token })
+        saveRoom({
+          code: this.code,
+          token: message.token,
+          ...(message.seat === TABLE_SEAT ? { table: true } : {}),
+        })
         return
       case 'room':
         this.room = message.room

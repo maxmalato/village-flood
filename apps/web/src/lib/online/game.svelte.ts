@@ -2,7 +2,7 @@
 // O servidor aplica as ações; aqui só se envia o pedido, mostra o estado e narra os eventos.
 import { suggest } from '@village-flood/bots'
 import type { Action, GameEvent, GameState, RoleId, SeatId } from '@village-flood/engine'
-import type { Notice } from '@village-flood/kit'
+import { TABLE_SEAT, type Notice } from '@village-flood/kit'
 import type { PingKind, RoomConfig, VillageRoomView } from '@village-flood/protocol'
 import { t, type Locale, type MessageKey } from '../../i18n.ts'
 import type { GameController, Hint, OnlineControls, PingView, SeatStats } from '../controller.ts'
@@ -66,6 +66,14 @@ export class OnlineGame implements GameController {
       get reconnecting() {
         return game.connection.status === 'reconnecting'
       },
+      get table() {
+        return game.room?.table?.connected && !game.isTable
+          ? {
+              legendOpen: game.tableLegendOpen,
+              setLegend: (open: boolean) => game.setTableLegend(open),
+            }
+          : null
+      },
       ping: (target, kind) => this.ping(target, kind),
       unping: (index) => this.unping(index),
     }
@@ -79,6 +87,20 @@ export class OnlineGame implements GameController {
 
   get mySeat(): SeatId | null {
     return this.connection.seat
+  }
+
+  /** Este aparelho é a mesa (TV): só mostra a partida. */
+  get isTable(): boolean {
+    return this.connection.seat === TABLE_SEAT
+  }
+
+  get tableLegendOpen(): boolean {
+    return this.room?.table?.overlay === 'legend'
+  }
+
+  /** Abre ou fecha a legenda completa na TV (da própria mesa ou de um celular). */
+  setTableLegend(open: boolean) {
+    this.connection.send({ type: 'table-overlay', overlay: open ? 'legend' : null })
   }
 
   get isHost(): boolean {

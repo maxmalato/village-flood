@@ -28,6 +28,7 @@ export const villageFlood: GameDefinition<GameState, Action, GameEvent, RoomConf
   maxSeats: defaultGameData.rules.seats.max,
   defaultConfig: defaultRoomConfig,
   pingKinds,
+  tableOverlays: ['legend'],
   parseConfig: parseRoomConfig,
   parseProfile: parseRole,
   parseAction,

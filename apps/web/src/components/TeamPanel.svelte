@@ -13,7 +13,12 @@
     const parts: string[] = []
     if (active)
       parts.push(
-        seat.bot ? t(locale, 'team.botTurn') : t(locale, 'team.yourTurn', { n: v.actionsLeft }),
+        seat.bot
+          ? t(locale, 'team.botTurn')
+          : // online e mesa: "Sua vez" só no aparelho de quem joga
+            seat.presence !== undefined && !seat.you
+            ? t(locale, 'team.playingNow', { n: v.actionsLeft })
+            : t(locale, 'team.yourTurn', { n: v.actionsLeft }),
       )
     if (v.carrying.length > 0) parts.push(t(locale, 'team.carrying', { n: v.carrying.length }))
     if (v.skipNextTurn) parts.push(t(locale, 'team.skip'))

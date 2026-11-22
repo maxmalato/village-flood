@@ -30,6 +30,7 @@ export const countGame: GameDefinition<
   maxSeats: 3,
   defaultConfig: { target: 10 },
   pingKinds: ['here'],
+  tableOverlays: ['help'],
   parseConfig: (raw) =>
     typeof raw === 'object' && raw !== null && typeof (raw as CountConfig).target === 'number'
       ? { target: (raw as CountConfig).target }

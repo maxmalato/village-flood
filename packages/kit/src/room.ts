@@ -1,7 +1,13 @@
 // Núcleo da sala: funções puras sobre um registro serializável (sem rede, sem relógio, sem
 // aleatoriedade própria). O servidor (Durable Object) guarda o registro, entrega as mensagens
 // e chama `tick` no alarme. Regras de desconexão: regras, seção 10; spec, seção 8.
-import { MAX_NAME_LENGTH, MAX_PINGS_PER_TURN, ROOM_TTL_MS, type RoomTimings } from './constants.ts'
+import {
+  MAX_NAME_LENGTH,
+  MAX_PINGS_PER_TURN,
+  ROOM_TTL_MS,
+  TABLE_SEAT,
+  type RoomTimings,
+} from './constants.ts'
 import type { GameDefinition, SeatId, SeatProfileEntry } from './definition.ts'
 import type { Notice } from './messages.ts'
 
@@ -18,7 +24,7 @@ export type Presence = 'connected' | 'away' | 'bot' | 'returning'
 
 export interface SeatRecord<P> {
   readonly seat: SeatId
-  /** Apelido (vazio para assentos de bot; a interface mostra "Bot"). */
+  /** Apelido (bots recebem "Bot 1", "Bot 2"...). */
   readonly name: string
   readonly kind: 'human' | 'bot'
   readonly profile: P
@@ -35,6 +41,14 @@ export interface Ping {
   readonly kind: string
 }
 
+/** Mesa (modo mesa): conectada ou não e a tela aberta por cima do jogo. */
+export interface TableRecord {
+  /** SHA-256 do token da mesa; o token em si nunca é guardado. */
+  readonly tokenHash: string
+  readonly connected: boolean
+  readonly overlay: string | null
+}
+
 export interface RoomRecord<S, C, P> {
   readonly code: string
   readonly status: RoomStatus
@@ -49,6 +63,8 @@ export interface RoomRecord<S, C, P> {
   /** Próxima jogada de bot (null: ninguém do bot na vez). */
   readonly nextBotAt: number | null
   readonly nextSeatNumber: number
+  /** Modo mesa; null numa sala sem mesa. */
+  readonly table: TableRecord | null
   readonly createdAt: number
   readonly lastActivity: number
 }
@@ -78,13 +94,20 @@ export interface RoomView<S, C, P> {
   readonly config: C
   readonly game: S | null
   readonly pings: readonly Ping[]
+  readonly table: { readonly connected: boolean; readonly overlay: string | null } | null
 }
 
 type Def<S, A, E, C, P> = GameDefinition<S, A, E, C, P>
 
 // ---------- Criação e visão ----------
 
-export function createRoom<S, C, P>(code: string, config: C, now: number): RoomRecord<S, C, P> {
+/** Sala nova. Com `tableTokenHash`, quem abriu foi a mesa (modo mesa). */
+export function createRoom<S, C, P>(
+  code: string,
+  config: C,
+  now: number,
+  tableTokenHash: string | null = null,
+): RoomRecord<S, C, P> {
   return {
     code,
     status: 'lobby',
@@ -96,6 +119,7 @@ export function createRoom<S, C, P>(code: string, config: C, now: number): RoomR
     pings: [],
     nextBotAt: null,
     nextSeatNumber: 1,
+    table: tableTokenHash ? { tokenHash: tableTokenHash, connected: false, overlay: null } : null,
     createdAt: now,
     lastActivity: now,
   }
@@ -116,6 +140,9 @@ export function viewOf<S, C, P>(record: RoomRecord<S, C, P>): RoomView<S, C, P> 
     config: record.config,
     game: record.game,
     pings: record.pings,
+    table: record.table
+      ? { connected: record.table.connected, overlay: record.table.overlay }
+      : null,
   }
 }
 
@@ -229,6 +256,10 @@ export function reconnect<S, C, P, E>(
   tokenHash: string,
   now: number,
 ): Outcome<S, E, C, P> & { seat?: SeatId } {
+  if (record.table && record.table.tokenHash === tokenHash) {
+    const next = touch({ ...record, table: { ...record.table, connected: true } }, now)
+    return { ...ok(next), seat: TABLE_SEAT }
+  }
   const me = record.seats.find((s) => s.kind === 'human' && s.tokenHash === tokenHash)
   if (!me) return fail(record, 'unknownToken')
   let next = touch(record, now)
@@ -251,6 +282,11 @@ export function disconnect<S, A, E, C, P>(
   now: number,
   timings: RoomTimings,
 ): Outcome<S, E, C, P> {
+  if (seat === TABLE_SEAT) {
+    return record.table
+      ? ok({ ...record, table: { ...record.table, connected: false } })
+      : ok(record)
+  }
   const me = findSeat(record, seat)
   if (!me || me.kind !== 'human') return ok(record)
   if (me.presence === 'returning') {
@@ -580,4 +616,29 @@ export function removePing<S, C, P, E>(
   const ping = record.pings[index]
   if (!ping || ping.seat !== seat) return fail(record, 'invalidPing')
   return ok({ ...touch(record, now), pings: record.pings.filter((_, i) => i !== index) })
+}
+
+// ---------- Modo mesa ----------
+
+/**
+ * Abre (ou fecha, com null) uma tela por cima do jogo na mesa, como a legenda completa. Pode vir
+ * da própria mesa (controle remoto ou teclado) ou de qualquer pessoa conectada da sala.
+ */
+export function setTableOverlay<S, A, E, C, P>(
+  def: Def<S, A, E, C, P>,
+  record: RoomRecord<S, C, P>,
+  seat: SeatId,
+  overlay: string | null,
+  now: number,
+): Outcome<S, E, C, P> {
+  if (!record.table) return fail(record, 'noTable')
+  if (overlay !== null && !def.tableOverlays.includes(overlay))
+    return fail(record, 'invalidOverlay')
+  if (seat !== TABLE_SEAT) {
+    const me = findSeat(record, seat)
+    if (!me || me.kind !== 'human' || me.presence !== 'connected')
+      return fail(record, 'notYourControl')
+  }
+  if (record.table.overlay === overlay) return ok(record)
+  return ok({ ...touch(record, now), table: { ...record.table, overlay } })
 }

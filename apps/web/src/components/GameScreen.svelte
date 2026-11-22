@@ -59,6 +59,17 @@
       <button type="button" class="btn btn-pill" onclick={() => (legendOpen = true)}>
         {t(locale, 'game.legend')}
       </button>
+      {#if game.online?.table}
+        {@const table = game.online.table}
+        <button
+          type="button"
+          class="btn btn-pill"
+          aria-pressed={table.legendOpen}
+          onclick={() => table.setLegend(!table.legendOpen)}
+        >
+          {t(locale, table.legendOpen ? 'game.legendOffTv' : 'game.legendOnTv')}
+        </button>
+      {/if}
     </div>
   </header>
 

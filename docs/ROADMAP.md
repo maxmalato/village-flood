@@ -15,7 +15,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Concluída | `v0.5-online` |
-| 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
+| 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
@@ -97,6 +97,16 @@ Deixa o projeto pronto para receber código.
 - Teste no navegador de uma Smart TV real.
 
 **Pronto quando:** partida completa em modo mesa (TV + celulares) e o modo local funcionando sem internet depois do primeiro acesso.
+
+**Feito (22/11/2026):**
+
+- `packages/kit`: assento da mesa (`TABLE_SEAT`) com token próprio guardado como hash; a mesa só pode pedir o estado e abrir ou fechar uma tela por cima do jogo (`table-overlay`); quem comanda é a primeira pessoa que entra.
+- `apps/server`: `POST /api/rooms` com `table: true` devolve o token da mesa; a mesa que tenta jogar recebe `tableCannotPlay`.
+- `apps/web`: "Abrir mesa (TV ou notebook)" na tela inicial; tela da TV com código grande, QR code (`uqr`) e endereço no lobby, e, na partida, tabuleiro só para ver, rio, moradores, previsão, equipe, "Sugestões da equipe" e legenda rápida; legenda completa pelo controle/teclado da TV ou pelo botão "Mostrar legenda na TV" dos celulares. A TV que recarrega volta sozinha como mesa. QR code também no lobby online.
+- PWA (`vite-plugin-pwa`): manifesto, ícones de `assets/logo/`, service worker com o jogo em cache; o modo local funciona offline e a tela inicial avisa quando não há internet.
+- Testes: kit (mesa e legenda), integração no servidor (mesa), E2E da mesa (TV + celular, legenda pelo celular e pelo teclado, TV recarregando) e do PWA (manifesto e jogo offline), axe-core nos temas claro e escuro.
+
+**Teste em aparelhos reais:** feito pelo dono do projeto em 22/11/2026, pela rede local (mesa e online); a instalação do PWA no celular será conferida com HTTPS na publicação (Etapa 7).
 
 ## Etapa 6 – Acabamento
 

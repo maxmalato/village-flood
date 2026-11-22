@@ -19,6 +19,15 @@ export type ClientMessage =
   | { type: 'resync' }
   | { type: 'again' }
   | { type: 'leave' }
+  /** Modo mesa: abre (ou fecha, com null) uma tela por cima do jogo na TV. */
+  | { type: 'table-overlay'; overlay: string | null }
+
+/** O que a mesa pode mandar: ela só mostra a partida (e abre ou fecha a legenda). */
+export const TABLE_MESSAGES: ReadonlySet<ClientMessage['type']> = new Set([
+  'hello',
+  'resync',
+  'table-overlay',
+])
 
 export type Notice =
   | { type: 'player-away'; seat: SeatId }
@@ -69,6 +78,10 @@ export function parseClientMessage(raw: string): ClientMessage | null {
     case 'unping':
       return typeof v.index === 'number' && Number.isInteger(v.index)
         ? { type: 'unping', index: v.index }
+        : null
+    case 'table-overlay':
+      return v.overlay === null || shortText(v.overlay, 32)
+        ? { type: 'table-overlay', overlay: v.overlay }
         : null
     case 'add-bot':
     case 'start':

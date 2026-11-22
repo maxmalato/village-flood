@@ -5,8 +5,10 @@
   import LobbyScreen from './components/LobbyScreen.svelte'
   import OnlineEntry from './components/OnlineEntry.svelte'
   import OnlineLobby from './components/OnlineLobby.svelte'
+  import TableScreen from './components/TableScreen.svelte'
   import { locales, pickLocale, t, type Locale } from './i18n.ts'
   import { LocalGame } from './lib/game.svelte.ts'
+  import { ApiError, createTableRoom } from './lib/online/api.ts'
   import { OnlineGame } from './lib/online/game.svelte.ts'
   import { codeFromUrl, savedRoom } from './lib/online/link.ts'
   import { defaultSetup, type LocalSetup } from './lib/setup.ts'
@@ -45,6 +47,18 @@
   let entryCode = $state('')
   let entryError = $state<string | null>(null)
   let resumeCode = $state<string | null>(savedRoom()?.code ?? null)
+  let tableError = $state<string | null>(null)
+
+  /** Modo mesa: esta tela abre a sala e mostra o jogo; as pessoas entram pelo celular. */
+  async function openTable() {
+    tableError = null
+    try {
+      const { code, token } = await createTableRoom({ difficulty: 'normal' })
+      connect(code, { token })
+    } catch (caught) {
+      tableError = caught instanceof ApiError ? caught.code : 'network'
+    }
+  }
 
   $effect(() => {
     document.documentElement.lang = locale
@@ -159,6 +173,8 @@
       oncreate={() => openEntry('create')}
       onjoin={() => openEntry('join')}
       onresume={resume}
+      ontable={openTable}
+      {tableError}
     />
   {:else if screen === 'online-entry'}
     {#key entryMode + entryCode + entryError}
@@ -172,7 +188,9 @@
       />
     {/key}
   {:else if screen === 'online'}
-    {#if !online?.room}
+    {#if online?.isTable}
+      <TableScreen game={online} {locale} onclose={leaveRoom} />
+    {:else if !online?.room}
       <main class="connecting">
         <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
         <p role="status">{t(locale, 'online.connecting')}</p>

@@ -189,7 +189,7 @@ Todos os valores desta tabela são **(inicial)**.
 
 - **Um aparelho:** todos em volta de um tablet ou notebook. Sem tela de "passe o aparelho", porque não há segredo.
 - **Vários aparelhos (online):** sala privada com código de 6 símbolos, como no Senhorio (sem senha: decisão de 22/11/2026). Cada pessoa vê o tabuleiro inteiro, o próprio papel e os botões de ação. Só o jogador da vez age.
-- **Mesa:** tabuleiro grande na TV ou notebook (assento de mesa, como no Senhorio), celulares como controle. Funciona como o modo online mais uma tela espelhada.
+- **Mesa:** tabuleiro grande na TV ou notebook (assento de mesa, como no Senhorio), celulares como controle. Funciona como o modo online mais uma tela espelhada. A TV abre a sala e mostra o código, o QR code e o endereço; quem entra primeiro pelo celular organiza a sala (dificuldade, bots, começar). A TV não joga nem comanda (decisão de 22/11/2026).
 - **Opinar (ping):** fora da sua vez, o jogador toca numa quadra e escolhe "ir para cá", "cuidado" ou "pegar daqui". Máximo de 3 pings por jogador, apagados ao fim do turno. Pings não fazem parte do estado do jogo e têm limite de frequência.
 - **Desconexão:**
   1. A equipe é avisada ("Diego desconectou, o bot assumiu").
@@ -219,7 +219,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 8. Tempo limite opcional por turno no online.
 9. Mockups no celular: validar tamanho das quadras (6 colunas em 390 px) e a legibilidade dos estados sem depender de cor.
 10. ~~Igreja como porto seguro pode deixar o jogo fácil?~~ **Decidido (20/11/2026):** manter. As derrotas são quase todas por ilhados e nas vitórias ainda sobram de 6 a 10 níveis; a pressão vem de tirar os moradores a tempo. Contexto original: Como a igreja nunca alaga e o morador entregue fica salvo para sempre, o jogo vira uma corrida de entregas (casa → igreja), e a dificuldade vem só do relógio da água. Medir nas simulações: quantos turnos sobram quando a equipe vence, taxa de vitória por dificuldade e quanto a Barqueira transportando 2 moradores encurta o trajeto. Se o jogo ficar fácil, as alavancas são: aumentar a meta, subir a média de chuva, aumentar o custo extra da Barqueira com 2 moradores ou afastar o cais/a igreja no mapa. Se ficar difícil demais, o caminho é o inverso.
-11. Legenda na mesa: a TV costuma não ter toque. Definir como abrir a legenda completa na TV (controle remoto/teclado, ou pelo celular de quem controla) e se a legenda rápida basta na TV.
+11. ~~Legenda na mesa.~~ **Decidido (22/11/2026):** a TV mostra sempre a legenda rápida; a completa abre pelo botão "Legenda" da TV (controle remoto ou teclado) ou por qualquer celular da sala ("Mostrar legenda na TV"), e fecha pelo celular, pelo controle ou com Esc (ver Registro de decisões).
 12. Marcas "✓" e "✗" nas casas: confirmar nos testes com pessoas se o símbolo é entendido sem explicação ou se precisa de texto curto.
 13. ~~Mockup "Sua vez" contradiz a regra do Bombeiro.~~ **Decidido (20/11/2026):** vale a regra (o Bombeiro paga 1 para pegar ferido). O texto do mockup não muda; se um mockup contradisser as regras, valem as regras.
 14. ~~Imagens exportadas dos mockups incompletas.~~ **Resolvido (20/11/2026):** as telas foram reexportadas com o tabuleiro desenhado.
@@ -269,6 +269,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 22/11/2026: modo mesa e PWA (Etapa 5)
+
+- **Decisão:** (1) no modo mesa, a TV abre a sala e só mostra o jogo; **quem entra primeiro pelo celular organiza a sala** (dificuldade, bots, começar e jogar de novo); (2) a **legenda completa na TV** abre pelo botão "Legenda" (controle remoto ou teclado) ou por qualquer celular da sala, e fecha pelo celular, pelo controle ou com Esc; a legenda rápida fica sempre visível na TV; (3) **QR code** do convite gerado no próprio aparelho com a biblioteca `uqr` (aprovada pelo dono do projeto), na TV e no lobby online; (4) **PWA** com `vite-plugin-pwa`: instalável, ícones de `assets/logo/`, e o modo local funciona sem internet depois do primeiro acesso; salas online e mesa precisam de conexão (a tela inicial avisa quando está offline).
+- **Motivo:** configurar a sala com o controle remoto da TV é lento e alguns navegadores de TV navegam mal; com o celular, todos já sabem usar. Abrir a legenda pelo celular funciona em qualquer TV. O QR evita digitar o código; gerado no aparelho, o link da sala não passa por serviço externo.
 
 ### 22/11/2026: telas online (Etapa 4)
 
@@ -374,7 +379,7 @@ Decisão nova entra no topo, com data e motivo.
   - Actions do GitHub fixadas pelo SHA do commit, com permissão só de leitura no CI.
   - Dependabot semanal com espera de 7 dias para versões novas.
 - **Motivo:** mesma stack do Senhorio Web, nas versões atuais e compatíveis entre si, seguindo as documentações oficiais e evitando pacotes descontinuados.
-- **Ainda não incluído:** o `vite-plugin-pwa` entra na Etapa 5 (PWA). O `packages/kit` será extraído do `senhorio-web` na Etapa 4.
+- **Ainda não incluído:** o `vite-plugin-pwa` entra na Etapa 5 (PWA). O `packages/kit` será extraído do `senhorio-web` na Etapa 4. (Situação em 22/11/2026: os dois já entraram.)
 
 ### 19/11/2026: primeiro commit direto na `main`
 

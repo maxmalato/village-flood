@@ -14,6 +14,11 @@ export const MAX_MESSAGE_BYTES = 8192
 export const MAX_PINGS_PER_TURN = 3
 /** Tamanho máximo do apelido. */
 export const MAX_NAME_LENGTH = 20
+/**
+ * Assento da mesa (modo mesa): a TV ou o notebook que abriu a sala e mostra a partida sem jogar.
+ * Nas mensagens, `seat: TABLE_SEAT` é a mesa.
+ */
+export const TABLE_SEAT = 'table'
 
 /** Tempos de bot e desconexão (configuráveis no servidor; os testes usam valores curtos). */
 export interface RoomTimings {

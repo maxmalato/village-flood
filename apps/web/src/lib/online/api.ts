@@ -37,6 +37,18 @@ export async function createRoom(config: RoomConfig): Promise<string> {
   return body.code
 }
 
+/** Modo mesa: a TV abre a sala e recebe o próprio token (só ela o conhece). */
+export async function createTableRoom(
+  config: RoomConfig,
+): Promise<{ code: string; token: string }> {
+  const body = (await request('/api/rooms', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ config, table: true }),
+  })) as { code: string; tableToken: string }
+  return { code: body.code, token: body.tableToken }
+}
+
 export async function roomInfo(input: string): Promise<RoomInfo> {
   const code = normalizeCode(input)
   if (!code) throw new ApiError('invalidCode')

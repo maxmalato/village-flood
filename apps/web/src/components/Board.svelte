@@ -7,11 +7,14 @@
     columns,
     label,
     onselect,
+    interactive = true,
   }: {
     tiles: readonly TileView[]
     columns: number
     label: string
     onselect: (id: string) => void
+    /** false: só mostra (mesa/TV); as quadras saem da ordem do Tab e do controle remoto. */
+    interactive?: boolean
   } = $props()
 
   const rows = $derived(Math.ceil(tiles.length / columns))
@@ -48,7 +51,7 @@
   {#each { length: rows } as _, y (y)}
     <span class="label" aria-hidden="true">{y + 1}</span>
     {#each tiles.slice(y * columns, (y + 1) * columns) as tile (tile.id)}
-      <Tile {tile} focusable={tile.id === focusId} {onselect} {onkey} />
+      <Tile {tile} focusable={interactive && tile.id === focusId} {onselect} {onkey} />
     {/each}
   {/each}
 </div>

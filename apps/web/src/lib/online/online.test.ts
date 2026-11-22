@@ -19,6 +19,7 @@ const room: VillageRoomView = {
   config: { difficulty: 'easy' },
   game: null,
   pings: [{ seat: 'seat-2', target: 'C3', kind: 'go' }],
+  table: null,
 }
 
 describe('link de convite', () => {
@@ -84,5 +85,12 @@ describe('erros do servidor', () => {
       'You already made 3 suggestions this turn.',
     )
     expect(errorText('pt-BR', 'invalidSeats')).toBe('O servidor recusou o pedido.')
+  })
+})
+
+describe('iniciais', () => {
+  it('bots da sala online têm iniciais diferentes', async () => {
+    const { initialOf } = await import('../view.ts')
+    expect(['Bot 1', 'Bot 2', 'Ana', ' bruno'].map(initialOf)).toEqual(['B1', 'B2', 'A', 'B'])
   })
 })

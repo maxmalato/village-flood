@@ -24,7 +24,10 @@ import {
   removeSeat,
   setConfig,
   setProfile,
+  setTableOverlay,
   startGame,
+  TABLE_MESSAGES,
+  TABLE_SEAT,
   tick,
   viewOf,
   type ClientMessage,
@@ -35,6 +38,7 @@ import {
 } from '@village-flood/kit'
 import type { RoomConfig, VillageRoomView, VillageServerMessage } from '@village-flood/protocol'
 import { villageFlood as def } from './definition.ts'
+import { hashToken, newToken } from './tokens.ts'
 
 type Record_ = RoomRecord<GameState, RoomConfig, RoleId>
 type Out = Outcome<GameState, GameEvent, RoomConfig, RoleId>
@@ -53,19 +57,6 @@ export interface RoomInfo {
 }
 
 const random = () => (crypto.getRandomValues(new Uint32Array(1))[0] ?? 0) / 2 ** 32
-
-function newToken(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(32))
-  return btoa(String.fromCharCode(...bytes))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '')
-}
-
-async function hashToken(token: string): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token))
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
-}
 
 export class Room extends DurableObject<Env> {
   private record: Record_ | null = null
@@ -93,10 +84,14 @@ export class Room extends DurableObject<Env> {
 
   // ---------- chamadas do Worker ----------
 
-  /** Cria a sala; false se o código já está em uso. */
-  async init(code: string, config: RoomConfig): Promise<boolean> {
+  /** Cria a sala; false se o código já está em uso. Com `tableTokenHash`, é uma sala com mesa. */
+  async init(
+    code: string,
+    config: RoomConfig,
+    tableTokenHash: string | null = null,
+  ): Promise<boolean> {
     if (this.record) return false
-    this.record = createRoom(code, config, Date.now())
+    this.record = createRoom(code, config, Date.now(), tableTokenHash)
     await this.persist()
     return true
   }
@@ -166,6 +161,9 @@ export class Room extends DurableObject<Env> {
     const now = Date.now()
     if (message.type === 'hello') return this.hello(ws, seat, message)
     if (seat === null) return this.send(ws, { type: 'error', code: 'notJoined' })
+    // a mesa só mostra a partida: não joga, não sugere e não comanda a sala
+    if (seat === TABLE_SEAT && !TABLE_MESSAGES.has(message.type))
+      return this.send(ws, { type: 'error', code: 'tableCannotPlay' })
 
     switch (message.type) {
       case 'resync':
@@ -190,6 +188,8 @@ export class Room extends DurableObject<Env> {
         return this.commit(removePing(record, seat, message.index, now), ws)
       case 'again':
         return this.commit(playAgain(record, seat, now), ws)
+      case 'table-overlay':
+        return this.commit(setTableOverlay(def, record, seat, message.overlay, now), ws)
       case 'leave': {
         ws.serializeAttachment({ seat: null } satisfies Attachment)
         await this.commit(leave(def, record, seat, now, this.timings), ws)
