@@ -23,6 +23,11 @@
   // Parâmetros para testes e demonstração: ?botDelay=0&seed=42
   const botDelay = Number(params.get('botDelay') ?? 700)
   const fixedSeed = params.get('seed')
+  // ?scenario=0&mirror=0 fixa a variação do mapa (testes); sem isso, a semente sorteia.
+  const fixedVariation =
+    params.get('scenario') !== null
+      ? { scenario: Number(params.get('scenario')), mirrored: params.get('mirror') === '1' }
+      : undefined
 
   let locale = $state<Locale>(savedLocale() ?? pickLocale(navigator.languages))
   let screen = $state<Screen>('home')
@@ -54,7 +59,12 @@
 
   function start() {
     game?.destroy()
-    game = new LocalGame($state.snapshot(setup), { seed: randomSeed(), botDelay, locale })
+    game = new LocalGame($state.snapshot(setup), {
+      seed: randomSeed(),
+      botDelay,
+      locale,
+      ...(fixedVariation ? { variation: fixedVariation } : {}),
+    })
     go('game')
   }
 

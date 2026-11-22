@@ -24,6 +24,7 @@ function game(): GameState {
     difficulty: 'normal',
     seed: 7,
     seats: seats.map((s) => ({ seat: s.seat, role: s.role })),
+    variation: { scenario: 0, mirrored: false },
   })
 }
 
