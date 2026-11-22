@@ -18,6 +18,9 @@
     if (v.carrying.length > 0) parts.push(t(locale, 'team.carrying', { n: v.carrying.length }))
     if (v.skipNextTurn) parts.push(t(locale, 'team.skip'))
     if (v.bonusActions > 0) parts.push(t(locale, 'team.bonus', { n: v.bonusActions }))
+    if (seat.presence === 'away') parts.push(t(locale, 'team.away'))
+    if (seat.presence === 'bot') parts.push(t(locale, 'team.botFor'))
+    if (seat.presence === 'returning') parts.push(t(locale, 'team.returning'))
     if (parts.length === 0) parts.push(seat.bot ? t(locale, 'team.bot') : t(locale, 'team.waiting'))
     return parts.join(' · ')
   }
@@ -34,7 +37,9 @@
         </span>
         <span class="who">
           <span class="name">
-            {seat.name} <span class="role">{t(locale, `role.${seat.role}` as MessageKey)}</span>
+            {seat.name}
+            {#if seat.you}<span class="role">{t(locale, 'team.you')}</span>{/if}
+            <span class="role">{t(locale, `role.${seat.role}` as MessageKey)}</span>
           </span>
           <span class="note" class:accent={active}>{note(seat)}</span>
         </span>

@@ -25,6 +25,8 @@
             : 'house-empty'
           : null,
   )
+  // Sugestão (ping) com forma própria, além da cor de quem sugeriu.
+  const pingSymbol: Record<string, string> = { go: '→', careful: '!', 'pick-up': '↑' }
 </script>
 
 <button
@@ -87,6 +89,18 @@
             </span>
           {/if}
         </span>
+      {/each}
+    </span>
+  {/if}
+
+  {#if tile.pings.length > 0}
+    <span class="pings" aria-hidden="true">
+      {#each tile.pings.slice(0, 2) as ping, i (i)}
+        <span
+          class="ping txt"
+          style:border-color={ping.color}
+          data-text={`${ping.initial}${pingSymbol[ping.kind] ?? '?'}`}
+        ></span>
       {/each}
     </span>
   {/if}
@@ -275,6 +289,28 @@
     gap: 1px;
   }
 
+  .pings {
+    position: absolute;
+    top: 50%;
+    right: 2px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    z-index: 2;
+  }
+  .ping {
+    height: 18px;
+    padding: 0 3px;
+    border-radius: 6px;
+    border: 3px solid;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 12px;
+    white-space: nowrap;
+  }
   .cost {
     position: absolute;
     top: 3px;

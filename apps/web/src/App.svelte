@@ -3,11 +3,15 @@
   import GameScreen from './components/GameScreen.svelte'
   import HomeScreen from './components/HomeScreen.svelte'
   import LobbyScreen from './components/LobbyScreen.svelte'
+  import OnlineEntry from './components/OnlineEntry.svelte'
+  import OnlineLobby from './components/OnlineLobby.svelte'
   import { locales, pickLocale, t, type Locale } from './i18n.ts'
   import { LocalGame } from './lib/game.svelte.ts'
+  import { OnlineGame } from './lib/online/game.svelte.ts'
+  import { codeFromUrl, savedRoom } from './lib/online/link.ts'
   import { defaultSetup, type LocalSetup } from './lib/setup.ts'
 
-  type Screen = 'home' | 'lobby' | 'game'
+  type Screen = 'home' | 'lobby' | 'game' | 'online-entry' | 'online'
 
   // Preferência de idioma guardada só neste navegador (sem dado pessoal).
   function savedLocale(): Locale | null {
@@ -35,10 +39,18 @@
   let game = $state.raw<LocalGame | null>(null)
   let main: HTMLDivElement | undefined = $state()
 
+  // ---- Online ----
+  let online = $state.raw<OnlineGame | null>(null)
+  let entryMode = $state<'create' | 'join'>('join')
+  let entryCode = $state('')
+  let entryError = $state<string | null>(null)
+  let resumeCode = $state<string | null>(savedRoom()?.code ?? null)
+
   $effect(() => {
     document.documentElement.lang = locale
     document.title = t(locale, 'app.title')
     game?.setLocale(locale)
+    online?.setLocale(locale)
     try {
       localStorage.setItem('village-flood.locale', locale)
     } catch {
@@ -75,6 +87,56 @@
   }
 
   const ended = $derived(game !== null && game.state.phase !== 'playing')
+
+  function openEntry(mode: 'create' | 'join', code = '', error: string | null = null) {
+    entryMode = mode
+    entryCode = code
+    entryError = error
+    go('online-entry')
+  }
+
+  function connect(code: string, who: { token: string } | { name: string }) {
+    online?.destroy()
+    online = new OnlineGame(code, who, locale)
+    go('online')
+  }
+
+  function resume() {
+    const saved = savedRoom()
+    if (saved) connect(saved.code, { token: saved.token })
+    else resumeCode = null
+  }
+
+  function leaveRoom() {
+    online?.leave()
+    online = null
+    resumeCode = null
+    go('home')
+  }
+
+  // A conexão parou de vez (sala expirou, apelido repetido...): volta à entrada com o motivo.
+  $effect(() => {
+    const fatal = online?.connection.fatal
+    if (!online || !fatal) return
+    const code = online.connection.code
+    online.destroy()
+    online = null
+    resumeCode = savedRoom()?.code ?? null
+    openEntry('join', fatal === 'roomGone' ? '' : code, fatal)
+  })
+
+  const onlineStatus = $derived(online?.room?.status ?? null)
+  // Leva o foco ao título quando a sala muda de fase (lobby, partida, fim).
+  $effect(() => {
+    if (onlineStatus) queueMicrotask(() => main?.querySelector<HTMLElement>('h1')?.focus())
+  })
+
+  // Link de convite (?sala=CODIGO): volta à sala guardada ou abre "Entrar" com o código.
+  // Sem link, uma sala guardada neste aparelho é retomada (ex.: a página recarregou).
+  const linkCode = codeFromUrl()
+  const saved = savedRoom()
+  if (saved && (linkCode === null || linkCode === saved.code)) resume()
+  else if (linkCode) openEntry('join', linkCode)
 </script>
 
 <div class="app" bind:this={main}>
@@ -90,7 +152,47 @@
   </header>
 
   {#if screen === 'home'}
-    <HomeScreen {locale} onplay={() => go('lobby')} />
+    <HomeScreen
+      {locale}
+      {resumeCode}
+      onplay={() => go('lobby')}
+      oncreate={() => openEntry('create')}
+      onjoin={() => openEntry('join')}
+      onresume={resume}
+    />
+  {:else if screen === 'online-entry'}
+    {#key entryMode + entryCode + entryError}
+      <OnlineEntry
+        {locale}
+        mode={entryMode}
+        code={entryCode}
+        error={entryError}
+        onconnect={(code, name) => connect(code, { name })}
+        onback={() => go('home')}
+      />
+    {/key}
+  {:else if screen === 'online'}
+    {#if !online?.room}
+      <main class="connecting">
+        <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
+        <p role="status">{t(locale, 'online.connecting')}</p>
+      </main>
+    {:else if online.room.status === 'lobby'}
+      <OnlineLobby game={online} {locale} onleave={leaveRoom} />
+    {:else if online.room.status === 'over' && online.room.game}
+      <EndScreen
+        game={online}
+        {locale}
+        onagain={online.isHost ? () => online?.again() : null}
+        waitText={t(locale, 'end.waitHost', {
+          name: online.seats.find((s) => s.seat === online?.room?.host)?.name ?? '',
+        })}
+        onhome={leaveRoom}
+        homeLabel="end.leave"
+      />
+    {:else if online.room.game}
+      <GameScreen game={online} {locale} />
+    {/if}
   {:else if screen === 'lobby'}
     <LobbyScreen {locale} bind:setup onstart={start} onback={() => go('home')} />
   {:else if game && ended}
@@ -105,6 +207,12 @@
     display: flex;
     justify-content: flex-end;
     padding: 8px 16px 0;
+  }
+  .connecting {
+    max-width: 36rem;
+    margin: 0 auto;
+    padding: 48px 16px;
+    font-weight: 700;
   }
   .app :global(h1) {
     outline: none;
