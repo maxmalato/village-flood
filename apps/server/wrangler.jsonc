@@ -2,11 +2,25 @@
 // credenciais ficam no painel da Cloudflare, no `wrangler secret` ou nos segredos do GitHub Actions.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "village-flood-server",
+  "name": "village-flood",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-01",
+  // Sem telemetria do Wrangler (privacidade)
   "send_metrics": false,
-  "observability": { "enabled": true },
+  // Sem registros de acesso guardados na Cloudflare (LGPD: nada de dado pessoal em logs)
+  "observability": { "enabled": false },
+  // Sem endereços de prévia por versão: só um endereço público
+  "preview_urls": false,
+  // O Worker serve o site (apps/web/dist) e responde primeiro só nas rotas /api/*
+  "assets": {
+    "directory": "../web/dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"],
+  },
+  // Tempos das salas (ms): o bot assume após TAKEOVER_MS na vez de quem caiu; BOT_STEP_MS
+  // entre as jogadas de bot. Os testes E2E usam valores curtos (--var).
+  "vars": { "TAKEOVER_MS": "20000", "BOT_STEP_MS": "900" },
+  // Uma instância de Room por sala
   "durable_objects": {
     "bindings": [{ "name": "ROOMS", "class_name": "Room" }],
   },

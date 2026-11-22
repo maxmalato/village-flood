@@ -11,6 +11,7 @@
     "typecheck": "wrangler types && tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@village-flood/bots": "workspace:*",
     "@village-flood/engine": "workspace:*",
     "@village-flood/kit": "workspace:*",
     "@village-flood/protocol": "workspace:*"
