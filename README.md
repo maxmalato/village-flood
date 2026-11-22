@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapas 0 a 4 prontas: já dá para jogar **neste aparelho** ou **online, cada pessoa no seu aparelho** (sala privada com código de 6 símbolos), de 2 a 4 voluntários, com bots completando a equipe. A próxima é a Etapa 5 (modo mesa e PWA). A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapas 0 a 4 prontas e a 5 em revisão: dá para jogar **neste aparelho**, **online, cada pessoa no seu aparelho** (sala privada com código de 6 símbolos e QR code) ou em **modo mesa** (tabuleiro na TV ou notebook, celulares como controle), de 2 a 4 voluntários, com bots completando a equipe. O jogo pode ser instalado (PWA) e o modo neste aparelho funciona sem internet. A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 
@@ -68,6 +68,8 @@ Para jogar online em casa (modo de desenvolvimento), rode também o servidor de 
 ```bash
 pnpm --filter @village-flood/server dev
 ```
+
+Para o modo mesa, abra o jogo na TV ou no notebook e escolha "Abrir mesa (TV ou notebook)": a tela mostra o código e o QR code, e quem entra primeiro pelo celular organiza a sala. A legenda completa abre na TV pelo controle remoto ou pelo botão "Mostrar legenda na TV" do celular.
 
 Na tela inicial, "Criar sala online" gera o código e o link (`?sala=CODIGO`); quem recebe usa "Entrar com código" ou abre o link. Se a conexão cair, o aparelho volta sozinho para o mesmo assento.
 
