@@ -8,6 +8,7 @@ import type {
   RoleId,
   Rules,
   TileId,
+  Variation,
 } from './schema.ts'
 
 /** Identificador opaco de um assento (o kit decide o formato, ex.: "s1"). */
@@ -65,6 +66,8 @@ export interface GameConfig {
   readonly mapId: string
   readonly rules: Rules
   readonly settings: DifficultySettings
+  /** Cenário de moradores extras sorteado e se o mapa está espelhado. */
+  readonly variation: Variation
 }
 
 export interface GameState {

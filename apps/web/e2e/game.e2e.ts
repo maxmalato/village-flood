@@ -5,7 +5,7 @@ test.use({ locale: 'pt-BR' })
 
 /** Abre o lobby e começa uma partida com 1 pessoa (Ana) e 2 bots, sem espera dos bots. */
 async function startGame(page: Page, seed = 42, difficulty: 'Tranquilo' | 'Normal' = 'Normal') {
-  await page.goto(`/?botDelay=0&seed=${seed}`)
+  await page.goto(`/?botDelay=0&seed=${seed}&scenario=0&mirror=0`)
   await page.getByRole('button', { name: 'Jogar neste aparelho' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Montar a equipe' })).toBeVisible()
   await page.getByRole('radio', { name: new RegExp(`^${difficulty}`) }).check()
@@ -103,7 +103,7 @@ test('uma partida completa, do lobby à tela final', async ({ page }) => {
 for (const colorScheme of ['dark', 'light'] as const) {
   test(`lobby e jogo sem violações de acessibilidade (tema ${colorScheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme })
-    await page.goto('/?botDelay=0&seed=42')
+    await page.goto('/?botDelay=0&seed=42&scenario=0&mirror=0')
     await page.getByRole('button', { name: 'Jogar neste aparelho' }).click()
     await axe(page)
     await page.getByRole('button', { name: 'Começar a partida' }).click()

@@ -8,6 +8,7 @@ import {
   type GameEvent,
   type GameState,
   type SeatId,
+  type Variation,
 } from '@village-flood/engine'
 import type { Locale } from '../i18n.ts'
 import type { LocalSetup } from './setup.ts'
@@ -48,7 +49,10 @@ export class LocalGame {
   private timer: ReturnType<typeof setTimeout> | null = null
   locale: Locale
 
-  constructor(setup: LocalSetup, options: { seed: number; botDelay: number; locale: Locale }) {
+  constructor(
+    setup: LocalSetup,
+    options: { seed: number; botDelay: number; locale: Locale; variation?: Variation },
+  ) {
     this.setup = setup
     this.botDelay = options.botDelay
     this.locale = options.locale
@@ -63,6 +67,7 @@ export class LocalGame {
       difficulty: setup.difficulty,
       seed: options.seed,
       seats: this.seats.map((s) => ({ seat: s.seat, role: s.role })),
+      ...(options.variation ? { variation: options.variation } : {}),
     })
     this.stats = Object.fromEntries(
       this.seats.map((s) => [s.seat, { rescues: 0, heals: 0, radioCalls: 0 }]),

@@ -6,7 +6,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 
 Planned modes: single device, multiple devices (private room with code and password) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
 
-> **Status:** in development. Stages 0 to 3 are ready: you can already play **on one device** (2 to 4 volunteers, with bots filling the team). Next is Stage 4 (online rooms). The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+> **Status:** in development. Stages 0 to 3 are ready: you can already play **on one device** (2 to 4 volunteers, with bots filling the team). Next is Stage 4 (online rooms). Each game draws which houses get the extra residents and whether the map is mirrored. The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
 
 ## Documentation
 

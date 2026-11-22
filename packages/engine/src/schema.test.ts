@@ -63,10 +63,28 @@ describe('schema recusa dados inválidos', () => {
     fails(data, /move/)
   })
 
-  it('morador extra em quadra que não é casa', () => {
+  it('cenário de extras com quadra que não é casa', () => {
     const data = raw()
-    data.map.extraResidentOrder[0] = 'C3'
+    data.difficulties.normal.extraResidentScenarios = [['C3', 'B5']]
     fails(data, /não é casa/)
+  })
+
+  it('cenário de extras com tamanho diferente de extraResidents', () => {
+    const data = raw()
+    data.difficulties.normal.extraResidentScenarios = [['A4']]
+    fails(data, /extraResidents é 2/)
+  })
+
+  it('cenário de extras repetindo casa', () => {
+    const data = raw()
+    data.difficulties.normal.extraResidentScenarios = [['A4', 'A4']]
+    fails(data, /repete casas/)
+  })
+
+  it('dificuldade sem cenários', () => {
+    const data = raw()
+    data.difficulties.normal.extraResidentScenarios = []
+    fails(data, /extraResidentScenarios/)
   })
 
   it('igreja e cais na mesma quadra', () => {

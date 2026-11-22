@@ -94,7 +94,7 @@ Contrato: `transition(state, action, ctx)` é pura e devolve `{ ok, state, event
 
 ## 6. Dados de configuração
 
-Mapa e baralhos como dados (JSON validado por schema), não no código: alturas, igreja, cais, casas, ordem dos moradores extras e tabela de dificuldades (valores da seção 9 do documento de regras, todos **iniciais**).
+Mapa e baralhos como dados (JSON validado por schema), não no código: alturas, igreja, cais, casas, se o mapa pode ser espelhado (`allowMirror`), cenários de moradores extras por dificuldade (`extraResidentScenarios`) e tabela de dificuldades (valores da seção 9 do documento de regras, todos **iniciais**). `newGame` sorteia o cenário e o espelhamento pela semente (ou recebe `variation` fixa, em testes e na simulação) e guarda a escolha em `config.variation`.
 
 Todos os números do jogo ficam nos dados: 3 ações por turno, nível máximo 24, limite de 4 ilhados, limiares por altura, sacos de areia (bônus e máximo) e custos (andar, pegar, saco de areia, alerta). Só a estrutura das regras fica no código. O schema completo é aprovado pelo dono do projeto no início da Etapa 1, antes de implementar.
 

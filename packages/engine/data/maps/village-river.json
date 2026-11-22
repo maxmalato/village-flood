@@ -14,5 +14,5 @@
   "dock": "B3",
   "houses": ["A2", "A4", "B1", "B5", "F3", "E5", "C2", "C5", "E2", "E4"],
   "residentsPerHouse": 1,
-  "extraResidentOrder": ["A4", "B5", "F3", "E5", "C5"]
+  "allowMirror": true
 }

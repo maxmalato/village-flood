@@ -2,6 +2,7 @@
   "easy": {
     "goal": 8,
     "extraResidents": 1,
+    "extraResidentScenarios": [["A4"], ["B5"], ["E5"]],
     "startLevel": 0,
     "deck": {
       "cloudy": 10,
@@ -18,6 +19,14 @@
   "normal": {
     "goal": 9,
     "extraResidents": 2,
+    "extraResidentScenarios": [
+      ["A4", "B5"],
+      ["A4", "B1"],
+      ["B1", "B5"],
+      ["A2", "A4"],
+      ["A2", "B5"],
+      ["B1", "E5"]
+    ],
     "startLevel": 0,
     "deck": {
       "cloudy": 13,
@@ -34,6 +43,14 @@
   "storm": {
     "goal": 10,
     "extraResidents": 3,
+    "extraResidentScenarios": [
+      ["A4", "B5", "F3"],
+      ["A2", "B1", "E5"],
+      ["A4", "B5", "E5"],
+      ["B1", "B5", "F3"],
+      ["A2", "B5", "F3"],
+      ["B1", "F3", "E5"]
+    ],
     "startLevel": 0,
     "deck": {
       "cloudy": 16,

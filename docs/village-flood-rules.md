@@ -63,7 +63,11 @@ Alturas:
 
 - Igreja: D3 (altura 3). Cais: B3 (altura 2). Todos os voluntários começam no cais.
 - Casas (10): A2, A4, B1, B5, F3, E5 (altura 1) e C2, C5, E2, E4 (altura 2). Cada casa começa com 1 morador.
-- Moradores extras, nesta ordem de casas: A4, B5, F3, E5, C5. Tranquilo usa 1 extra, Normal usa 2 e Tempestade usa 3.
+- Moradores extras: Tranquilo tem 1, Normal 2 e Tempestade 3. As casas que recebem os extras mudam a cada partida: o jogo sorteia um **cenário** entre os testados na simulação para aquela dificuldade (21/11/2026):
+  - Tranquilo: A4; B5; E5.
+  - Normal: A4 e B5; A4 e B1; B1 e B5; A2 e A4; A2 e B5; B1 e E5.
+  - Tempestade: A4, B5 e F3; A2, B1 e E5; A4, B5 e E5; B1, B5 e F3; A2, B5 e F3; B1, F3 e E5.
+- **Mapa espelhado:** em cada partida, o mapa pode ser sorteado espelhado de cima para baixo. O rio continua à esquerda e as regras são as mesmas; a igreja, o cais e as casas trocam de linha (por exemplo, a igreja vai de D3 para D4). Os nomes das quadras seguem a posição na tela.
 
 ### Igreja e cais: funções diferentes
 
@@ -232,6 +236,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
     - Em "Opinar", "Vez do Bruno" e "Você é a Carla, Médica" ficam colados em 390 px. Quebrar a linha em telas estreitas.
     - Na mesa (T13), a Lia aparece carregando 1 morador ("+1" em A3), mas nas telas do celular do mesmo turno o "+1" não aparece.
 22. **Vizinha fraca e Engenheiro forte (simulação de 20/11/2026).** Depois dos ajustes, o efeito de cada papel (com × sem) ficou dentro de ±10 pontos para Bombeiro, Médica e Radialista, mas a Vizinha ficou em −21 (Tranquilo), −8 (Normal) e −13 (Tempestade), e o Engenheiro em +10, +19 e +17; a Barqueira ficou em +15 no Normal. Andar na diagonal economiza pouco neste mapa, e o saco de areia por 1 ação, também em quadra vizinha, segura as casas por mais tempo. Decidir antes da Etapa 7 (ideias: dar à Vizinha uma segunda habilidade; Engenheiro pagando 1 só na própria quadra e 2 na vizinha). Ver `docs/simulation/2026-11-20-summary.md`.
+23. **Variedade entre partidas (ideias para depois da Etapa 6).** Mapas novos e cartas de evento (por exemplo, "ponte caída" ou "morador idoso pesa mais"). Registrado no roadmap, seção "Ideias para depois da Etapa 6". A variedade da v1 vem dos cenários de moradores extras e do mapa espelhado (seção 4).
 
 ## 14. Acessibilidade
 
@@ -264,6 +269,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 21/11/2026: variedade do mapa (cenários de moradores e espelhamento)
+
+- **Decisão:** cada partida sorteia um **cenário de moradores extras** entre os testados na simulação para a dificuldade (Tranquilo 3, Normal 6, Tempestade 6) e se o **mapa aparece espelhado** de cima para baixo (o rio continua à esquerda). Os cenários e o espelhamento ficam nos dados (`extraResidentScenarios` e `allowMirror`). Mapas novos e cartas de evento ficam como ideias para depois da Etapa 6.
+- **Motivo:** o mapa sempre igual pode cansar. Sortear as casas livremente quebraria o equilíbrio (no Normal, a vitória variava de 49% a 97% conforme as casas), então só entram cenários que ficaram dentro da faixa-alvo na simulação. Resultado do sorteio completo: Tranquilo 80%, Normal 55%, Tempestade 28%. Detalhes em `docs/simulation/2026-11-22-variety-summary.md`.
 
 ### 21/11/2026: Dica só no Tranquilo
 

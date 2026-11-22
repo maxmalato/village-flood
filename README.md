@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código e senha) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapas 0 a 3 prontas: já dá para jogar **neste aparelho** (de 2 a 4 voluntários, com bots completando a equipe). A próxima é a Etapa 4 (salas online). Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapas 0 a 3 prontas: já dá para jogar **neste aparelho** (de 2 a 4 voluntários, com bots completando a equipe). A próxima é a Etapa 4 (salas online). A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 

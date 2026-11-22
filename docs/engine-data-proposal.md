@@ -2,6 +2,8 @@
 
 Status: **aprovada em 20/11/2026 e implementada** em `packages/engine`. É a referência dos dados e dos tipos do motor; as decisões estão no "Registro de decisões" das regras.
 
+> **Desde 21/11/2026:** `extraResidentOrder` do mapa foi trocado por `extraResidentScenarios` em cada dificuldade (lista de cenários sorteados por partida) e o mapa ganhou `allowMirror` (espelhamento de cima para baixo). Ver o "Registro de decisões" das regras.
+>
 > **Valores atuais:** os números abaixo são os da proposta original. Os valores em uso ficam em `packages/engine/data/` e mudaram na calibração da Etapa 2 (ver "Registro de decisões" das regras, 20/11/2026), incluindo novos parâmetros da Médica e do Chamado pelo rádio.
 
 Notas da implementação:
