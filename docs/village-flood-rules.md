@@ -188,13 +188,13 @@ Todos os valores desta tabela são **(inicial)**.
 ## 10. Modos de jogo
 
 - **Um aparelho:** todos em volta de um tablet ou notebook. Sem tela de "passe o aparelho", porque não há segredo.
-- **Vários aparelhos (online):** sala com código e senha, como no Senhorio. Cada pessoa vê o tabuleiro inteiro, o próprio papel e os botões de ação. Só o jogador da vez age.
+- **Vários aparelhos (online):** sala privada com código de 6 símbolos, como no Senhorio (sem senha: decisão de 22/11/2026). Cada pessoa vê o tabuleiro inteiro, o próprio papel e os botões de ação. Só o jogador da vez age.
 - **Mesa:** tabuleiro grande na TV ou notebook (assento de mesa, como no Senhorio), celulares como controle. Funciona como o modo online mais uma tela espelhada.
 - **Opinar (ping):** fora da sua vez, o jogador toca numa quadra e escolhe "ir para cá", "cuidado" ou "pegar daqui". Máximo de 3 pings por jogador, apagados ao fim do turno. Pings não fazem parte do estado do jogo e têm limite de frequência.
 - **Desconexão:**
   1. A equipe é avisada ("Diego desconectou, o bot assumiu").
   2. O bot entra após cerca de 20 s de espera na vez da pessoa, ou no início do próximo turno dela, para evitar acionar por oscilação de Wi-Fi.
-  3. A pessoa volta com o código e a senha da sala (ou o token do assento) e retoma o controle no início do próprio turno seguinte, nunca no meio do turno de um bot.
+  3. A pessoa volta com o código da sala (o token guardado no aparelho identifica o assento) e retoma o controle no início do próprio turno seguinte, nunca no meio do turno de um bot.
   4. O assento não é removido por inatividade.
 
 ## 11. Bots
@@ -269,6 +269,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 22/11/2026: sala online só com código, sem senha
+
+- **Decisão:** a sala online usa só o código de 6 símbolos (sem 0/O e 1/I, cerca de 1 bilhão de combinações), como no Senhorio. Não há senha. Cada aparelho recebe um token ao entrar (guardado no servidor só como hash SHA-256), que serve para voltar ao mesmo assento.
+- **Motivo:** mais simples para família e amigos (basta passar 6 letras ou o link). A segurança vem do tamanho do código, do limite de tentativas por endereço e da expiração da sala em 12 h; adivinhar um código ativo é inviável.
 
 ### 21/11/2026: variedade do mapa (cenários de moradores e espelhamento)
 

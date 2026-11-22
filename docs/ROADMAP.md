@@ -14,7 +14,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 1 – Motor | Concluída | `v0.2-engine` |
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
-| 4 – Vários aparelhos (online) | Não iniciada | `v0.5-online` |
+| 4 – Vários aparelhos (online) | Em andamento (branch `develop/online`) | `v0.5-online` |
 | 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
@@ -73,7 +73,7 @@ Deixa o projeto pronto para receber código.
 
 `packages/kit` (extraído do `senhorio-web`), `apps/server`, `packages/protocol`.
 
-- Salas com código e senha, assentos, token como hash, limites e expiração.
+- Salas com código (sem senha), assentos, token como hash, limites e expiração.
 - Desconexão: bot assume, aviso à equipe, volta do jogador no início do próprio turno.
 - Opinar (ping): 3 por jogador, efêmero, limpo ao fim do turno.
 - `resync` na reconexão. O servidor valida toda ação.

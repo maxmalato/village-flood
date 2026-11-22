@@ -115,7 +115,7 @@ Lista completa e valores atuais: `packages/engine/data/rules.json` (schema em `p
 
 ## 7. Protocolo e salas
 
-- Reaproveitar o protocolo do Senhorio: código de sala de 6 caracteres, senha da sala, token de assento guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, modo mesa (assento de mesa).
+- Reaproveitar o protocolo do Senhorio: código de sala de 6 caracteres (sem senha, decisão de 22/11/2026), token de assento guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, modo mesa (assento de mesa).
 - Mensagens novas: `pin` (ping, efêmero, fora do estado, com limite de 3 por jogador e limpeza ao fim do turno) e `resync` (o servidor envia o estado completo na reconexão).
 - O servidor é a única fonte da verdade e valida `actorsOf` antes de aplicar qualquer ação.
 - Sem contas: apenas apelido. Nada de dado pessoal em logs.

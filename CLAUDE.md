@@ -4,7 +4,7 @@ Instruções para o Claude Code neste repositório. Leia antes de qualquer taref
 
 ## O projeto
 
-Enchente na Vila (`village-flood`): jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas ou bots). Uma chuva forte faz o rio subir. A equipe leva os moradores até a igreja e depois todos os voluntários embarcam no cais. Modos: um aparelho, vários aparelhos (sala privada por código e senha) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
+Enchente na Vila (`village-flood`): jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas ou bots). Uma chuva forte faz o rio subir. A equipe leva os moradores até a igreja e depois todos os voluntários embarcam no cais. Modos: um aparelho, vários aparelhos (sala privada por código) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda em celular, tablet, desktop e Smart TV com navegador, como PWA.
 
 - Regras: `docs/village-flood-rules.md`.
 - Especificação técnica: `docs/village-flood-tech-spec.md`.
