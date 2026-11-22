@@ -6,7 +6,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 
 Planned modes: single device, multiple devices (private room with code and password) and table mode (board on a TV or laptop, phones as controllers). It runs as a PWA on phones, tablets, desktops and Smart TVs.
 
-> **Status:** in development. Stages 0 (foundation), 1 (rules engine) and 2 (bots and simulation) are ready; next is Stage 3 (screens). There are no game screens yet. The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
+> **Status:** in development. Stages 0 to 3 are ready: you can already play **on one device** (2 to 4 volunteers, with bots filling the team). Next is Stage 4 (online rooms). The game numbers were calibrated with simulation (see [docs/simulation](docs/simulation/), in Portuguese). See the [roadmap](docs/ROADMAP.md) (in Portuguese).
 
 ## Documentation
 
@@ -59,11 +59,13 @@ Before the first `pnpm e2e`, install the Playwright browser:
 pnpm --filter @village-flood/web exec playwright install chromium
 ```
 
-To run the interface in development mode:
+To play in the browser (development mode), run the command below and open the address it prints:
 
 ```bash
 pnpm --filter @village-flood/web dev
 ```
+
+In the lobby, pick the difficulty, the roles and which seats are bots. In the game, tap a tile to see the actions; on Calm, "Hint" shows the move the bot would make. For tests, `?botDelay=0&seed=42` in the URL makes bots play instantly and fixes the seed.
 
 ## Security and privacy
 

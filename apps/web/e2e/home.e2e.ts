@@ -8,7 +8,6 @@ for (const colorScheme of ['dark', 'light'] as const) {
     test('a tela inicial abre e não tem violações de acessibilidade', async ({ page }) => {
       await page.goto('/')
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enchente na Vila')
-
       const results = await new AxeBuilder({ page }).analyze()
       expect(results.violations).toEqual([])
     })

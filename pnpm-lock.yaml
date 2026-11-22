@@ -236,6 +236,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@village-flood/bots':
+        specifier: workspace:*
+        version: link:../../packages/bots
       '@village-flood/engine':
         specifier: workspace:*
         version: link:../../packages/engine

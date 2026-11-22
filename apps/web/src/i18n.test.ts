@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { locales, messages, pickLocale, t } from './i18n.ts'
+import { locales, messages, paramsOf, pickLocale, t } from './i18n.ts'
 
 describe('i18n', () => {
-  it('todos os idiomas têm as mesmas chaves e nenhum texto vazio', () => {
-    const reference = Object.keys(messages['pt-BR']).sort()
+  it('todos os idiomas têm as mesmas chaves, os mesmos parâmetros e nenhum texto vazio', () => {
+    const reference = messages['pt-BR']
     for (const locale of locales) {
-      expect(Object.keys(messages[locale]).sort()).toEqual(reference)
-      for (const text of Object.values(messages[locale])) expect(text.trim()).not.toBe('')
+      expect(Object.keys(messages[locale]).sort()).toEqual(Object.keys(reference).sort())
+      for (const [key, text] of Object.entries(messages[locale])) {
+        expect(text.trim(), key).not.toBe('')
+        expect(paramsOf(text), key).toEqual(paramsOf(reference[key as keyof typeof reference]))
+      }
     }
   })
 
@@ -17,7 +20,9 @@ describe('i18n', () => {
     expect(pickLocale([])).toBe('pt-BR')
   })
 
-  it('traduz uma chave', () => {
+  it('troca os parâmetros', () => {
     expect(t('en', 'app.title')).toBe('Village Flood')
+    expect(t('pt-BR', 'game.goal', { goal: 9 })).toBe('Meta: salvar 9 moradores')
+    expect(t('pt-BR', 'game.goal')).toBe('Meta: salvar {goal} moradores')
   })
 })

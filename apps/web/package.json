@@ -12,6 +12,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@village-flood/bots": "workspace:*",
     "@village-flood/engine": "workspace:*"
   },
   "devDependencies": {

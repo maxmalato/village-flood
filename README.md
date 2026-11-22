@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código e senha) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapas 0 (fundação), 1 (motor de regras) e 2 (bots e simulação) prontas; a próxima é a Etapa 3 (telas). Ainda não há telas do jogo. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapas 0 a 3 prontas: já dá para jogar **neste aparelho** (de 2 a 4 voluntários, com bots completando a equipe). A próxima é a Etapa 4 (salas online). Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 
@@ -57,11 +57,13 @@ Antes do primeiro `pnpm e2e`, instale o navegador do Playwright:
 pnpm --filter @village-flood/web exec playwright install chromium
 ```
 
-Para rodar a interface em modo de desenvolvimento:
+Para jogar no navegador (modo de desenvolvimento), rode o comando abaixo e abra o endereço que ele mostrar:
 
 ```bash
 pnpm --filter @village-flood/web dev
 ```
+
+No lobby, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; no Tranquilo, "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
 
 ## Segurança e privacidade
 
