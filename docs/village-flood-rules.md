@@ -232,6 +232,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
     - Em "Opinar", "Vez do Bruno" e "Você é a Carla, Médica" ficam colados em 390 px. Quebrar a linha em telas estreitas.
     - Na mesa (T13), a Lia aparece carregando 1 morador ("+1" em A3), mas nas telas do celular do mesmo turno o "+1" não aparece.
 22. **Vizinha fraca e Engenheiro forte (simulação de 20/11/2026).** Depois dos ajustes, o efeito de cada papel (com × sem) ficou dentro de ±10 pontos para Bombeiro, Médica e Radialista, mas a Vizinha ficou em −21 (Tranquilo), −8 (Normal) e −13 (Tempestade), e o Engenheiro em +10, +19 e +17; a Barqueira ficou em +15 no Normal. Andar na diagonal economiza pouco neste mapa, e o saco de areia por 1 ação, também em quadra vizinha, segura as casas por mais tempo. Decidir antes da Etapa 7 (ideias: dar à Vizinha uma segunda habilidade; Engenheiro pagando 1 só na própria quadra e 2 na vizinha). Ver `docs/simulation/2026-11-20-summary.md`.
+23. **Variedade entre partidas (ideias para depois da Etapa 6).** Mapas novos e cartas de evento (por exemplo, "ponte caída" ou "morador idoso pesa mais"). Registrado no roadmap, seção "Ideias para depois da Etapa 6". A variedade da v1 vem dos cenários de moradores extras e do mapa espelhado (seção 4).
 
 ## 14. Acessibilidade
 

@@ -103,6 +103,13 @@ Deixa o projeto pronto para receber código.
 
 **Pronto quando:** taxas de vitória reais próximas das faixas alvo e nenhum ponto "a testar" sem decisão registrada.
 
+## Ideias para depois da Etapa 6
+
+Registradas em 21/11/2026, a pedido do dono do projeto, para aumentar a variedade entre partidas (ponto em aberto 23 das regras):
+
+- **Mapas novos:** outras vilas com formato, alturas, casas, igreja e cais diferentes. O motor e o tabuleiro já aceitam qualquer mapa vindo dos dados; cada mapa precisa ser desenhado e calibrado na simulação, e o lobby ganha a escolha (ou o sorteio) do mapa.
+- **Cartas de evento:** pequenos imprevistos por partida, como "ponte caída" ou "morador idoso pesa mais". Mudam regras, então pedem nova calibração.
+
 ## Depois da v1
 
 Modelo de água B (chuva que escorre), registrado na seção 12 das regras e da especificação. Só começa depois que a v1 estiver finalizada.
