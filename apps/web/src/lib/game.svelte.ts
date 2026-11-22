@@ -11,14 +11,9 @@ import {
   type Variation,
 } from '@village-flood/engine'
 import type { Locale } from '../i18n.ts'
+import type { GameController, Hint, SeatStats } from './controller.ts'
 import type { LocalSetup } from './setup.ts'
 import { actionTile, eventMessages, seatColors, type SeatInfo } from './view.ts'
-
-export interface SeatStats {
-  rescues: number
-  heals: number
-  radioCalls: number
-}
 
 /**
  * Dificuldades em que a Dica aparece (decisão do dono do projeto, 21/11/2026: só no Tranquilo).
@@ -26,11 +21,9 @@ export interface SeatStats {
  */
 export const hintDifficulties: readonly Difficulty[] = ['easy']
 
-export interface Hint {
-  readonly actions: readonly Action[]
-}
+export type { Hint, SeatStats } from './controller.ts'
 
-export class LocalGame {
+export class LocalGame implements GameController {
   /** Estado do motor. `raw`: o motor já devolve objetos novos (imutáveis). */
   state = $state.raw<GameState>() as GameState
   selected = $state<string | null>(null)
@@ -83,6 +76,10 @@ export class LocalGame {
     return this.state.phase === 'playing' && (this.active?.bot ?? false)
   }
 
+  get activeIsBot(): boolean {
+    return this.active?.bot ?? false
+  }
+
   get isHumanTurn(): boolean {
     return this.state.phase === 'playing' && !(this.active?.bot ?? true)
   }
@@ -93,11 +90,11 @@ export class LocalGame {
   }
 
   /** Aplica a ação de quem tem a vez. Devolve se foi aceita. */
-  act(action: Action): boolean {
+  act(action: Action): void {
     const result = transition(this.state, action, { seat: this.state.activeSeat })
     if (!result.ok) {
       this.rejected = result.reason
-      return false
+      return
     }
     this.rejected = null
     this.state = result.state
@@ -105,7 +102,6 @@ export class LocalGame {
     this.record(result.events)
     if (action.type === 'end-turn' || this.state.phase !== 'playing') this.selected = null
     this.scheduleBot()
-    return true
   }
 
   /** Dica: a mesma lógica do bot, para quem tem a vez. */

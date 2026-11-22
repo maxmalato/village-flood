@@ -29,6 +29,10 @@ export interface SeatInfo {
   readonly role: RoleId
   readonly bot: boolean
   readonly color: string
+  /** Online: presença do assento (o bot pode estar no lugar de quem caiu). */
+  readonly presence?: 'connected' | 'away' | 'bot' | 'returning'
+  /** Online: este aparelho. */
+  readonly you?: boolean
 }
 
 export const seatColors = ['#B39DDB', '#4FC3F7', '#FF8A65', '#81C784'] as const
@@ -55,6 +59,12 @@ export interface PawnView {
   readonly carrying: number
 }
 
+export interface TilePing {
+  readonly initial: string
+  readonly color: string
+  readonly kind: string
+}
+
 export interface TileView {
   readonly id: TileId
   readonly height: number
@@ -67,6 +77,8 @@ export interface TileView {
   readonly pawns: readonly PawnView[]
   /** Custo para o voluntário da vez andar até a quadra (null: não alcança num passo). */
   readonly cost: number | null
+  /** Sugestões de outros jogadores nesta quadra (online). */
+  readonly pings: readonly TilePing[]
   readonly selected: boolean
   readonly suggested: boolean
   readonly aria: string
@@ -78,6 +90,7 @@ export interface TileViewOptions {
   readonly suggested: TileId | null
   readonly showReach: boolean
   readonly locale: Locale
+  readonly pings?: readonly { seat: SeatId; target: string; kind: string }[]
 }
 
 export function tileViews(state: GameState, options: TileViewOptions): TileView[] {
@@ -103,6 +116,16 @@ export function tileViews(state: GameState, options: TileViewOptions): TileView[
         }
       })
     const cost = reach.get(tile.id) ?? null
+    const pings = (options.pings ?? [])
+      .filter((p) => p.target === tile.id)
+      .map((p) => {
+        const info = options.seats.find((s) => s.seat === p.seat)
+        return {
+          initial: initialOf(info?.name ?? '?'),
+          color: info?.color ?? '#C9D8E3',
+          kind: p.kind,
+        }
+      })
 
     const parts = [
       t(locale, 'tile.aria', {
@@ -129,6 +152,15 @@ export function tileViews(state: GameState, options: TileViewOptions): TileView[
       )
     }
     if (cost !== null) parts.push(t(locale, 'tile.reachable', { n: cost }))
+    for (const p of options.pings ?? []) {
+      if (p.target !== tile.id) continue
+      parts.push(
+        t(locale, 'tile.ping', {
+          name: seatName(options.seats, p.seat),
+          kind: t(locale, `ping.${p.kind}` as MessageKey),
+        }),
+      )
+    }
     if (options.selected === tile.id) parts.push(t(locale, 'tile.selected'))
     if (options.suggested === tile.id) parts.push(t(locale, 'tile.suggested'))
 
@@ -143,6 +175,7 @@ export function tileViews(state: GameState, options: TileViewOptions): TileView[
       mark,
       pawns,
       cost,
+      pings,
       selected: options.selected === tile.id,
       suggested: options.suggested === tile.id,
       aria: parts.join(', '),

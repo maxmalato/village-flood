@@ -12,7 +12,8 @@ const ptBR = {
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 4 voluntários em volta da mesma tela. Bots completam a equipe.',
-  'home.online': 'Salas online e modo mesa chegam nas próximas versões.',
+  'home.online':
+    'O modo mesa (TV como tabuleiro e celulares como controle) chega na próxima versão.',
 
   'lobby.title': 'Montar a equipe',
   'lobby.difficulty': 'Dificuldade',
@@ -249,6 +250,95 @@ const ptBR = {
   'end.mostCallsText': '{name} fez {n} chamado(s).',
   'end.again': 'Jogar de novo',
   'end.home': 'Voltar ao início',
+
+  'home.createRoom': 'Criar sala online',
+  'home.joinRoom': 'Entrar com código',
+  'home.onlineHint': 'Cada pessoa no seu aparelho, pela internet. Bots completam a equipe.',
+  'home.resume': 'Voltar para a sala {code}',
+
+  'online.createTitle': 'Criar sala online',
+  'online.joinTitle': 'Entrar numa sala',
+  'online.name': 'Seu apelido',
+  'online.code': 'Código da sala',
+  'online.codeHint': '6 letras e números, como K7P·4QX.',
+  'online.create': 'Criar sala',
+  'online.join': 'Entrar',
+  'online.back': 'Voltar',
+  'online.privacy':
+    'O jogo guarda só o apelido, e só enquanto a sala existir (até 12 h sem atividade).',
+  'online.connecting': 'Conectando à sala…',
+  'online.reconnecting': 'Conexão perdida. Tentando de novo…',
+
+  'room.title': 'Sala online',
+  'room.code': 'Código da sala',
+  'room.codeHint': 'Passe o código ou o link para quem vai jogar.',
+  'room.copyLink': 'Copiar link',
+  'room.copied': 'Link copiado.',
+  'room.seats': 'Voluntários ({n} de {max})',
+  'room.you': 'você',
+  'room.host': 'organiza a sala',
+  'room.bot': 'bot',
+  'room.away': 'sem conexão',
+  'room.yourRole': 'Seu papel',
+  'room.difficulty': 'Dificuldade',
+  'room.addBot': 'Adicionar bot',
+  'room.remove': 'Remover {name}',
+  'room.start': 'Começar a partida',
+  'room.waitHost': 'Aguardando {name} começar a partida.',
+  'room.needMore': 'Para começar: pelo menos {n} voluntários e 1 pessoa.',
+  'room.leave': 'Sair da sala',
+
+  'game.turnOther': 'Turno {turn} · Vez de {name}',
+  'game.otherTurn': '{name} está jogando…',
+  'game.youReturning': 'Você volta a jogar no início do seu próximo turno.',
+
+  'ping.go': 'Ir para cá',
+  'ping.careful': 'Cuidado',
+  'ping.pick-up': 'Pegar daqui',
+  'ping.title': 'Sugerir para {name}',
+  'ping.pick': 'Toque numa quadra para sugerir uma jogada a {name}.',
+  'ping.count': 'Suas sugestões neste turno: {n} de {max}',
+  'ping.remove': 'Tirar a sugestão "{kind}" da quadra {tile}',
+  'tile.ping': '{name} sugere: {kind}',
+
+  'team.you': '(você)',
+  'team.away': 'Sem conexão',
+  'team.botFor': 'Bot no lugar',
+  'team.returning': 'Volta no próximo turno',
+
+  'notice.away': '{name} perdeu a conexão. Se não voltar a tempo, um bot joga no lugar.',
+  'notice.botTookOver': 'Um bot está jogando no lugar de {name}.',
+  'notice.youBot': 'Um bot está jogando por você.',
+  'notice.backSoon': '{name} voltou e assume no início do próximo turno.',
+  'notice.youBackSoon':
+    'Você voltou. Assume no início do seu próximo turno; até lá, o bot joga por você.',
+  'notice.returned': '{name} voltou ao jogo.',
+  'notice.youReturned': 'Você voltou ao jogo.',
+
+  'end.waitHost': 'Aguardando {name} começar outra partida.',
+  'end.leave': 'Sair da sala',
+
+  'error.generic': 'O servidor recusou o pedido.',
+  'error.network': 'Sem conexão com o servidor. Tente de novo.',
+  'error.notFound': 'Não há sala com esse código.',
+  'error.invalidCode': 'O código tem 6 letras e números.',
+  'error.roomGone': 'Esta sala não existe mais (a sala expira depois de 12 h sem atividade).',
+  'error.unknownToken': 'Este aparelho não tem mais lugar nesta sala.',
+  'error.nameTaken': 'Já tem alguém com esse apelido na sala.',
+  'error.invalidName': 'Escolha um apelido de 1 a 20 caracteres.',
+  'error.roomFull': 'A sala está cheia.',
+  'error.gameStarted': 'A partida desta sala já começou.',
+  'error.tooManyRequests': 'Muitas tentativas. Espere um pouco.',
+  'error.onlyHost': 'Só quem organiza a sala pode fazer isso.',
+  'error.profileTaken': 'Esse papel já tem dono.',
+  'error.notEnoughSeats': 'Faltam voluntários para começar.',
+  'error.noHuman': 'A equipe precisa de pelo menos 1 pessoa.',
+  'error.someoneAway': 'Alguém está sem conexão. Espere voltar ou remova o assento.',
+  'error.stillConnected': 'Só dá para remover quem está sem conexão.',
+  'error.notYourTurn': 'Não é a sua vez.',
+  'error.notYourControl': 'O bot está jogando por você até o seu próximo turno.',
+  'error.yourTurn': 'Na sua vez, jogue em vez de sugerir.',
+  'error.tooManyPings': 'Você já fez {n} sugestões neste turno.',
 } as const
 
 export type MessageKey = keyof typeof ptBR
@@ -260,7 +350,7 @@ const en: Record<MessageKey, string> = {
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 4 volunteers around the same screen. Bots fill the team.',
-  'home.online': 'Online rooms and table mode come in later versions.',
+  'home.online': 'Table mode (TV as the board, phones as controllers) comes in the next version.',
 
   'lobby.title': 'Build the team',
   'lobby.difficulty': 'Difficulty',
@@ -498,6 +588,96 @@ const en: Record<MessageKey, string> = {
   'end.mostCallsText': '{name} made {n} call(s).',
   'end.again': 'Play again',
   'end.home': 'Back to the start',
+
+  'home.createRoom': 'Create an online room',
+  'home.joinRoom': 'Join with a code',
+  'home.onlineHint': 'Each person on their own device, over the internet. Bots fill the team.',
+  'home.resume': 'Back to room {code}',
+
+  'online.createTitle': 'Create an online room',
+  'online.joinTitle': 'Join a room',
+  'online.name': 'Your nickname',
+  'online.code': 'Room code',
+  'online.codeHint': '6 letters and numbers, like K7P·4QX.',
+  'online.create': 'Create room',
+  'online.join': 'Join',
+  'online.back': 'Back',
+  'online.privacy':
+    'The game only keeps your nickname, and only while the room exists (up to 12 h without activity).',
+  'online.connecting': 'Connecting to the room…',
+  'online.reconnecting': 'Connection lost. Trying again…',
+
+  'room.title': 'Online room',
+  'room.code': 'Room code',
+  'room.codeHint': 'Share the code or the link with the other players.',
+  'room.copyLink': 'Copy link',
+  'room.copied': 'Link copied.',
+  'room.seats': 'Volunteers ({n} of {max})',
+  'room.you': 'you',
+  'room.host': 'room host',
+  'room.bot': 'bot',
+  'room.away': 'disconnected',
+  'room.yourRole': 'Your role',
+  'room.difficulty': 'Difficulty',
+  'room.addBot': 'Add a bot',
+  'room.remove': 'Remove {name}',
+  'room.start': 'Start the game',
+  'room.waitHost': 'Waiting for {name} to start the game.',
+  'room.needMore': 'To start: at least {n} volunteers and 1 person.',
+  'room.leave': 'Leave the room',
+
+  'game.turnOther': "Turn {turn} · {name}'s turn",
+  'game.otherTurn': '{name} is playing…',
+  'game.youReturning': 'You take over again at the start of your next turn.',
+
+  'ping.go': 'Go here',
+  'ping.careful': 'Careful',
+  'ping.pick-up': 'Pick up here',
+  'ping.title': 'Suggest to {name}',
+  'ping.pick': 'Tap a tile to suggest a move to {name}.',
+  'ping.count': 'Your suggestions this turn: {n} of {max}',
+  'ping.remove': 'Remove the "{kind}" suggestion from tile {tile}',
+  'tile.ping': '{name} suggests: {kind}',
+
+  'team.you': '(you)',
+  'team.away': 'Disconnected',
+  'team.botFor': 'Bot standing in',
+  'team.returning': 'Back next turn',
+
+  'notice.away':
+    '{name} lost the connection. If they do not come back in time, a bot plays instead.',
+  'notice.botTookOver': 'A bot is playing for {name}.',
+  'notice.youBot': 'A bot is playing for you.',
+  'notice.backSoon': '{name} is back and takes over at the start of their next turn.',
+  'notice.youBackSoon':
+    'You are back. You take over at the start of your next turn; until then, the bot plays for you.',
+  'notice.returned': '{name} is back in the game.',
+  'notice.youReturned': 'You are back in the game.',
+
+  'end.waitHost': 'Waiting for {name} to start another game.',
+  'end.leave': 'Leave the room',
+
+  'error.generic': 'The server refused the request.',
+  'error.network': 'No connection to the server. Try again.',
+  'error.notFound': 'There is no room with this code.',
+  'error.invalidCode': 'The code has 6 letters and numbers.',
+  'error.roomGone': 'This room no longer exists (rooms expire after 12 h without activity).',
+  'error.unknownToken': 'This device no longer has a seat in this room.',
+  'error.nameTaken': 'Someone in the room already has this nickname.',
+  'error.invalidName': 'Pick a nickname of 1 to 20 characters.',
+  'error.roomFull': 'The room is full.',
+  'error.gameStarted': "This room's game has already started.",
+  'error.tooManyRequests': 'Too many attempts. Wait a moment.',
+  'error.onlyHost': 'Only the room host can do that.',
+  'error.profileTaken': 'Someone already has this role.',
+  'error.notEnoughSeats': 'More volunteers are needed to start.',
+  'error.noHuman': 'The team needs at least 1 person.',
+  'error.someoneAway': 'Someone is disconnected. Wait for them or remove their seat.',
+  'error.stillConnected': 'Only disconnected players can be removed.',
+  'error.notYourTurn': 'It is not your turn.',
+  'error.notYourControl': 'The bot is playing for you until your next turn.',
+  'error.yourTurn': 'On your turn, play instead of suggesting.',
+  'error.tooManyPings': 'You already made {n} suggestions this turn.',
 }
 
 export const messages: Record<Locale, Record<MessageKey, string>> = { 'pt-BR': ptBR, en }
@@ -520,6 +700,14 @@ export function t(locale: Locale, key: MessageKey, params: Params = {}): string 
     const value = params[name]
     return value === undefined ? match : String(value)
   })
+}
+
+/** Texto de um erro do servidor ("error.<código>"); código desconhecido vira um aviso genérico. */
+export function errorText(locale: Locale, code: string, params: Params = {}): string {
+  const key = `error.${code}`
+  return key in messages[locale]
+    ? t(locale, key as MessageKey, params)
+    : t(locale, 'error.generic', params)
 }
 
 /** Nomes dos parâmetros usados num texto ({nome}). */

@@ -245,6 +245,12 @@ importers:
       '@village-flood/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      '@village-flood/kit':
+        specifier: workspace:*
+        version: link:../../packages/kit
+      '@village-flood/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.14.0

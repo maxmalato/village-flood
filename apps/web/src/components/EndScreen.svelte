@@ -1,7 +1,7 @@
 <script lang="ts">
   import { countResidents } from '@village-flood/engine'
   import { t, type Locale, type MessageKey } from '../i18n.ts'
-  import type { LocalGame, SeatStats } from '../lib/game.svelte.ts'
+  import type { GameController, SeatStats } from '../lib/controller.ts'
   import Icon from './Icon.svelte'
 
   let {
@@ -9,7 +9,17 @@
     locale,
     onagain,
     onhome,
-  }: { game: LocalGame; locale: Locale; onagain: () => void; onhome: () => void } = $props()
+    waitText = null,
+    homeLabel = 'end.home',
+  }: {
+    game: GameController
+    locale: Locale
+    /** null: este aparelho não começa outra partida (online, quem não organiza a sala). */
+    onagain: (() => void) | null
+    onhome: () => void
+    waitText?: string | null
+    homeLabel?: MessageKey
+  } = $props()
 
   const state = $derived(game.state)
   const won = $derived(state.phase === 'won')
@@ -91,8 +101,12 @@
     </section>
   {/if}
 
-  <button type="button" class="btn-primary" onclick={onagain}>{t(locale, 'end.again')}</button>
-  <button type="button" class="btn" onclick={onhome}>{t(locale, 'end.home')}</button>
+  {#if onagain}
+    <button type="button" class="btn-primary" onclick={onagain}>{t(locale, 'end.again')}</button>
+  {:else if waitText}
+    <p class="tip" role="status">{waitText}</p>
+  {/if}
+  <button type="button" class="btn" onclick={onhome}>{t(locale, homeLabel)}</button>
 </main>
 
 <style>

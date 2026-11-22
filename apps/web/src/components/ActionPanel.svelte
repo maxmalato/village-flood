@@ -1,10 +1,12 @@
 <script lang="ts">
   import { findVolunteer } from '@village-flood/engine'
   import { t, type Locale, type MessageKey } from '../i18n.ts'
-  import type { LocalGame } from '../lib/game.svelte.ts'
+  import { MAX_PINGS_PER_TURN } from '@village-flood/kit'
+  import { pingKinds } from '@village-flood/protocol'
+  import type { GameController } from '../lib/controller.ts'
   import { describeAction, globalActions, tileActions, tileInfo } from '../lib/view.ts'
 
-  let { game, locale }: { game: LocalGame; locale: Locale } = $props()
+  let { game, locale }: { game: GameController; locale: Locale } = $props()
 
   const state = $derived(game.state)
   const human = $derived(game.isHumanTurn)
@@ -14,6 +16,15 @@
   const extras = $derived(human ? globalActions(state, locale) : [])
   const primary = $derived(options[0])
   const secondary = $derived(options.slice(1))
+  const online = $derived(game.online)
+  const myPings = $derived(online ? online.pings.filter((p) => p.seat === online.mySeat) : [])
+  const waitingText = $derived.by(() => {
+    const active = game.active
+    if (!active) return ''
+    if (game.activeIsBot && active.you) return t(locale, 'game.youReturning')
+    if (game.activeIsBot) return t(locale, 'game.botThinking', { name: active.name })
+    return t(locale, 'game.otherTurn', { name: active.name })
+  })
 </script>
 
 <section class="actions" aria-label={t(locale, 'info.actions')}>
@@ -32,7 +43,8 @@
       {/if}
     </div>
     {#if !human && game.active}
-      <p class="title">{t(locale, 'game.botThinking', { name: game.active.name })}</p>
+      <p class="title">{waitingText}</p>
+      {#if info}<p class="text">{info.title}</p>{/if}
     {:else if info}
       <p class="title">{info.title}</p>
       {#if info.text}<p class="text">{info.text}</p>{/if}
@@ -46,6 +58,45 @@
       </p>
     {/if}
   </div>
+
+  {#if online?.canPing && game.active}
+    <div class="pings">
+      <p class="hint-title">{t(locale, 'ping.title', { name: game.active.name })}</p>
+      {#if game.selected}
+        <div class="more">
+          {#each pingKinds as kind (kind)}
+            <button
+              type="button"
+              class="btn"
+              disabled={myPings.length >= MAX_PINGS_PER_TURN}
+              onclick={() => game.selected && online.ping(game.selected, kind)}
+            >
+              {t(locale, `ping.${kind}`)}
+            </button>
+          {/each}
+        </div>
+      {:else}
+        <p>{t(locale, 'ping.pick', { name: game.active.name })}</p>
+      {/if}
+      <p class="count">
+        {t(locale, 'ping.count', { n: myPings.length, max: MAX_PINGS_PER_TURN })}
+      </p>
+      {#if myPings.length > 0}
+        <ul>
+          {#each myPings as ping (ping.index)}
+            <li>
+              <button type="button" class="btn small" onclick={() => online.unping(ping.index)}>
+                {t(locale, 'ping.remove', {
+                  kind: t(locale, `ping.${ping.kind}`),
+                  tile: ping.target,
+                })}
+              </button>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    </div>
+  {/if}
 
   {#if game.hint}
     <div class="hint" role="status">
@@ -84,7 +135,7 @@
     </div>
   {/if}
 
-  <div class="row" class:two={!game.hintAvailable}>
+  <div class="row" class:two={!game.hintAvailable} hidden={Boolean(online) && !human}>
     <button
       type="button"
       class="btn"
@@ -170,6 +221,36 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+  }
+  .pings {
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pings p,
+  .pings ul {
+    margin: 0;
+    font-weight: 700;
+  }
+  .pings ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .count {
+    color: var(--muted);
+  }
+  .btn.small {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+  .row[hidden] {
+    display: none;
   }
   .hint p,
   .hint ol {

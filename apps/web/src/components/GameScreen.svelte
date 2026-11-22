@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { t, type Locale, type MessageKey } from '../i18n.ts'
-  import type { LocalGame } from '../lib/game.svelte.ts'
+  import { MAX_PINGS_PER_TURN } from '@village-flood/kit'
+  import { errorText, t, type Locale, type MessageKey } from '../i18n.ts'
+  import type { GameController } from '../lib/controller.ts'
   import { actionTile, residentSummary, tileViews } from '../lib/view.ts'
   import ActionPanel from './ActionPanel.svelte'
   import Board from './Board.svelte'
@@ -11,7 +12,7 @@
   import RiverPanel from './RiverPanel.svelte'
   import TeamPanel from './TeamPanel.svelte'
 
-  let { game, locale }: { game: LocalGame; locale: Locale } = $props()
+  let { game, locale }: { game: GameController; locale: Locale } = $props()
   let legendOpen = $state(false)
 
   const gs = $derived(game.state)
@@ -23,13 +24,20 @@
       suggested,
       showReach: game.isHumanTurn,
       locale,
+      ...(game.online ? { pings: game.online.pings } : {}),
     }),
   )
+  // Partida local: quem não é bot está "na sua vez" (mesmo aparelho). Online: só o próprio.
+  function turnKey(active: NonNullable<GameController['active']>): MessageKey {
+    if (active.bot) return 'game.turnBot'
+    if (!game.online || active.you) return 'game.turnYours'
+    return 'game.turnOther'
+  }
   const columns = $derived(Math.max(...gs.tiles.map((tile) => tile.x)) + 1)
   const summary = $derived(residentSummary(gs))
   const turnLine = $derived(
     game.active
-      ? t(locale, game.active.bot ? 'game.turnBot' : 'game.turnYours', {
+      ? t(locale, turnKey(game.active), {
           turn: gs.turn,
           name: game.active.name,
         })
@@ -56,6 +64,17 @@
 
   {#if game.alert}
     <p class="alert" role="alert">{game.alert}</p>
+  {/if}
+  {#if game.online}
+    <div class="banners" role="status">
+      {#if game.online.reconnecting}
+        <p class="banner">{t(locale, 'online.reconnecting')}</p>
+      {/if}
+      {#if game.online.notice}<p class="banner">{game.online.notice}</p>{/if}
+      {#if game.online.error}
+        <p class="banner">{errorText(locale, game.online.error, { n: MAX_PINGS_PER_TURN })}</p>
+      {/if}
+    </div>
   {/if}
 
   <div class="layout">
@@ -152,6 +171,17 @@
     border-radius: 14px;
     background: var(--accent);
     color: var(--ink);
+    font-weight: 800;
+  }
+  .banners {
+    display: contents;
+  }
+  .banner {
+    margin: 0;
+    padding: 8px 14px;
+    border-radius: 14px;
+    border: 2px solid var(--accent);
+    background: var(--panel);
     font-weight: 800;
   }
   .layout {
