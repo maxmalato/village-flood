@@ -776,7 +776,7 @@ describe('variação do mapa (cenários e espelhamento)', () => {
   })
 
   it('recusa variação inválida', () => {
-    expect(() => make(1, { scenario: 5, mirrored: false })).toThrow(/Cenário inexistente/)
+    expect(() => make(1, { scenario: 99, mirrored: false })).toThrow(/Cenário inexistente/)
     const flat = { ...defaultGameData, map: { ...defaultGameData.map, allowMirror: false } }
     expect(() =>
       newGame(
