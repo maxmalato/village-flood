@@ -270,6 +270,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 
 Decisão nova entra no topo, com data e motivo.
 
+### 21/11/2026: variedade do mapa (cenários de moradores e espelhamento)
+
+- **Decisão:** cada partida sorteia um **cenário de moradores extras** entre os testados na simulação para a dificuldade (Tranquilo 3, Normal 6, Tempestade 6) e se o **mapa aparece espelhado** de cima para baixo (o rio continua à esquerda). Os cenários e o espelhamento ficam nos dados (`extraResidentScenarios` e `allowMirror`). Mapas novos e cartas de evento ficam como ideias para depois da Etapa 6.
+- **Motivo:** o mapa sempre igual pode cansar. Sortear as casas livremente quebraria o equilíbrio (no Normal, a vitória variava de 49% a 97% conforme as casas), então só entram cenários que ficaram dentro da faixa-alvo na simulação. Resultado do sorteio completo: Tranquilo 80%, Normal 55%, Tempestade 28%. Detalhes em `docs/simulation/2026-11-22-variety-summary.md`.
+
 ### 21/11/2026: Dica só no Tranquilo
 
 - **Decisão:** o botão "Dica" (jogada sugerida pelo bot) aparece só na dificuldade Tranquilo. No Normal e na Tempestade, a equipe joga sem sugestão.
