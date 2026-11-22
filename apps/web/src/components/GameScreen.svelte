@@ -86,11 +86,18 @@
 
     <div class="side">
       <div class="actions-desktop"><ActionPanel {game} {locale} /></div>
-      <RiverPanel state={gs} {locale} />
-      <ResidentsPanel state={gs} {locale} />
-      <ForecastPanel state={gs} seats={game.seats} {locale} />
-      <TeamPanel state={gs} seats={game.seats} {locale} />
-      <QuickLegend {locale} onopen={() => (legendOpen = true)} />
+      <!-- Duas colunas independentes no desktop (sem buracos); uma coluna no celular. -->
+      <div class="cols">
+        <div class="col">
+          <div class="slot river"><RiverPanel state={gs} {locale} /></div>
+          <div class="slot forecast"><ForecastPanel state={gs} seats={game.seats} {locale} /></div>
+          <div class="slot legend"><QuickLegend {locale} onopen={() => (legendOpen = true)} /></div>
+        </div>
+        <div class="col">
+          <div class="slot residents"><ResidentsPanel state={gs} {locale} /></div>
+          <div class="slot team"><TeamPanel state={gs} seats={game.seats} {locale} /></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -192,6 +199,29 @@
     flex-direction: column;
     gap: 14px;
   }
+  /* Celular: uma coluna só, na ordem rio, moradores, previsão, equipe e legenda. */
+  .cols,
+  .col {
+    display: contents;
+  }
+  .slot:empty {
+    display: none;
+  }
+  .river {
+    order: 1;
+  }
+  .residents {
+    order: 2;
+  }
+  .forecast {
+    order: 3;
+  }
+  .team {
+    order: 4;
+  }
+  .legend {
+    order: 5;
+  }
   .actions-desktop {
     display: none;
   }
@@ -227,13 +257,16 @@
     .actions-desktop {
       display: block;
     }
-    .side {
+    .cols {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
       align-items: start;
     }
-    .side > :global(*:first-child) {
-      grid-column: 1 / -1;
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
   }
 </style>
