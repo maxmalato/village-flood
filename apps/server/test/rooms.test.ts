@@ -196,6 +196,40 @@ describe('salas', () => {
     expect(view.seats[1]?.presence).toBe('connected')
   }, 20_000)
 
+  it('modo mesa: a TV entra pelo próprio token, só mostra e abre a legenda', async () => {
+    const response = await exports.default.fetch('https://example.com/api/rooms', {
+      method: 'POST',
+      body: JSON.stringify({ config: { difficulty: 'easy' }, table: true }),
+    })
+    expect(response.status).toBe(201)
+    const { code, tableToken } = (await response.json()) as { code: string; tableToken: string }
+    expect(tableToken).toMatch(/^[\w-]{40,}$/)
+
+    const tv = await connect(code, 'mesa')
+    tv.send({ type: 'hello', token: tableToken })
+    expect((await tv.waitFor(isWelcome)).seat).toBe('table')
+    await tv.room((r) => r.table?.connected === true)
+
+    // a mesa não joga nem comanda; quem comanda é a primeira pessoa que entra
+    tv.send({ type: 'start' })
+    expect(await errorCode(tv)).toBe('tableCannotPlay')
+    const ana = await join(code, 'Ana')
+    const lobby = await tv.room((r) => r.seats.length === 1)
+    expect(lobby.host).toBe(ana.seat)
+
+    // a legenda abre pelo celular e fecha pela própria mesa (controle remoto)
+    ana.send({ type: 'table-overlay', overlay: 'legend' })
+    await tv.room((r) => r.table?.overlay === 'legend')
+    tv.send({ type: 'table-overlay', overlay: null })
+    await ana.room((r) => r.table?.overlay === null)
+    ana.send({ type: 'table-overlay', overlay: 'placar' })
+    expect(await errorCode(ana)).toBe('invalidOverlay')
+
+    // a mesa cai e volta pelo mesmo token
+    tv.ws.close(1000, 'teste')
+    await ana.room((r) => r.table?.connected === false)
+  })
+
   it('token desconhecido é recusado', async () => {
     const code = await createRoom()
     await join(code, 'Ana')

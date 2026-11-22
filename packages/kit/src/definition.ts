@@ -23,6 +23,8 @@ export interface GameDefinition<S, A, E, C, P> {
   readonly defaultConfig: C
   /** Tipos de ping aceitos (ex.: "ir para cá", "cuidado"). */
   readonly pingKinds: readonly string[]
+  /** Telas que os celulares podem abrir por cima do jogo na mesa (ex.: a legenda). */
+  readonly tableOverlays: readonly string[]
 
   /** Validam o que chega do aparelho. Null: recusado. */
   parseConfig(raw: unknown): C | null

@@ -4,9 +4,10 @@ import {
   formatCode,
   normalizeCode,
   ROOM_TTL_MS,
+  TABLE_SEAT,
   type RoomTimings,
 } from './constants.ts'
-import { parseClientMessage, RateLimiter } from './messages.ts'
+import { parseClientMessage, RateLimiter, TABLE_MESSAGES } from './messages.ts'
 import {
   act,
   addBot,
@@ -23,6 +24,7 @@ import {
   removeSeat,
   setConfig,
   setProfile,
+  setTableOverlay,
   startGame,
   tick,
   viewOf,
@@ -311,5 +313,48 @@ describe('pings', () => {
     expect(room.pings.map((p) => p.target)).toEqual(['b', 'c'])
     room = okRecord(act(def, room, 'seat-1', { type: 'end' }, 15, timings))
     expect(room.pings).toEqual([])
+  })
+})
+
+describe('modo mesa', () => {
+  function tableRoom(): Room {
+    let room: Room = createRoom('ABCDEF', def.defaultConfig, 0, 'hash-mesa')
+    room = okRecord(joinRoom(def, room, 'Ana', 'hash-ana', 1, random))
+    return okRecord(joinRoom(def, room, 'Bruno', 'hash-bruno', 2, random))
+  }
+
+  it('a mesa entra pelo próprio token, não ocupa assento e não comanda', () => {
+    let room = tableRoom()
+    expect(viewOf(room).table).toEqual({ connected: false, overlay: null })
+    const back = reconnect<CountState, CountConfig, CountProfile, CountEvent>(room, 'hash-mesa', 3)
+    expect(back.seat).toBe(TABLE_SEAT)
+    room = okRecord(back)
+    expect(room.table?.connected).toBe(true)
+    expect(room.seats).toHaveLength(2)
+    // quem comanda é a primeira pessoa que entrou
+    expect(room.host).toBe('seat-1')
+    expect(startGame(def, room, TABLE_SEAT, 7, 4, timings).error).toBe('onlyHost')
+    room = okRecord(disconnect(def, room, TABLE_SEAT, 5, timings))
+    expect(room.table?.connected).toBe(false)
+  })
+
+  it('a legenda abre e fecha na TV pela mesa ou por qualquer pessoa conectada', () => {
+    let room = tableRoom()
+    room = okRecord(setTableOverlay(def, room, 'seat-2', 'help', 3))
+    expect(viewOf(room).table?.overlay).toBe('help')
+    room = okRecord(setTableOverlay(def, room, TABLE_SEAT, null, 4))
+    expect(room.table?.overlay).toBeNull()
+    expect(setTableOverlay(def, room, 'seat-1', 'outra', 5).error).toBe('invalidOverlay')
+    expect(setTableOverlay(def, room, 'seat-9', 'help', 5).error).toBe('notYourControl')
+    expect(setTableOverlay(def, lobby(), 'seat-1', 'help', 5).error).toBe('noTable')
+  })
+
+  it('a mesa só pode pedir o estado e abrir ou fechar a legenda', () => {
+    expect([...TABLE_MESSAGES].sort()).toEqual(['hello', 'resync', 'table-overlay'])
+    expect(parseClientMessage('{"type":"table-overlay","overlay":null}')).toEqual({
+      type: 'table-overlay',
+      overlay: null,
+    })
+    expect(parseClientMessage('{"type":"table-overlay","overlay":3}')).toBeNull()
   })
 })

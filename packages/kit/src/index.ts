@@ -6,6 +6,7 @@ export type { GameDefinition, SeatId, SeatProfileEntry, TransitionOutcome } from
 export {
   parseClientMessage,
   RateLimiter,
+  TABLE_MESSAGES,
   type ClientMessage,
   type Notice,
   type ServerMessage,
