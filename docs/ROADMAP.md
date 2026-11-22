@@ -14,7 +14,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 1 – Motor | Concluída | `v0.2-engine` |
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
-| 4 – Vários aparelhos (online) | Concluída (branch `develop/online`, aguardando merge) | `v0.5-online` |
+| 4 – Vários aparelhos (online) | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
