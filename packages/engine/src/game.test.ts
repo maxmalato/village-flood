@@ -74,6 +74,7 @@ describe('newGame', () => {
           { seat: 'ana', role: 'medic' },
           { seat: 'bruno', role: 'engineer' },
         ],
+        variation: { scenario: 0, mirrored: false },
       },
       data,
     )
@@ -698,5 +699,95 @@ describe('Chamado pelo rádio (Radialista)', () => {
     s = act(withDeck(s, ['cloudy', 'cloudy', 'cloudy']), { type: 'end-turn' })
     expect(s.activeSeat).toBe('carla')
     expect(volunteer(s, 'bruno').bonusActions).toBe(0)
+  })
+})
+
+describe('variação do mapa (cenários e espelhamento)', () => {
+  const seats = [
+    { seat: 'ana', role: 'medic' as const },
+    { seat: 'bruno', role: 'engineer' as const },
+  ]
+  const make = (seed: number, variation?: { scenario: number; mirrored: boolean }) =>
+    newGame({ difficulty: 'normal', seed, seats, ...(variation ? { variation } : {}) })
+
+  it('espelhado de cima para baixo: igreja, cais, casas e alturas trocam de linha', () => {
+    const original = make(1, { scenario: 0, mirrored: false })
+    const mirrored = make(1, { scenario: 0, mirrored: true })
+    expect(mirrored.config.variation).toEqual({ scenario: 0, mirrored: true })
+    expect(mirrored.tiles.find((t) => t.kind === 'church')?.id).toBe('D4')
+    expect(mirrored.tiles.find((t) => t.kind === 'dock')?.id).toBe('B4')
+    expect(mirrored.volunteers.every((v) => v.tileId === 'B4')).toBe(true)
+    // A4 (2 moradores) vira A3; a linha 6 (toda altura 1) vira a linha 1.
+    expect(mirrored.residents.filter((r) => r.homeTileId === 'A3')).toHaveLength(2)
+    for (const tile of original.tiles) {
+      const twin = mirrored.tiles.find((t) => t.x === tile.x && t.y === 5 - tile.y)
+      expect(twin?.height, tile.id).toBe(tile.height)
+      expect(twin?.kind, tile.id).toBe(tile.kind)
+    }
+  })
+
+  it('a água se comporta igual no mapa espelhado', () => {
+    const original = atLevel(make(1, { scenario: 0, mirrored: false }), 12)
+    const mirrored = atLevel(make(1, { scenario: 0, mirrored: true }), 12)
+    for (const tile of original.tiles) {
+      const twin = mirrored.tiles.find((t) => t.x === tile.x && t.y === 5 - tile.y)
+      expect(twin?.water, tile.id).toBe(tile.water)
+    }
+  })
+
+  it('a semente sorteia a variação de forma reprodutível', () => {
+    expect(make(9).config.variation).toEqual(make(9).config.variation)
+    const seen = new Set<string>()
+    for (let seed = 0; seed < 64; seed++) {
+      const { mirrored } = make(seed).config.variation
+      seen.add(String(mirrored))
+    }
+    expect(seen).toEqual(new Set(['true', 'false']))
+  })
+
+  it('sorteia entre todos os cenários da dificuldade', () => {
+    const data = {
+      ...defaultGameData,
+      difficulties: {
+        ...defaultGameData.difficulties,
+        normal: {
+          ...defaultGameData.difficulties.normal,
+          extraResidentScenarios: [
+            ['A4', 'B5'],
+            ['C2', 'C5'],
+            ['F3', 'E5'],
+          ],
+        },
+      },
+    }
+    const used = new Set<number>()
+    for (let seed = 0; seed < 60; seed++) {
+      used.add(newGame({ difficulty: 'normal', seed, seats }, data).config.variation.scenario)
+    }
+    expect([...used].sort()).toEqual([0, 1, 2])
+    const forced = newGame(
+      { difficulty: 'normal', seed: 1, seats, variation: { scenario: 2, mirrored: false } },
+      data,
+    )
+    expect(forced.residents.filter((r) => r.id.endsWith('-2')).map((r) => r.homeTileId)).toEqual([
+      'F3',
+      'E5',
+    ])
+  })
+
+  it('recusa variação inválida', () => {
+    expect(() => make(1, { scenario: 5, mirrored: false })).toThrow(/Cenário inexistente/)
+    const flat = { ...defaultGameData, map: { ...defaultGameData.map, allowMirror: false } }
+    expect(() =>
+      newGame(
+        { difficulty: 'normal', seed: 1, seats, variation: { scenario: 0, mirrored: true } },
+        flat,
+      ),
+    ).toThrow(/espelhado/)
+    for (let seed = 0; seed < 20; seed++) {
+      expect(newGame({ difficulty: 'normal', seed, seats }, flat).config.variation.mirrored).toBe(
+        false,
+      )
+    }
   })
 })

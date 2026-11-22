@@ -23,6 +23,7 @@ function setup(
     difficulty,
     seed,
     seats: roles.map((role, i) => ({ seat: names[i] ?? 'x', role })),
+    variation: { scenario: 0, mirrored: false },
   })
 }
 

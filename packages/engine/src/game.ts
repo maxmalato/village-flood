@@ -3,8 +3,9 @@
 // Todos os números vêm de state.config (dados); aqui fica só a estrutura das regras.
 import { indexTiles, isNeighbor, neighborIds } from './board.ts'
 import { defaultGameData } from './data.ts'
-import { seedToRng, shuffle } from './rng.ts'
+import { nextRandom, seedToRng, shuffle } from './rng.ts'
 import {
+  coordsOf,
   GameSetupSchema,
   rainCardKinds,
   tileIdAt,
@@ -12,6 +13,7 @@ import {
   type GameSetup,
   type RainCardKind,
   type TileId,
+  type Variation,
 } from './schema.ts'
 import type {
   Action,
@@ -220,7 +222,7 @@ export function forecastView(state: GameState): ForecastView | null {
 
 /** Cria a partida. Lança erro se a configuração for inválida. */
 export function newGame(setup: GameSetup, data: GameData = defaultGameData): GameState {
-  const { difficulty, seats, seed } = GameSetupSchema.parse(setup)
+  const { difficulty, seats, seed, variation: forced } = GameSetupSchema.parse(setup)
   const { rules, map } = data
   const settings = data.difficulties[difficulty]
 
@@ -234,28 +236,54 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
     throw new Error('Cada assento precisa de um papel diferente')
   }
 
+  // Variação da partida: cenário de moradores extras e espelhamento (sorteados pela semente).
+  let rng = seedToRng(seed)
+  const scenarios = settings.extraResidentScenarios
+  let variation: Variation
+  if (forced) {
+    if (forced.scenario >= scenarios.length)
+      throw new Error(`Cenário inexistente: ${forced.scenario}`)
+    if (forced.mirrored && !map.allowMirror) throw new Error('Este mapa não pode ser espelhado')
+    variation = forced
+  } else {
+    const pick = nextRandom(rng)
+    rng = pick.rng
+    let mirrored = false
+    if (map.allowMirror) {
+      const flip = nextRandom(rng)
+      rng = flip.rng
+      mirrored = flip.value < 0.5
+    }
+    variation = { scenario: Math.floor(pick.value * scenarios.length), mirrored }
+  }
+
+  // Espelhado de cima para baixo: a linha y vira rows - 1 - y. O rio continua na coluna A.
+  const place = (id: TileId): TileId => {
+    if (!variation.mirrored) return id
+    const { x, y } = coordsOf(id)
+    return tileIdAt(x, map.rows - 1 - y)
+  }
+  const church = place(map.church)
+  const dock = place(map.dock)
+  const houses = map.houses.map(place)
+
   const tiles: Tile[] = []
   for (let y = 0; y < map.rows; y++) {
     for (let x = 0; x < map.columns; x++) {
       const id = tileIdAt(x, y)
       const kind: TileKind =
-        id === map.church
-          ? 'church'
-          : id === map.dock
-            ? 'dock'
-            : map.houses.includes(id)
-              ? 'house'
-              : 'plain'
-      const height = map.heights[y]?.[x]
+        id === church ? 'church' : id === dock ? 'dock' : houses.includes(id) ? 'house' : 'plain'
+      const sourceRow = variation.mirrored ? map.rows - 1 - y : y
+      const height = map.heights[sourceRow]?.[x]
       if (height === undefined) throw new Error(`Altura ausente em ${id}`)
       tiles.push({ id, x, y, height, kind, sandbags: 0, water: 'dry' })
     }
   }
 
-  // Moradores: residentsPerHouse em cada casa, mais os extras na ordem do mapa.
-  const extras = new Set(map.extraResidentOrder.slice(0, settings.extraResidents))
+  // Moradores: residentsPerHouse em cada casa, mais 1 em cada casa do cenário sorteado.
+  const extras = new Set((scenarios[variation.scenario] ?? []).map(place))
   const residents: Resident[] = []
-  for (const house of map.houses) {
+  for (const house of houses) {
     const count = map.residentsPerHouse + (extras.has(house) ? 1 : 0)
     for (let k = 1; k <= count; k++) {
       residents.push({
@@ -271,7 +299,7 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
   const volunteers: Volunteer[] = seats.map((s, i) => ({
     seat: s.seat,
     role: s.role,
-    tileId: map.dock,
+    tileId: dock,
     carrying: [],
     actionsLeft: i === 0 ? rules.actionsPerTurn : 0,
     skipNextTurn: false,
@@ -282,13 +310,13 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
   for (const kind of rainCardKinds) {
     for (let i = 0; i < settings.deck[kind]; i++) cards.push(kind)
   }
-  const shuffled = shuffle(cards, seedToRng(seed))
+  const shuffled = shuffle(cards, rng)
 
   const first = seats[0]
   if (!first) throw new Error('A partida precisa de assentos')
 
   const state: GameState = {
-    config: { difficulty, mapId: map.id, rules, settings },
+    config: { difficulty, mapId: map.id, rules, settings, variation },
     rng: shuffled.rng,
     tiles,
     residents,
@@ -303,7 +331,7 @@ export function newGame(setup: GameSetup, data: GameData = defaultGameData): Gam
     turnHistory: [],
     phase: 'playing',
   }
-  // Água do nível inicial (Tempestade começa em 4).
+  // Água do nível inicial.
   return settleWater(state, [])
 }
 

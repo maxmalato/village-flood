@@ -23,6 +23,8 @@ export function setup(
     difficulty,
     seed,
     seats: roles.map((role, i) => ({ seat: names[i] ?? `seat-${i}`, role })),
+    // Cenário 0 e mapa sem espelho: os testes usam as posições do mapa original.
+    variation: { scenario: 0, mirrored: false },
   })
 }
 

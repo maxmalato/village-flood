@@ -106,6 +106,12 @@ export const DifficultySettingsSchema = z
   .strictObject({
     goal: positiveInt,
     extraResidents: nonNegativeInt,
+    /**
+     * Cenários de moradores extras: em cada partida, um é sorteado. Cada cenário lista as casas
+     * que recebem 1 morador a mais (tantas quanto extraResidents). Só entram cenários testados
+     * na simulação (ver docs/simulation).
+     */
+    extraResidentScenarios: z.array(z.array(TileIdSchema)).min(1),
     startLevel: nonNegativeInt,
     deck: PerRainCardSchema,
     forecast: ForecastRulesSchema,
@@ -145,7 +151,8 @@ export const MapDataSchema = z
     dock: TileIdSchema,
     houses: z.array(TileIdSchema).min(1),
     residentsPerHouse: positiveInt,
-    extraResidentOrder: z.array(TileIdSchema),
+    /** Se o mapa pode ser sorteado espelhado de cima para baixo (o rio continua à esquerda). */
+    allowMirror: z.boolean(),
   })
   .superRefine((map, ctx) => {
     const issue = (message: string) => ctx.addIssue({ code: 'custom', message })
@@ -157,16 +164,13 @@ export const MapDataSchema = z
       const { x, y } = coordsOf(id)
       return x >= 0 && x < map.columns && y >= 0 && y < map.rows
     }
-    for (const id of [map.church, map.dock, ...map.houses, ...map.extraResidentOrder]) {
+    for (const id of [map.church, map.dock, ...map.houses]) {
       if (!inside(id)) issue(`a quadra ${id} está fora do mapa`)
     }
     if (map.church === map.dock) issue('a igreja e o cais devem ser quadras diferentes')
     if (new Set(map.houses).size !== map.houses.length) issue('casas repetidas em houses')
     if (map.houses.includes(map.church)) issue('a igreja não pode ser casa')
     if (map.houses.includes(map.dock)) issue('o cais não pode ser casa')
-    for (const id of map.extraResidentOrder) {
-      if (!map.houses.includes(id)) issue(`extraResidentOrder tem ${id}, que não é casa`)
-    }
   })
 export type MapData = z.infer<typeof MapDataSchema>
 
@@ -184,13 +188,19 @@ export const GameDataSchema = z
     for (const difficulty of difficulties) {
       const settings = data.difficulties[difficulty]
       const path = ['difficulties', difficulty]
-      if (settings.extraResidents > map.extraResidentOrder.length) {
-        ctx.addIssue({
-          code: 'custom',
-          path,
-          message: `extraResidents (${settings.extraResidents}) é maior que extraResidentOrder do mapa`,
-        })
-      }
+      settings.extraResidentScenarios.forEach((scenario, i) => {
+        const issue = (message: string) =>
+          ctx.addIssue({ code: 'custom', path: [...path, 'extraResidentScenarios', i], message })
+        if (scenario.length !== settings.extraResidents) {
+          issue(
+            `o cenário ${i} tem ${scenario.length} casas, mas extraResidents é ${settings.extraResidents}`,
+          )
+        }
+        if (new Set(scenario).size !== scenario.length) issue(`o cenário ${i} repete casas`)
+        for (const id of scenario) {
+          if (!map.houses.includes(id)) issue(`o cenário ${i} tem ${id}, que não é casa`)
+        }
+      })
       // Coerência da derrota por ilhados (regras, seção 6): o ilhado número
       // strandedLossCount torna a meta impossível.
       const residents = baseResidents + settings.extraResidents
@@ -229,9 +239,18 @@ export const SeatSetupSchema = z.strictObject({
   role: RoleIdSchema,
 })
 
+/** Variação do mapa numa partida: cenário de moradores extras e espelhamento. */
+export const VariationSchema = z.strictObject({
+  scenario: nonNegativeInt,
+  mirrored: z.boolean(),
+})
+export type Variation = z.infer<typeof VariationSchema>
+
 export const GameSetupSchema = z.strictObject({
   difficulty: DifficultySchema,
   seats: z.array(SeatSetupSchema).min(1),
   seed: z.int(),
+  /** Fixa a variação (testes, simulação); sem ela, a semente sorteia. */
+  variation: VariationSchema.optional(),
 })
 export type GameSetup = z.infer<typeof GameSetupSchema>
