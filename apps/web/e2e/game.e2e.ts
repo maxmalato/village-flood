@@ -13,9 +13,13 @@ async function startGame(page: Page, seed = 42, difficulty: 'Tranquilo' | 'Norma
   await expect(page.getByText('Turno 1 · Sua vez, Ana')).toBeVisible()
 }
 
+/** axe-core nos temas escuro e claro. */
 async function axe(page: Page) {
-  const results = await new AxeBuilder({ page }).analyze()
-  expect(results.violations).toEqual([])
+  for (const colorScheme of ['dark', 'light'] as const) {
+    await page.emulateMedia({ colorScheme })
+    const results = await new AxeBuilder({ page }).analyze()
+    expect(results.violations, colorScheme).toEqual([])
+  }
 }
 
 test('joga um turno: anda, desfaz, anda de novo, encerra e os bots jogam', async ({ page }) => {
