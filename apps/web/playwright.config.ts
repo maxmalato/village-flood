@@ -17,7 +17,11 @@ export default defineConfig({
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     // Salas online (vários aparelhos): basta um tamanho de tela; o layout já é testado no local.
-    { name: 'mobile', use: { ...devices['Pixel 7'] }, testIgnore: '**/online.e2e.ts' },
+    {
+      name: 'mobile',
+      use: { ...devices['Pixel 7'] },
+      testIgnore: ['**/online.e2e.ts', '**/table.e2e.ts'],
+    },
   ],
   webServer: [
     {
