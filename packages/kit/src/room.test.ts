@@ -132,8 +132,13 @@ describe('lobby', () => {
       seat: 'seat-3',
       kind: 'bot',
       profile: 'green',
-      name: '',
+      name: 'Bot 1',
     })
+    // o nome do bot nunca repete o de alguém da sala
+    let other: Room = createRoom('ABCDEF', def.defaultConfig, 0)
+    other = okRecord(joinRoom(def, other, 'Ana', 'hash-ana', 1, random))
+    other = okRecord(joinRoom(def, other, 'bot 1', 'hash-x', 1, random))
+    expect(okRecord(addBot(def, other, 'seat-1', 2, random)).seats[2]?.name).toBe('Bot 2')
     expect(removeSeat(withBot, 'seat-1', 'seat-2', 4).error).toBe('stillConnected')
     expect(okRecord(removeSeat(withBot, 'seat-1', 'seat-3', 4)).seats).toHaveLength(2)
   })

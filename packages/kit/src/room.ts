@@ -315,9 +315,13 @@ export function addBot<S, A, E, C, P>(
     random,
   )
   if (profile === null) return fail(record, 'roomFull')
+  // Nome neutro e único ("Bot 1", "Bot 2"...), igual em todos os aparelhos.
+  const names = new Set(record.seats.map((s) => s.name.toLocaleLowerCase()))
+  let n = 1
+  while (names.has(`bot ${n}`)) n++
   const bot: SeatRecord<P> = {
     seat: `seat-${record.nextSeatNumber}`,
-    name: '',
+    name: `Bot ${n}`,
     kind: 'bot',
     profile,
     tokenHash: null,
