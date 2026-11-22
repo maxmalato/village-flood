@@ -34,6 +34,8 @@ export interface OnlineControls {
   readonly error: string | null
   /** A conexão caiu e está tentando de novo. */
   readonly reconnecting: boolean
+  /** Modo mesa (sala com TV conectada): abrir e fechar a legenda completa na TV. */
+  readonly table: { readonly legendOpen: boolean; setLegend(open: boolean): void } | null
   ping(target: string, kind: PingKind): void
   unping(index: number): void
 }

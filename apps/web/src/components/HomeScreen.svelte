@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatCode } from '@village-flood/kit'
-  import { t, type Locale } from '../i18n.ts'
+  import { errorText, t, type Locale } from '../i18n.ts'
 
   let {
     locale,
@@ -9,6 +9,8 @@
     oncreate,
     onjoin,
     onresume,
+    ontable,
+    tableError = null,
   }: {
     locale: Locale
     /** Sala guardada neste aparelho, para voltar a ela. */
@@ -17,7 +19,12 @@
     oncreate: () => void
     onjoin: () => void
     onresume: () => void
+    ontable: () => void
+    /** Falha ao abrir a mesa (ex.: sem internet), código de erro. */
+    tableError?: string | null
   } = $props()
+
+  let online = $state(navigator.onLine)
 </script>
 
 <main class="home">
@@ -41,8 +48,15 @@
     </div>
     <p>{t(locale, 'home.onlineHint')}</p>
   </div>
-  <p class="soon">{t(locale, 'home.online')}</p>
+  <div class="card">
+    <button type="button" class="btn" onclick={ontable}>{t(locale, 'home.openTable')}</button>
+    <p>{t(locale, 'home.tableHint')}</p>
+    {#if tableError}<p class="error" role="alert">{errorText(locale, tableError)}</p>{/if}
+  </div>
+  {#if !online}<p class="soon" role="status">{t(locale, 'home.offline')}</p>{/if}
 </main>
+
+<svelte:window onoffline={() => (online = false)} ononline={() => (online = true)} />
 
 <style>
   .home {
@@ -73,6 +87,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
     gap: 8px;
+  }
+  .error {
+    color: var(--danger) !important;
+    font-weight: 800 !important;
   }
   .card p,
   .soon {

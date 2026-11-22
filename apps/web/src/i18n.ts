@@ -12,8 +12,6 @@ const ptBR = {
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 4 voluntários em volta da mesma tela. Bots completam a equipe.',
-  'home.online':
-    'O modo mesa (TV como tabuleiro e celulares como controle) chega na próxima versão.',
 
   'lobby.title': 'Montar a equipe',
   'lobby.difficulty': 'Dificuldade',
@@ -91,6 +89,7 @@ const ptBR = {
   'team.title': 'Equipe',
   'team.yourTurn': 'Sua vez · ações: {n}',
   'team.botTurn': 'Jogando agora (bot)',
+  'team.playingNow': 'Jogando agora · ações: {n}',
   'team.carrying': 'Carrega {n} morador(es)',
   'team.skip': 'Perde o próximo turno',
   'team.bonus': '+{n} ação no próximo turno',
@@ -339,6 +338,29 @@ const ptBR = {
   'error.notYourControl': 'O bot está jogando por você até o seu próximo turno.',
   'error.yourTurn': 'Na sua vez, jogue em vez de sugerir.',
   'error.tooManyPings': 'Você já fez {n} sugestões neste turno.',
+
+  'home.openTable': 'Abrir mesa (TV ou notebook)',
+  'home.tableHint': 'Tabuleiro grande nesta tela; cada pessoa joga pelo celular.',
+  'home.offline':
+    'Sem internet: dá para jogar neste aparelho; salas online e mesa precisam de conexão.',
+
+  'table.title': 'Mesa',
+  'table.join': 'Entre pelo celular',
+  'table.scan':
+    'Aponte a câmera do celular para o QR code, ou abra o endereço abaixo e digite o código.',
+  'table.qr': 'QR code para entrar na sala {code}',
+  'table.address': 'Endereço',
+  'table.firstHost':
+    'Quem entrar primeiro organiza a sala: escolhe a dificuldade, os bots e começa a partida.',
+  'table.empty': 'Ninguém entrou ainda.',
+  'table.close': 'Fechar a mesa',
+  'table.suggestions': 'Sugestões da equipe',
+  'table.suggestion': '{name}: {kind}, em {tile}',
+  'table.noSuggestions': 'Nenhuma sugestão neste turno.',
+  'game.legendOnTv': 'Mostrar legenda na TV',
+  'game.legendOffTv': 'Fechar legenda na TV',
+  'room.tableConnected': 'Mesa conectada: o tabuleiro aparece na tela grande.',
+  'error.tableCannotPlay': 'A mesa só mostra a partida.',
 } as const
 
 export type MessageKey = keyof typeof ptBR
@@ -350,7 +372,6 @@ const en: Record<MessageKey, string> = {
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 4 volunteers around the same screen. Bots fill the team.',
-  'home.online': 'Table mode (TV as the board, phones as controllers) comes in the next version.',
 
   'lobby.title': 'Build the team',
   'lobby.difficulty': 'Difficulty',
@@ -429,6 +450,7 @@ const en: Record<MessageKey, string> = {
   'team.title': 'Team',
   'team.yourTurn': 'Your turn · actions: {n}',
   'team.botTurn': 'Playing now (bot)',
+  'team.playingNow': 'Playing now · actions: {n}',
   'team.carrying': 'Carrying {n} resident(s)',
   'team.skip': 'Loses the next turn',
   'team.bonus': '+{n} action next turn',
@@ -678,6 +700,29 @@ const en: Record<MessageKey, string> = {
   'error.notYourControl': 'The bot is playing for you until your next turn.',
   'error.yourTurn': 'On your turn, play instead of suggesting.',
   'error.tooManyPings': 'You already made {n} suggestions this turn.',
+
+  'home.openTable': 'Open the table (TV or laptop)',
+  'home.tableHint': 'Big board on this screen; each person plays on their phone.',
+  'home.offline':
+    'Offline: you can play on this device; online rooms and the table need a connection.',
+
+  'table.title': 'Table',
+  'table.join': 'Join on your phone',
+  'table.scan':
+    'Point your phone camera at the QR code, or open the address below and type the code.',
+  'table.qr': 'QR code to join room {code}',
+  'table.address': 'Address',
+  'table.firstHost':
+    'The first person to join runs the room: picks the difficulty and the bots, and starts the game.',
+  'table.empty': 'Nobody has joined yet.',
+  'table.close': 'Close the table',
+  'table.suggestions': 'Team suggestions',
+  'table.suggestion': '{name}: {kind}, on {tile}',
+  'table.noSuggestions': 'No suggestions this turn.',
+  'game.legendOnTv': 'Show the legend on the TV',
+  'game.legendOffTv': 'Close the legend on the TV',
+  'room.tableConnected': 'Table connected: the board shows on the big screen.',
+  'error.tableCannotPlay': 'The table only shows the game.',
 }
 
 export const messages: Record<Locale, Record<MessageKey, string>> = { 'pt-BR': ptBR, en }

@@ -37,7 +37,12 @@ export interface SeatInfo {
 
 export const seatColors = ['#B39DDB', '#4FC3F7', '#FF8A65', '#81C784'] as const
 
-export const initialOf = (name: string) => (name.trim()[0] ?? '?').toUpperCase()
+/** Inicial do peão; bots da sala online ("Bot 1", "Bot 2") viram "B1", "B2" para não repetir. */
+export function initialOf(name: string): string {
+  const bot = /^bot (\d)$/i.exec(name.trim())
+  if (bot) return `B${bot[1]}`
+  return (name.trim()[0] ?? '?').toUpperCase()
+}
 
 export function seatName(seats: readonly SeatInfo[], seat: SeatId): string {
   return seats.find((s) => s.seat === seat)?.name ?? seat
