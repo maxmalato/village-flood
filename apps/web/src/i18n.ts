@@ -9,6 +9,8 @@ const ptBR = {
   'app.title': 'Enchente na Vila',
   'app.tagline': 'Jogo cooperativo: levem os moradores até a igreja antes que o rio suba.',
   'app.language': 'Idioma',
+  'app.soundOn': 'Som: ligado',
+  'app.soundOff': 'Som: desligado',
 
   'home.playLocal': 'Jogar neste aparelho',
   'home.playLocalHint': 'De 2 a 4 voluntários em volta da mesma tela. Bots completam a equipe.',
@@ -369,6 +371,8 @@ const en: Record<MessageKey, string> = {
   'app.title': 'Village Flood',
   'app.tagline': 'Co-op game: bring the residents to the church before the river rises.',
   'app.language': 'Language',
+  'app.soundOn': 'Sound: on',
+  'app.soundOff': 'Sound: off',
 
   'home.playLocal': 'Play on this device',
   'home.playLocalHint': '2 to 4 volunteers around the same screen. Bots fill the team.',
