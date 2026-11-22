@@ -217,6 +217,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@village-flood/bots':
+        specifier: workspace:*
+        version: link:../../packages/bots
       '@village-flood/engine':
         specifier: workspace:*
         version: link:../../packages/engine
@@ -281,6 +284,12 @@ importers:
       '@village-flood/engine':
         specifier: workspace:*
         version: link:../engine
+      '@village-flood/kit':
+        specifier: workspace:*
+        version: link:../kit
+      zod:
+        specifier: ^4.6.6
+        version: 4.6.6
 
   packages/sim:
     dependencies:
