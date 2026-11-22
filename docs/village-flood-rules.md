@@ -63,7 +63,11 @@ Alturas:
 
 - Igreja: D3 (altura 3). Cais: B3 (altura 2). Todos os voluntários começam no cais.
 - Casas (10): A2, A4, B1, B5, F3, E5 (altura 1) e C2, C5, E2, E4 (altura 2). Cada casa começa com 1 morador.
-- Moradores extras, nesta ordem de casas: A4, B5, F3, E5, C5. Tranquilo usa 1 extra, Normal usa 2 e Tempestade usa 3.
+- Moradores extras: Tranquilo tem 1, Normal 2 e Tempestade 3. As casas que recebem os extras mudam a cada partida: o jogo sorteia um **cenário** entre os testados na simulação para aquela dificuldade (21/11/2026):
+  - Tranquilo: A4; B5; E5.
+  - Normal: A4 e B5; A4 e B1; B1 e B5; A2 e A4; A2 e B5; B1 e E5.
+  - Tempestade: A4, B5 e F3; A2, B1 e E5; A4, B5 e E5; B1, B5 e F3; A2, B5 e F3; B1, F3 e E5.
+- **Mapa espelhado:** em cada partida, o mapa pode ser sorteado espelhado de cima para baixo. O rio continua à esquerda e as regras são as mesmas; a igreja, o cais e as casas trocam de linha (por exemplo, a igreja vai de D3 para D4). Os nomes das quadras seguem a posição na tela.
 
 ### Igreja e cais: funções diferentes
 
