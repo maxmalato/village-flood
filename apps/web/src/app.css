@@ -219,6 +219,23 @@ button:disabled {
     var(--water-submerged);
 }
 
+/* Avisos chegando (alerta da água, queda de conexão). */
+/* fieldset não encolhe abaixo do conteúdo por padrão: em tela estreita, criava rolagem lateral */
+fieldset {
+  min-width: 0;
+}
+select,
+input {
+  max-width: 100%;
+}
+
+@keyframes notice-in {
+  from {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

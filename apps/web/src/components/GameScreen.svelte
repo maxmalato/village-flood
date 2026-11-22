@@ -177,6 +177,7 @@
     display: none;
   }
   .alert {
+    animation: notice-in 0.3s ease-out;
     margin: 0;
     padding: 10px 14px;
     border-radius: 14px;
@@ -188,6 +189,7 @@
     display: contents;
   }
   .banner {
+    animation: notice-in 0.3s ease-out;
     margin: 0;
     padding: 8px 14px;
     border-radius: 14px;
