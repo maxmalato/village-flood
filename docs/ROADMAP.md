@@ -16,7 +16,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
 | 4 – Vários aparelhos (online) | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
-| 6 – Acabamento | Não iniciada | `v0.9-polish` |
+| 6 – Acabamento | Em andamento (branch `develop/polish`) | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
 
 ## Etapa 0 – Fundação
@@ -115,6 +115,18 @@ Deixa o projeto pronto para receber código.
 
 **Pronto quando:** checklist de acessibilidade e de desempenho cumprido; READMEs revisados.
 
+**Feito (22/11/2026):**
+
+- Sons sintetizados (Web Audio), ligados por padrão, com o botão "Som" em todas as telas.
+- Animações curtas em CSS, desligadas com `prefers-reduced-motion`.
+- Revisão de acessibilidade com testes novos (`e2e/a11y.e2e.ts`): alvos de toque de 44 px em todas as telas, jogada inteira pelo teclado, reduzir movimento e telas de menu em 320 px. A revisão achou e corrigiu rolagem lateral no lobby em tela estreita. axe-core nos dois temas em todas as telas.
+- Medições de desempenho com CPU 6× mais lenta e rede 3G, todas dentro das metas.
+- Checklist em `docs/quality-checklist.md`.
+- Three.js avaliado e deixado para a v2 (registro de decisões, 22/11/2026).
+- `README.md` e `README.en.md` finais.
+
+**Ficou para a Etapa 7:** teste com leitor de tela real (TalkBack ou VoiceOver) e novo teste em aparelhos reais depois da publicação com HTTPS.
+
 ## Etapa 7 – Calibração com partidas reais e publicação
 
 - Partidas com pessoas (família e amigos) em cada dificuldade e tamanho de equipe; ajuste dos valores iniciais e das regras "a testar" **nos dados**.
@@ -128,6 +140,7 @@ Registradas em 21/11/2026, a pedido do dono do projeto, para aumentar a variedad
 
 - **Mapas novos:** outras vilas com formato, alturas, casas, igreja e cais diferentes. O motor e o tabuleiro já aceitam qualquer mapa vindo dos dados; cada mapa precisa ser desenhado e calibrado na simulação, e o lobby ganha a escolha (ou o sorteio) do mapa.
 - **Cartas de evento:** pequenos imprevistos por partida, como "ponte caída" ou "morador idoso pesa mais". Mudam regras, então pedem nova calibração.
+- **Tabuleiro em 3D (Three.js):** avaliado na Etapa 6 e deixado para depois da v1 (registro de decisões, 22/11/2026). Se voltar, entra como opção, com o tabuleiro HTML como alternativa acessível.
 
 ## Depois da v1
 

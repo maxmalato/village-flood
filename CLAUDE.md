@@ -46,7 +46,7 @@ Arquitetura limpa: dependências apontam para dentro (UI e servidor dependem do 
 - `packages/sim`: simulação em lote (fora do `pnpm test`).
 - `apps/web`: Svelte 5 + Vite + PWA. Só desenha o estado, envia ações e anima eventos. Nunca calcula regra.
 - `apps/server`: Cloudflare Worker + um Durable Object por sala. Roda o mesmo motor e valida quem envia cada ação.
-- Tabuleiro em HTML/SVG, sem engine 3D. A v1 é em SVG; o Three.js só entra se for avaliado e aprovado na Etapa 6 (ver "Registro de decisões").
+- Tabuleiro em HTML/SVG, sem engine 3D. O Three.js foi avaliado na Etapa 6 e ficou para depois da v1 (ver "Registro de decisões", 22/11/2026).
 - O ESLint barra imports que quebram as camadas (motor sem dependências, kit sem o jogo, bots só com o motor).
 
 ## Comandos
