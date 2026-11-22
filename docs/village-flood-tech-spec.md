@@ -116,13 +116,16 @@ Lista completa e valores atuais: `packages/engine/data/rules.json` (schema em `p
 ## 7. Protocolo e salas
 
 - Reaproveitar o protocolo do Senhorio: código de sala de 6 caracteres (sem senha, decisão de 22/11/2026), token de assento guardado como hash SHA-256, limite de 40 mensagens por 10 s, expiração de 12 h, modo mesa (assento de mesa).
-- Mensagens novas: `pin` (ping, efêmero, fora do estado, com limite de 3 por jogador e limpeza ao fim do turno) e `resync` (o servidor envia o estado completo na reconexão).
+- Mensagens novas: `ping`/`unping` (sugestão efêmera, fora do estado do jogo, com limite de 3 por jogador e limpeza ao fim do turno) e `resync` (o servidor envia o estado completo; a reconexão já recebe a sala inteira).
+- Implementado na Etapa 4: `POST /api/rooms` cria a sala (`{ config: { difficulty } }` → `{ code }`), `GET /api/rooms/CODIGO` mostra o resumo e `/api/rooms/CODIGO/ws` abre o WebSocket. Mensagens do cliente: `hello` (apelido ou token), `profile`, `config`, `add-bot`, `remove-seat`, `start`, `action`, `ping`, `unping`, `resync`, `again`, `leave`. Do servidor: `welcome` (assento e token, só para quem entrou), `room`, `update` (sala + eventos), `notice` (queda, bot assumiu, volta) e `error` (código; recusa do motor vem como `refused` com o motivo). Tipos em `packages/kit/src/messages.ts` e `packages/protocol`.
+- O navegador guarda só `{ code, token }` (chave `village-flood:room`) para voltar ao assento; o link de convite é `?sala=CODIGO`. Bots do lobby recebem nomes neutros ("Bot 1", "Bot 2").
+- Prazos (`TAKEOVER_MS`, `BOT_STEP_MS`) vêm de variáveis do Worker (`wrangler.jsonc`), para os testes usarem prazos curtos.
 - O servidor é a única fonte da verdade e valida `actorsOf` antes de aplicar qualquer ação.
 - Sem contas: apenas apelido. Nada de dado pessoal em logs.
 
 ## 8. Desconexão e bots
 
-Máquina de estados por assento humano: `connected` → `away` (soquete caiu) → `bot-controlled` (após cerca de 20 s se for a vez dele, ou ao chegar o turno dele) → `returning` (voltou, aguardando o próprio turno) → `connected` (no início do turno dele).
+Máquina de estados por assento humano: `connected` → `away` (soquete caiu) → `bot` (após cerca de 20 s se for a vez dele, ou ao chegar o turno dele) → `returning` (voltou, aguardando o próprio turno) → `connected` (no início do turno dele). Quem volta ainda em `away` (antes de o bot entrar) volta na hora.
 
 - Eventos `bot-took-over` e `player-returned` alimentam o aviso para a equipe.
 - O assento não é removido por inatividade. A sala expira pela regra normal.

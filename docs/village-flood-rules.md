@@ -229,7 +229,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 18. ~~Valores fora do `RoleParams`.~~ **Decidido (20/11/2026):** todos os números vão para os dados; só a estrutura das regras fica no código. O schema completo será apresentado para aprovação no início da Etapa 1, antes de implementar.
 19. ~~Tipos sem definição na especificação.~~ **Decidido (20/11/2026):** `SeatId`, `Snapshot`, `Ctx` e `Result` serão propostos e aprovados no início da Etapa 1. O motor continua puro: sem relógio e sem acesso a nada externo.
 20. ~~Three.js no acabamento.~~ **Decidido (20/11/2026):** a v1 é em SVG; o 3D só entra se for avaliado e aprovado na Etapa 6 (ver Registro de decisões).
-21. **Ajustes de tela vistos nos mockups.** Situação em 20/11/2026 (Etapa 3): o "+1" com dois sentidos foi resolvido (ferido: caixa de primeiros socorros vermelha com o número; carregando: ícone de pessoa com o número, em fundo escuro); o painel "Equipe" mostra a ordem real dos assentos; a contagem do bot e a sobreposição de textos em "Opinar" ficam para a Etapa 4 (telas online); o "+1" de quem carrega aparece igual em todas as telas, porque todas usam o mesmo componente. Pontos originais:
+21. **Ajustes de tela vistos nos mockups.** Situação em 20/11/2026 (Etapa 3): o "+1" com dois sentidos foi resolvido (ferido: caixa de primeiros socorros vermelha com o número; carregando: ícone de pessoa com o número, em fundo escuro); o painel "Equipe" mostra a ordem real dos assentos; a contagem do bot e a sobreposição de textos em "Opinar" ficam para a Etapa 4 (telas online). Situação em 22/11/2026 (Etapa 4): o aviso acompanha o servidor ("perdeu a conexão; se não voltar a tempo, um bot joga" e só depois "um bot está jogando"), sem contagem visível por enquanto; em "Opinar", nada fica colado: a vez aparece no cabeçalho e o painel de sugestões tem título próprio ("Sugerir para …"); o "+1" de quem carrega aparece igual em todas as telas, porque todas usam o mesmo componente. Pontos originais:
     - O "+1" tem dois sentidos: na casa (borda vermelha), número de feridos; no voluntário (fundo escuro), carregando 1 morador. A diferença é quase só de cor e posição. Avaliar um símbolo diferente para ferido, porque os estados não podem depender só de cor.
     - Ordem dos turnos: no painel "Equipe" da mesa a ordem é Bruno, Lia, Carla, Diego; nas telas "Bot assumiu" e "Diego volta", depois do Bruno (T13) vem o Diego (T14) e depois a Lia (T15). O painel deve mostrar a ordem real dos assentos.
     - Em "Bot assumiu", o aviso diz que o bot já joga, mas a contagem "Esperando o Diego voltar 0:12" mostra que ele ainda não entrou (o bot só entra após cerca de 20 s, seção 10). O texto deve acompanhar a contagem.
@@ -269,6 +269,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 22/11/2026: telas online (Etapa 4)
+
+- **Decisão:** (1) bots adicionados numa sala online recebem nomes neutros, "Bot 1", "Bot 2", dados pelo servidor, para todos os aparelhos verem o mesmo nome e ninguém entrar com um apelido igual; (2) o aparelho guarda só o código da sala e o token do assento e, ao abrir o jogo de novo, volta sozinho para a sala (sai dela pelo botão "Sair da sala"); (3) sugestões (pings) aparecem na quadra com a inicial de quem sugeriu e uma forma por tipo (→ ir para cá, ! cuidado, ↑ pegar daqui), além da cor, e entram no rótulo de acessibilidade da quadra; (4) quem organiza a sala escolhe a dificuldade, põe e tira bots e começa; cada pessoa escolhe o próprio papel entre os livres.
+- **Motivo:** nomes iguais em todos os aparelhos evitam confusão nos avisos; voltar sozinho resolve a queda de Wi-Fi e a página recarregada sem pedir nada à pessoa; a forma do ping segue a regra de não depender só de cor.
 
 ### 22/11/2026: sala online só com código, sem senha
 

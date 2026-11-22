@@ -6,7 +6,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 
 Modos previstos: um aparelho, vários aparelhos (sala privada com código) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
 
-> **Situação:** em desenvolvimento. Etapas 0 a 3 prontas: já dá para jogar **neste aparelho** (de 2 a 4 voluntários, com bots completando a equipe). A próxima é a Etapa 4 (salas online). A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
+> **Situação:** em desenvolvimento. Etapas 0 a 4 prontas: já dá para jogar **neste aparelho** ou **online, cada pessoa no seu aparelho** (sala privada com código de 6 símbolos), de 2 a 4 voluntários, com bots completando a equipe. A próxima é a Etapa 5 (modo mesa e PWA). A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
 
 ## Documentação
 
@@ -63,7 +63,15 @@ Para jogar no navegador (modo de desenvolvimento), rode o comando abaixo e abra 
 pnpm --filter @village-flood/web dev
 ```
 
-No lobby, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; no Tranquilo, "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
+Para jogar online em casa (modo de desenvolvimento), rode também o servidor de salas, num segundo terminal. O site encaminha `/api` para ele (porta 8787):
+
+```bash
+pnpm --filter @village-flood/server dev
+```
+
+Na tela inicial, "Criar sala online" gera o código e o link (`?sala=CODIGO`); quem recebe usa "Entrar com código" ou abre o link. Se a conexão cair, o aparelho volta sozinho para o mesmo assento.
+
+No lobby local, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; no Tranquilo, "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
 
 ## Segurança e privacidade
 

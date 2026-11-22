@@ -14,7 +14,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 1 – Motor | Concluída | `v0.2-engine` |
 | 2 – Bots e simulação | Concluída | `v0.3-bots-sim` |
 | 3 – Telas (um aparelho) | Concluída | `v0.4-local-ui` |
-| 4 – Vários aparelhos (online) | Em andamento (branch `develop/online`) | `v0.5-online` |
+| 4 – Vários aparelhos (online) | Concluída (branch `develop/online`, aguardando merge) | `v0.5-online` |
 | 5 – Mesa e PWA | Não iniciada | `v0.6-table-pwa` |
 | 6 – Acabamento | Não iniciada | `v0.9-polish` |
 | 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
@@ -79,6 +79,15 @@ Deixa o projeto pronto para receber código.
 - `resync` na reconexão. O servidor valida toda ação.
 
 **Pronto quando:** E2E com dois ou mais navegadores cobrindo criar sala, entrar, jogar um turno, desfazer, ping, desconexão com bot assumindo e volta do jogador; teste de que ação de quem não é da vez é recusada.
+
+**Feito (22/11/2026):**
+
+- `packages/kit`: sala pura e agnóstica de jogo (lobby, partida, presença `connected`/`away`/`bot`/`returning`, bot assumindo após 20 s na vez da pessoa ou no início do turno dela, volta no início do próprio turno, pings, expiração, limite de mensagens). 21 testes.
+- `packages/protocol`: ações e configuração validadas com Zod; `apps/server`: Worker + Durable Object por sala (WebSocket com hibernação, alarme para bots e expiração). Testes de integração no runtime dos Workers, incluindo a recusa de ação de quem não tem a vez e de ação malformada.
+- `apps/web`: criar sala, entrar com código ou link (`?sala=`), lobby online (código, link, papéis livres, dificuldade, bots), a mesma tela da partida (interface `GameController`), sugestões com forma própria na quadra, avisos de queda, bot e volta, reconexão automática pelo token guardado no aparelho.
+- E2E com dois navegadores contra o servidor local (`wrangler dev`), axe-core nos temas claro e escuro.
+
+**Ficou para depois:** QR code do convite (precisa de dependência nova, pedir aprovação), resumo "Enquanto você estava fora" e contagem regressiva visível até o bot assumir. Os destaques da tela final contam só os eventos que o aparelho viu (quem entrou de novo no meio da partida vê números menores).
 
 ## Etapa 5 – Mesa e PWA
 
