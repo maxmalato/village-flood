@@ -14,7 +14,8 @@
     "typecheck": "pnpm -r --parallel typecheck",
     "build": "pnpm -r build",
     "e2e": "pnpm --filter @village-flood/web e2e",
-    "simulate": "pnpm --filter @village-flood/sim simulate"
+    "simulate": "pnpm --filter @village-flood/sim simulate",
+    "cf:deploy": "pnpm build && pnpm --filter @village-flood/server exec wrangler deploy"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
