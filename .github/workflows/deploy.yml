@@ -1,0 +1,58 @@
+# Publicação automática na Cloudflare: roda só depois que o CI passa num envio para a main.
+# O token e o ID da conta ficam nos segredos do environment "production" do GitHub (só a main
+# pode usá-los); nada disso fica no código nem aparece nos registros.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+# Menor privilégio: só ler o código. A publicação usa o token da Cloudflare, não o do GitHub.
+permissions:
+  contents: read
+
+# Uma publicação por vez, sem cancelar a que já está em andamento.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  WRANGLER_SEND_METRICS: 'false'
+
+jobs:
+  deploy:
+    name: Publica na Cloudflare
+    # Só quando o CI passou num envio (push) para a main; nunca para pull requests.
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    steps:
+      # Actions fixadas pelo SHA do commit (o comentário mostra a versão), as mesmas do CI.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # exatamente o commit que passou no CI
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Gera o site e publica o Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::warning::Segredos da Cloudflare não configurados no environment production: publicação pulada."
+            exit 0
+          fi
+          pnpm cf:deploy

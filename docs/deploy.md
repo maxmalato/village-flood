@@ -43,9 +43,9 @@ O comando gera o site (`pnpm build`) e publica o Worker com os arquivos do site.
 4. No celular instalado, ligue o modo avião e confira que "Jogar neste aparelho" continua funcionando.
 5. No painel da Cloudflare (Workers e Pages → village-flood → Configurações), confira que os registros ("Workers Logs" ou "Observability") estão desligados. O projeto já publica com `observability` desligado, para não guardar dados de quem joga.
 
-## Atualizar
+## Atualizar à mão
 
-Depois de cada release na `main`, repita:
+Com a publicação automática ativa, isto só é preciso em emergência. Para publicar à mão:
 
 ```bash
 git pull
@@ -65,9 +65,21 @@ pnpm --filter @village-flood/server exec wrangler rollback
 
 Se você tiver um domínio na Cloudflare, adicione-o no painel: Workers e Pages → village-flood → Configurações → Domínios e rotas → Adicionar → Domínio personalizado. O endereço `workers.dev` continua funcionando.
 
-## Publicação automática pelo GitHub (opcional, para depois)
+## Publicação automática pelo GitHub
 
-Dá para publicar a cada merge na `main` pelo GitHub Actions. Isso exige criar na Cloudflare um token de API com a permissão mínima (editar Workers só desta conta) e guardá-lo nos segredos do repositório (`CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`), nunca no código. Fica para quando você quiser; hoje a publicação é manual.
+Ativa desde 23/11/2026 (`.github/workflows/deploy.yml`). A cada merge na `main`, o CI roda os testes e, **só se tudo passar**, o workflow "Deploy" publica exatamente aquele commit na Cloudflare. Não é preciso rodar `wrangler login` nem `pnpm cf:deploy`; esses comandos ficam para publicar à mão ou voltar uma versão numa emergência.
+
+Configuração (feita uma vez pelo dono do projeto):
+
+1. Na Cloudflare: **My Profile → API Tokens → Create Token**, modelo **"Edit Cloudflare Workers"**, só para a sua conta (de preferência com validade). Copie o token uma vez.
+2. O **Account ID** fica em **Workers e Pages**, na lateral.
+3. No GitHub: **Settings → Environments → New environment** `production`; em **Deployment branches**, só a `main`; em **Environment secrets**, `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` (secrets, nunca "variables").
+
+Como acompanhar: aba **Actions** do repositório → workflow **Deploy**. Se os segredos não estiverem configurados, a publicação é pulada com um aviso, sem erro. Se o token vazar ou vencer, gere outro na Cloudflare (**Roll**) e troque o segredo no GitHub.
+
+## Padrão de nomes para vários jogos na mesma conta
+
+O endereço é `NOME-DO-WORKER.SUBDOMINIO-DA-CONTA.workers.dev`. Use um subdomínio de conta neutro (o seu "estúdio", não o nome de um jogo) e o nome de cada jogo no `name` do `wrangler.jsonc` (aqui, `village-flood`). Trocar o subdomínio da conta muda o endereço de todos os Workers dela de uma vez.
 
 ## O que o projeto já cuida
 

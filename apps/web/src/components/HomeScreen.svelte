@@ -48,7 +48,9 @@
     </div>
     <p>{t(locale, 'home.onlineHint')}</p>
   </div>
-  <div class="card">
+  <!-- Modo mesa só em tablet e telas maiores: no celular, a tela é pequena demais para servir de
+       tabuleiro da mesa (o celular entra na mesa como controle, pelo QR code). -->
+  <div class="card table-card">
     <button type="button" class="btn" onclick={ontable}>{t(locale, 'home.openTable')}</button>
     <p>{t(locale, 'home.tableHint')}</p>
     {#if tableError}<p class="error" role="alert">{errorText(locale, tableError)}</p>{/if}
@@ -91,6 +93,15 @@
   .error {
     color: var(--danger) !important;
     font-weight: 800 !important;
+  }
+  .table-card {
+    display: none;
+  }
+  /* tablet (em pé ou deitado) e telas maiores; celular deitado tem altura menor que 500 px */
+  @media (min-width: 768px) and (min-height: 500px) {
+    .table-card {
+      display: flex;
+    }
   }
   .card p,
   .soon {

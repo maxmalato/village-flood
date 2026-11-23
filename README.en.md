@@ -20,7 +20,7 @@ Full rules in [docs/village-flood-rules.md](docs/village-flood-rules.md) (in Por
 
 - **On this device:** everyone around the same screen. Bots fill the team. Works offline after the first visit.
 - **Online:** "Create an online room" gives a 6-symbol code, a link (`?sala=CODE`) and a QR code; the others use "Join with a code" or open the link. Outside your turn, you suggest moves (Go here, Careful, Pick up here). If someone drops, a bot plays for them until they come back; the device reconnects on its own.
-- **Table:** "Open the table (TV or laptop)" shows the big board, and each person plays on their phone (joining through the QR code). The first person to join runs the room. The full legend opens on the TV with the remote or with the "Show the legend on the TV" button on a phone.
+- **Table:** on a tablet, laptop or TV (not shown on phones), "Open the table (TV or laptop)" shows the big board, and each person plays on their phone (joining through the QR code). The first person to join runs the room. The full legend opens on the TV with the remote or with the "Show the legend on the TV" button on a phone.
 
 ## Accessibility
 
@@ -115,7 +115,7 @@ For tests, `?botDelay=0&seed=42` in the URL makes the bots play instantly and fi
 
 ## Publishing
 
-The step-by-step guide to publish on Cloudflare (login, publishing, checks, custom domain and rolling back a version) is in [docs/deploy.md](docs/deploy.md) (in Portuguese).
+On every merge into `main`, GitHub Actions publishes to Cloudflare on its own, after all tests pass. Setup, manual publishing, custom domain and rolling back a version are in [docs/deploy.md](docs/deploy.md) (in Portuguese).
 
 ## Security and privacy
 
