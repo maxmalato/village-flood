@@ -159,19 +159,41 @@
   <header class="topbar">
     <button
       type="button"
-      class="btn btn-pill"
+      class="btn btn-pill sound"
+      aria-label={t(locale, 'app.sound')}
+      aria-pressed={soundOn}
+      title={t(locale, soundOn ? 'app.soundOn' : 'app.soundOff')}
       onclick={() => {
         sound.setEnabled(!soundOn)
         soundOn = sound.enabled
       }}
     >
-      {t(locale, soundOn ? 'app.soundOn' : 'app.soundOff')}
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+        <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" />
+        {#if soundOn}
+          <path
+            d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        {:else}
+          <path
+            d="M16 9l5 6M21 9l-5 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        {/if}
+      </svg>
     </button>
     <label>
       <span class="visually-hidden">{t(locale, 'app.language')}</span>
       <select bind:value={locale} aria-label={t(locale, 'app.language')}>
         {#each locales as option (option)}
-          <option value={option}>{option === 'pt-BR' ? 'Português (Brasil)' : 'English'}</option>
+          <option value={option}>{option === 'pt-BR' ? 'Português' : 'English'}</option>
         {/each}
       </select>
     </label>
@@ -236,6 +258,7 @@
   .topbar {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 8px;
     padding: 8px 16px 0;
   }
@@ -244,6 +267,13 @@
     margin: 0 auto;
     padding: 48px 16px;
     font-weight: 700;
+  }
+  .sound {
+    width: 44px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .app :global(h1) {
     outline: none;

@@ -9,6 +9,7 @@ const ptBR = {
   'app.title': 'Enchente na Vila',
   'app.tagline': 'Jogo cooperativo: levem os moradores até a igreja antes que o rio suba.',
   'app.language': 'Idioma',
+  'app.sound': 'Som',
   'app.soundOn': 'Som: ligado',
   'app.soundOff': 'Som: desligado',
 
@@ -399,6 +400,7 @@ const en: Record<MessageKey, string> = {
   'app.title': 'Village Flood',
   'app.tagline': 'Co-op game: bring the residents to the church before the river rises.',
   'app.language': 'Language',
+  'app.sound': 'Sound',
   'app.soundOn': 'Sound: on',
   'app.soundOff': 'Sound: off',
 
