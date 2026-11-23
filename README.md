@@ -38,6 +38,8 @@ Checklist e medições em [docs/quality-checklist.md](docs/quality-checklist.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Checklist de acessibilidade e desempenho](docs/quality-checklist.md)
 - [Relatórios de simulação](docs/simulation/)
+- [Publicação na Cloudflare](docs/deploy.md)
+- [Roteiro das partidas de teste](docs/playtests/README.md)
 - [Mockups](docs/mockups/)
 
 ## Estrutura
@@ -74,6 +76,7 @@ pnpm build          # build da interface e do servidor
 pnpm e2e            # testes E2E (Playwright + axe-core)
 pnpm simulate       # simulação com bots (fora do pnpm test)
 pnpm format         # formata o código com o Prettier
+pnpm cf:deploy      # publica na Cloudflare (precisa de login na sua conta)
 ```
 
 Antes do primeiro `pnpm e2e`, instale o navegador do Playwright:
@@ -108,10 +111,15 @@ Depois abra `http://IP-DO-COMPUTADOR:8787` em todos os aparelhos. Libere o acess
 
 Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
 
+## Publicar
+
+O passo a passo para publicar na Cloudflare (login, publicação, conferência, domínio próprio e como voltar uma versão) está em [docs/deploy.md](docs/deploy.md).
+
 ## Segurança e privacidade
 
 - O jogo guarda só apelidos: sem contas, analytics, rastreamento ou fontes externas. O QR code é gerado no próprio aparelho.
 - O servidor é a única fonte da verdade e valida toda ação. O token de cada assento fica guardado só como hash (SHA-256); cada conexão tem limite de 40 mensagens por 10 s; a sala expira depois de 12 h sem atividade.
+- O site é publicado com cabeçalhos de segurança: só aceita arquivos e conexões do próprio endereço, não pode ser incorporado em outros sites e não envia o endereço de origem.
 - Nenhum segredo no repositório. O arquivo `.env.example` tem só valores fictícios.
 - O pnpm só instala versões publicadas há pelo menos 1 dia e só deixa o `esbuild` e o `workerd` rodarem scripts de instalação. O CI roda com permissão só de leitura e usa actions fixadas pelo SHA do commit.
 
