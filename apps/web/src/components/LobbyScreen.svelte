@@ -72,7 +72,7 @@
             <span>{t(locale, 'lobby.bot')}</span>
           </label>
           {#if setup.seats.length > MIN_SEATS}
-            <button type="button" class="btn" onclick={() => (setup = removeSeat(setup, i))}>
+            <button type="button" class="btn remove" onclick={() => (setup = removeSeat(setup, i))}>
               {t(locale, 'lobby.removeSeat', { n: i + 1 })}
             </button>
           {/if}
@@ -201,6 +201,12 @@
   .check input {
     width: 22px;
     height: 22px;
+  }
+  /* ação secundária: discreta e à direita, ainda com 44 px de toque */
+  .remove {
+    align-self: flex-end;
+    border-color: var(--border-muted);
+    font-size: 0.95rem;
   }
   .errors {
     margin: 0;

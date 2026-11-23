@@ -136,10 +136,14 @@
   {:else if waitText}
     <p class="tip" role="status">{waitText}</p>
   {/if}
-  <button type="button" class="btn" onclick={onhome}>{t(locale, homeLabel)}</button>
+  <div class="secondary">
+    <button type="button" class="btn" onclick={onhome}>{t(locale, homeLabel)}</button>
+    {#if showSummary}
+      <button type="button" class="btn" onclick={copySummary}>{t(locale, 'summary.copy')}</button>
+    {/if}
+  </div>
 
   {#if showSummary}
-    <button type="button" class="btn" onclick={copySummary}>{t(locale, 'summary.copy')}</button>
     <p class="copy-status" role="status">
       {copyState === 'copied'
         ? t(locale, 'summary.copied')
@@ -235,6 +239,11 @@
   }
   .highlights .panel-title {
     color: var(--card-muted);
+  }
+  .secondary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 8px;
   }
   .copy-status {
     margin: 0;

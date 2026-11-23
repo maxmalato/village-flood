@@ -142,6 +142,7 @@ Deixa o projeto pronto para receber código.
 - Roteiro e modelo de anotação das partidas de teste em `docs/playtests/README.md`.
 - Publicação automática: o workflow `Deploy` publica na Cloudflare depois de cada CI verde na `main` (segredos no environment `production` do GitHub).
 - Modo mesa só em tablet e telas maiores (decisão de 23/11/2026).
+- Logo ao lado do nome do jogo e revisão leve de interface (decisão de 24/11/2026).
 - Botão "Copiar resumo" na tela final, com a linha pronta para a tabela do roteiro, sem nomes (pedido do dono do projeto em 23/11/2026).
 
 **Falta:** publicação na conta da Cloudflare (feita pelo dono do projeto), partidas com pessoas e ajustes nos dados, teste com leitor de tela e novo teste em aparelhos com HTTPS.

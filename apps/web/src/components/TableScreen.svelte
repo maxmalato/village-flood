@@ -8,6 +8,7 @@
   import { MAX_SEATS } from '../lib/setup.ts'
   import { initialOf, residentSummary, seatName, tileViews } from '../lib/view.ts'
   import Board from './Board.svelte'
+  import Logo from './Logo.svelte'
   import EndScreen from './EndScreen.svelte'
   import ForecastPanel from './ForecastPanel.svelte'
   import LegendDialog from './LegendDialog.svelte'
@@ -51,7 +52,7 @@
 {#if room && room.status === 'lobby'}
   <main class="table-lobby">
     <header class="top">
-      <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
+      <h1 class="brand" tabindex="-1"><Logo size={52} /><span>{t(locale, 'app.title')}</span></h1>
       <button type="button" class="btn btn-pill" onclick={onclose}>
         {t(locale, 'table.close')}
       </button>
@@ -118,7 +119,7 @@
   <main class="table-game">
     <header class="top">
       <div class="titles">
-        <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
+        <h1 class="brand" tabindex="-1"><Logo size={52} /><span>{t(locale, 'app.title')}</span></h1>
         <p class="turn">{turnLine}</p>
       </div>
       <div class="pills">
@@ -184,7 +185,7 @@
   </main>
 {:else}
   <main class="table-lobby">
-    <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
+    <h1 class="brand" tabindex="-1"><Logo size={52} /><span>{t(locale, 'app.title')}</span></h1>
     <p role="status">{t(locale, 'online.connecting')}</p>
   </main>
 {/if}
@@ -210,6 +211,11 @@
   }
   h1 {
     font-size: 2.4rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
   h2 {
     margin: 0;
