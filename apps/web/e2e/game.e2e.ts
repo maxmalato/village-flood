@@ -100,6 +100,16 @@ test('uma partida completa, do lobby à tela final', async ({ page }) => {
     /A vila foi salva!|ilhados|topo|água/,
   )
   await axe(page)
+
+  // resumo para o roteiro das partidas de teste, sem nomes
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.getByRole('button', { name: 'Copiar resumo' }).click()
+  await expect(page.getByText('Resumo copiado.', { exact: false })).toBeVisible()
+  const copied = await page.evaluate(() => navigator.clipboard.readText())
+  expect(copied).toContain('Modo: neste aparelho · Dificuldade: Tranquilo')
+  expect(copied).toMatch(/\| \| neste aparelho \| Tranquilo \| 1 \+ 2 \|/)
+  expect(copied).not.toContain('Ana')
+
   await page.getByRole('button', { name: 'Voltar ao início' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enchente na Vila')
 })

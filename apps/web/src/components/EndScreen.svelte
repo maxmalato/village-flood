@@ -2,6 +2,7 @@
   import { countResidents } from '@village-flood/engine'
   import { t, type Locale, type MessageKey } from '../i18n.ts'
   import type { GameController, SeatStats } from '../lib/controller.ts'
+  import { gameSummary } from '../lib/summary.ts'
   import Icon from './Icon.svelte'
 
   let {
@@ -11,6 +12,7 @@
     onhome,
     waitText = null,
     homeLabel = 'end.home',
+    showSummary = true,
   }: {
     game: GameController
     locale: Locale
@@ -19,12 +21,40 @@
     onhome: () => void
     waitText?: string | null
     homeLabel?: MessageKey
+    /** Botão "Copiar resumo" (a TV da mesa não mostra: não tem onde colar). */
+    showSummary?: boolean
   } = $props()
 
-  const state = $derived(game.state)
-  const won = $derived(state.phase === 'won')
-  const counts = $derived(countResidents(state))
-  const reason = $derived(state.lossReason ?? 'stranded')
+  // Resumo para o roteiro das partidas de teste; a duração conta até esta tela abrir.
+  const endedAt = Date.now()
+  const summary = $derived(
+    gameSummary(
+      {
+        state: game.state,
+        seats: game.seats,
+        stats: game.stats,
+        mode: game.mode,
+        durationMs: game.startedAt === null ? null : endedAt - game.startedAt,
+      },
+      locale,
+    ),
+  )
+  let copyState = $state<'idle' | 'copied' | 'failed'>('idle')
+
+  async function copySummary() {
+    try {
+      await navigator.clipboard.writeText(summary)
+      copyState = 'copied'
+    } catch {
+      // sem HTTPS (ex.: rede local) o navegador não deixa copiar: mostra o texto para copiar à mão
+      copyState = 'failed'
+    }
+  }
+
+  const gs = $derived(game.state)
+  const won = $derived(gs.phase === 'won')
+  const counts = $derived(countResidents(gs))
+  const reason = $derived(gs.lossReason ?? 'stranded')
 
   function best(key: keyof SeatStats) {
     let winner: { name: string; n: number } | null = null
@@ -68,7 +98,7 @@
   <p class="lead">
     {won
       ? t(locale, 'end.wonText', { safe: counts.safe })
-      : t(locale, 'end.lostText', { safe: counts.safe, goal: state.config.settings.goal })}
+      : t(locale, 'end.lostText', { safe: counts.safe, goal: gs.config.settings.goal })}
   </p>
   {#if !won}<p class="tip">{t(locale, `end.tip.${reason}` as MessageKey)}</p>{/if}
 
@@ -79,11 +109,11 @@
     </div>
     <div>
       <dt>{t(locale, 'end.statLevel')}</dt>
-      <dd>{state.riverLevel}</dd>
+      <dd>{gs.riverLevel}</dd>
     </div>
     <div>
       <dt>{t(locale, 'end.statTurn')}</dt>
-      <dd>T{state.turn}</dd>
+      <dd>T{gs.turn}</dd>
     </div>
   </dl>
 
@@ -107,6 +137,24 @@
     <p class="tip" role="status">{waitText}</p>
   {/if}
   <button type="button" class="btn" onclick={onhome}>{t(locale, homeLabel)}</button>
+
+  {#if showSummary}
+    <button type="button" class="btn" onclick={copySummary}>{t(locale, 'summary.copy')}</button>
+    <p class="copy-status" role="status">
+      {copyState === 'copied'
+        ? t(locale, 'summary.copied')
+        : copyState === 'failed'
+          ? t(locale, 'summary.copyFailed')
+          : ''}
+    </p>
+    {#if copyState === 'failed'}
+      <label class="summary">
+        <span>{t(locale, 'summary.label')}</span>
+        <textarea readonly rows="9" value={summary} onfocus={(e) => e.currentTarget.select()}
+        ></textarea>
+      </label>
+    {/if}
+  {/if}
 </main>
 
 <style>
@@ -187,6 +235,30 @@
   }
   .highlights .panel-title {
     color: var(--card-muted);
+  }
+  .copy-status {
+    margin: 0;
+    min-height: 1.2em;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .summary {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .summary textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
   .highlights p {
     margin: 8px 0 0;

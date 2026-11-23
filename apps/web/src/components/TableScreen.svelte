@@ -112,6 +112,7 @@
     waitText={t(locale, 'end.waitHost', { name: host?.name ?? '' })}
     onhome={onclose}
     homeLabel="table.close"
+    showSummary={false}
   />
 {:else if room && gs && summary}
   <main class="table-game">
