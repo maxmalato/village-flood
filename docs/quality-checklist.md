@@ -15,6 +15,7 @@ Etapa 6 (acabamento), 22/11/2026. Cada item diz como é verificado. Os testes au
 | Eventos anunciados (`aria-live`), recusas em `role="status"`, alertas em `role="alert"` | Cumprido | Revisão de código; E2E confere os textos |
 | Estados sem depender só de cor (água, marcas ✓/✗, ferido, sugestões com forma) | Cumprido | Revisão das telas; regras, seção 14 |
 | `prefers-reduced-motion` respeitado | Cumprido | E2E `a11y`: com "reduzir movimento", as animações ficam com duração zero |
+| Telas grandes: tabuleiro ocupa a altura da janela sem rolagem (quadra de 118 px em 1920 × 937 e 146 px em 2560 × 1297; sem mudança em 1366 px) | Cumprido | Medido com Playwright em 23/11/2026 |
 | Telas de menu sem rolagem lateral em 320 px (zoom de 400%) | Cumprido | E2E `a11y` (o tabuleiro de 6 colunas tem largura mínima própria, como permite a WCAG para jogos e mapas) |
 | Idioma da página (`lang`) e textos em PT-BR e inglês | Cumprido | E2E `home`; teste de unidade garante as mesmas chaves nos dois idiomas |
 | Legenda em diálogo nativo: prende o foco e devolve ao botão que abriu | Cumprido | E2E `game` |
