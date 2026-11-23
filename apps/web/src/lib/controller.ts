@@ -9,7 +9,12 @@ export interface SeatStats {
   rescues: number
   heals: number
   radioCalls: number
+  /** Vezes que o voluntário foi apanhado pela água. */
+  swept?: number
 }
+
+/** Modo da partida: neste aparelho, online ou online com a mesa (TV) na sala. */
+export type GameMode = 'local' | 'online' | 'table'
 
 export interface Hint {
   readonly actions: Plan['actions']
@@ -57,6 +62,9 @@ export interface GameController {
   readonly activeIsBot: boolean
   readonly hintAvailable: boolean
   readonly online?: OnlineControls
+  readonly mode: GameMode
+  /** Quando este aparelho viu a partida começar (ms); null se entrou no meio. */
+  readonly startedAt: number | null
   select(tileId: string | null): void
   act(action: Action): void
   showHint(): void

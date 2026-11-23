@@ -37,6 +37,10 @@ export class OnlineGame implements GameController {
   /** Aviso de conexão de alguém da equipe (caiu, bot assumiu, voltou). */
   notice = $state<string | null>(null)
   stats = $state.raw<Record<SeatId, SeatStats>>({})
+  /** Quando este aparelho viu o turno 1 desta partida (ms); null se entrou no meio. */
+  startedAt = $state<number | null>(null)
+  /** Último turno visto, para notar uma partida nova (jogar de novo). */
+  private lastTurn: number | null = null
   locale: Locale
 
   constructor(code: string, who: { token: string } | { name: string }, locale: Locale) {
@@ -145,6 +149,8 @@ export class OnlineGame implements GameController {
     this.alert = null
     this.notice = null
     this.stats = {}
+    this.startedAt = Date.now()
+    this.lastTurn = 1
     this.connection.send({ type: 'start' })
   }
 
@@ -166,6 +172,10 @@ export class OnlineGame implements GameController {
   }
 
   // ---------- partida (GameController) ----------
+
+  get mode(): 'online' | 'table' {
+    return this.room?.table ? 'table' : 'online'
+  }
 
   get state(): GameState {
     return this.connection.room?.game as GameState
@@ -274,6 +284,12 @@ export class OnlineGame implements GameController {
   private record(events: readonly GameEvent[]) {
     const game = this.room?.game
     if (!game) return
+    // Partida nova (começo ou "jogar de novo"): zera os números e marca o início.
+    if (game.turn === 1 && this.lastTurn !== 1) {
+      if (this.lastTurn !== null) this.stats = {}
+      this.startedAt = Date.now()
+    }
+    this.lastTurn = game.turn
     // Na mesa, a TV toca os sons de todos; os celulares só avisam "sua vez" (sem eco na sala).
     const cue = cueFor(events, this.isTable ? null : this.mySeat)
     const tableInRoom = this.room?.table?.connected && !this.isTable
@@ -289,12 +305,13 @@ export class OnlineGame implements GameController {
     const stats = { ...this.stats }
     const bump = (seat: SeatId, key: keyof SeatStats, n = 1) => {
       const current = stats[seat] ?? { rescues: 0, heals: 0, radioCalls: 0 }
-      stats[seat] = { ...current, [key]: current[key] + n }
+      stats[seat] = { ...current, [key]: (current[key] ?? 0) + n }
     }
     for (const e of events) {
       if (e.type === 'delivered') bump(e.seat, 'rescues', e.residentIds.length)
       if (e.type === 'healed') bump(e.seat, 'heals')
       if (e.type === 'radio-called') bump(e.seat, 'radioCalls')
+      if (e.type === 'volunteer-swept') bump(e.seat, 'swept')
     }
     this.stats = stats
   }

@@ -140,6 +140,7 @@ Deixa o projeto pronto para receber código.
 
 - Preparação para publicar: cabeçalhos de segurança e de cache (`apps/web/cloudflare/_headers`, com CSP), teste E2E do site servido pelo Worker com a CSP ativa, comando `pnpm cf:deploy` e o passo a passo em `docs/deploy.md`.
 - Roteiro e modelo de anotação das partidas de teste em `docs/playtests/README.md`.
+- Botão "Copiar resumo" na tela final, com a linha pronta para a tabela do roteiro, sem nomes (pedido do dono do projeto em 23/11/2026).
 
 **Falta:** publicação na conta da Cloudflare (feita pelo dono do projeto), partidas com pessoas e ajustes nos dados, teste com leitor de tela e novo teste em aparelhos com HTTPS.
 

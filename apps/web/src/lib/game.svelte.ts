@@ -39,6 +39,8 @@ export class LocalGame implements GameController {
 
   readonly seats: SeatInfo[]
   readonly setup: LocalSetup
+  readonly mode = 'local' as const
+  readonly startedAt = Date.now()
   private readonly botDelay: number
   private timer: ReturnType<typeof setTimeout> | null = null
   locale: Locale
@@ -141,12 +143,13 @@ export class LocalGame implements GameController {
     const stats = { ...this.stats }
     const bump = (seat: SeatId, key: keyof SeatStats, n = 1) => {
       const current = stats[seat] ?? { rescues: 0, heals: 0, radioCalls: 0 }
-      stats[seat] = { ...current, [key]: current[key] + n }
+      stats[seat] = { ...current, [key]: (current[key] ?? 0) + n }
     }
     for (const e of events) {
       if (e.type === 'delivered') bump(e.seat, 'rescues', e.residentIds.length)
       if (e.type === 'healed') bump(e.seat, 'heals')
       if (e.type === 'radio-called') bump(e.seat, 'radioCalls')
+      if (e.type === 'volunteer-swept') bump(e.seat, 'swept')
     }
     this.stats = stats
   }
