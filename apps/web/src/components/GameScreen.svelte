@@ -312,4 +312,17 @@
       gap: 14px;
     }
   }
+
+  /* Telas grandes (monitor Full HD ou maior): mais largura e um tabuleiro que cresce até caber
+     na altura da janela, sem rolagem. O resto da página continua com largura confortável. */
+  @media (min-width: 1400px) {
+    .game {
+      max-width: 1840px;
+      padding: 16px 32px;
+    }
+    .layout {
+      grid-template-columns: minmax(540px, min(920px, calc(100vh - 190px))) minmax(0, 1fr);
+      gap: 32px;
+    }
+  }
 </style>

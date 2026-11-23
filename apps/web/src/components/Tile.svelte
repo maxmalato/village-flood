@@ -409,4 +409,56 @@
       font-size: 0.875rem;
     }
   }
+
+  /* Telas grandes: as quadras crescem, e os peões, ícones e números crescem junto. */
+  @media (min-width: 1400px) and (min-height: 760px) {
+    .height {
+      min-width: 24px;
+      height: 24px;
+      line-height: 24px;
+      font-size: 1rem;
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+    }
+    .icon :global(svg) {
+      width: 26px;
+      height: 26px;
+    }
+    .pawn {
+      width: 38px;
+      height: 38px;
+      line-height: 34px;
+      font-size: 1.2rem;
+    }
+    .pawn.active {
+      line-height: 32px;
+    }
+    .many .pawn {
+      width: 32px;
+      height: 32px;
+      line-height: 29px;
+      font-size: 1rem;
+    }
+    .many .pawn.active {
+      line-height: 28px;
+    }
+    .badge,
+    .mark,
+    .cost {
+      height: 26px;
+      min-width: 26px;
+      line-height: 22px;
+      font-size: 1rem;
+    }
+    .cost {
+      line-height: 26px;
+    }
+    .ping {
+      height: 22px;
+      font-size: 0.85rem;
+      line-height: 16px;
+    }
+  }
 </style>
