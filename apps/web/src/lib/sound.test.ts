@@ -26,6 +26,14 @@ describe('sons', () => {
     expect(cueFor(started, 'seat-2')).toBe('your-turn')
   })
 
+  it('o ruído (chuva, água) entra devagar, sem estalo', () => {
+    for (const notes of Object.values(CUES)) {
+      for (const note of notes) {
+        if (note.freq === 0) expect(note.attack ?? 0.25).toBeGreaterThanOrEqual(0.15)
+      }
+    }
+  })
+
   it('todo som é curto (até 1,5 s)', () => {
     for (const notes of Object.values(CUES)) {
       const end = Math.max(...notes.map((n) => n.at + n.dur))

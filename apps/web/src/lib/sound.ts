@@ -91,16 +91,23 @@ interface Note {
   volume?: number
   /** Frequência final (deslize). */
   to?: number
+  /** Tempo de entrada em segundos (padrão: 0,015 para notas, 0,25 para ruído). */
+  attack?: number
 }
 
 // Notas originais, compostas para o jogo: arpejos curtos em dó maior para coisas boas,
-// intervalos descendentes para perigo, ruído filtrado para a chuva.
+// intervalos descendentes para perigo; a chuva são gotas (notas agudas e curtas) sobre um
+// chiado baixo que entra devagar, sem estalo.
 const C4 = 261.63
 const E4 = 329.63
 const G4 = 392.0
 const C5 = 523.25
 const E5 = 659.25
 const G5 = 783.99
+const D6 = 1174.66
+const E6 = 1318.51
+const G6 = 1567.98
+const A6 = 1760.0
 
 export const CUES: Record<Cue, readonly Note[]> = {
   won: [
@@ -116,7 +123,7 @@ export const CUES: Record<Cue, readonly Note[]> = {
     { freq: C4, at: 0.5, dur: 0.7, wave: 'triangle', to: 220 },
   ],
   swept: [
-    { freq: 0, at: 0, dur: 0.6, volume: 0.25 },
+    { freq: 0, at: 0, dur: 0.7, volume: 0.12, attack: 0.2 },
     { freq: 440, at: 0, dur: 0.5, wave: 'sawtooth', to: 220, volume: 0.08 },
   ],
   stranded: [
@@ -129,7 +136,14 @@ export const CUES: Record<Cue, readonly Note[]> = {
   ],
   submerged: [{ freq: 180, at: 0, dur: 0.45, wave: 'sine', to: 90, volume: 0.25 }],
   flooded: [{ freq: 300, at: 0, dur: 0.3, wave: 'sine', to: 180, volume: 0.18 }],
-  rain: [{ freq: 0, at: 0, dur: 0.7, volume: 0.18 }],
+  rain: [
+    { freq: 0, at: 0, dur: 1.1, volume: 0.05, attack: 0.35 },
+    { freq: G6, at: 0.05, dur: 0.14, volume: 0.06 },
+    { freq: E6, at: 0.22, dur: 0.14, volume: 0.05 },
+    { freq: A6, at: 0.38, dur: 0.14, volume: 0.06 },
+    { freq: D6, at: 0.55, dur: 0.14, volume: 0.05 },
+    { freq: G6, at: 0.72, dur: 0.18, volume: 0.05 },
+  ],
   healed: [
     { freq: G4, at: 0, dur: 0.15, volume: 0.14 },
     { freq: C5, at: 0.12, dur: 0.3, volume: 0.14 },
@@ -144,6 +158,49 @@ export const CUES: Record<Cue, readonly Note[]> = {
     { freq: C5, at: 0.16, dur: 0.2, volume: 0.16 },
   ],
   step: [{ freq: 520, at: 0, dur: 0.05, wave: 'sine', volume: 0.06 }],
+}
+
+/** Agenda as notas de um som num contexto de áudio (também serve para gerar arquivos de teste). */
+export function scheduleCue(ctx: BaseAudioContext, cue: Cue, start: number) {
+  for (const note of CUES[cue]) playNote(ctx, start, note)
+}
+
+function playNote(ctx: BaseAudioContext, start: number, note: Note) {
+  const gain = ctx.createGain()
+  const t0 = start + note.at
+  const t1 = t0 + note.dur
+  const volume = note.volume ?? 0.15
+  const attack = note.attack ?? (note.freq === 0 ? 0.25 : 0.015)
+  gain.gain.setValueAtTime(0.0001, t0)
+  gain.gain.exponentialRampToValueAtTime(volume, t0 + Math.min(attack, note.dur / 2))
+  gain.gain.exponentialRampToValueAtTime(0.0001, t1)
+  gain.connect(ctx.destination)
+  if (note.freq === 0) {
+    // ruído filtrado (chuva, água)
+    const length = Math.ceil(ctx.sampleRate * note.dur)
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1
+    const source = ctx.createBufferSource()
+    source.buffer = buffer
+    // passa-faixa nos agudos: soa como chiado de chuva, não como estouro
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'bandpass'
+    filter.Q.setValueAtTime(0.7, t0)
+    filter.frequency.setValueAtTime(3000, t0)
+    filter.frequency.exponentialRampToValueAtTime(1800, t1)
+    source.connect(filter).connect(gain)
+    source.start(t0)
+    source.stop(t1)
+    return
+  }
+  const osc = ctx.createOscillator()
+  osc.type = note.wave ?? 'sine'
+  osc.frequency.setValueAtTime(note.freq, t0)
+  if (note.to) osc.frequency.exponentialRampToValueAtTime(note.to, t1)
+  osc.connect(gain)
+  osc.start(t0)
+  osc.stop(t1 + 0.02)
 }
 
 const STORAGE_KEY = 'village-flood.sound'
@@ -187,45 +244,10 @@ export class SoundPlayer {
       // o navegador só libera o som depois de um toque ou tecla; antes disso, fica em silêncio
       if (ctx.state === 'suspended') void ctx.resume()
       const start = ctx.currentTime + 0.01
-      for (const note of CUES[cue]) this.note(ctx, start, note)
+      scheduleCue(ctx, cue, start)
     } catch {
       // sem áudio no aparelho: o jogo segue sem som
     }
-  }
-
-  private note(ctx: AudioContext, start: number, note: Note) {
-    const gain = ctx.createGain()
-    const t0 = start + note.at
-    const t1 = t0 + note.dur
-    const volume = note.volume ?? 0.15
-    gain.gain.setValueAtTime(0.0001, t0)
-    gain.gain.exponentialRampToValueAtTime(volume, t0 + 0.015)
-    gain.gain.exponentialRampToValueAtTime(0.0001, t1)
-    gain.connect(ctx.destination)
-    if (note.freq === 0) {
-      // ruído filtrado (chuva, água)
-      const length = Math.ceil(ctx.sampleRate * note.dur)
-      const buffer = ctx.createBuffer(1, length, ctx.sampleRate)
-      const data = buffer.getChannelData(0)
-      for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1
-      const source = ctx.createBufferSource()
-      source.buffer = buffer
-      const filter = ctx.createBiquadFilter()
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(1200, t0)
-      filter.frequency.exponentialRampToValueAtTime(400, t1)
-      source.connect(filter).connect(gain)
-      source.start(t0)
-      source.stop(t1)
-      return
-    }
-    const osc = ctx.createOscillator()
-    osc.type = note.wave ?? 'sine'
-    osc.frequency.setValueAtTime(note.freq, t0)
-    if (note.to) osc.frequency.exponentialRampToValueAtTime(note.to, t1)
-    osc.connect(gain)
-    osc.start(t0)
-    osc.stop(t1 + 0.02)
   }
 }
 
