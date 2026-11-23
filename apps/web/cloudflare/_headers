@@ -1,0 +1,20 @@
+# Cabeçalhos dos arquivos do site servidos pela Cloudflare (Workers Static Assets).
+# Formato: https://developers.cloudflare.com/workers/static-assets/headers/
+# Segurança: só scripts, estilos, imagens e conexões do próprio site (o jogo não usa nada de fora).
+# style-src 'unsafe-inline': o Svelte aplica estilos por atributo (ex.: cor do peão).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+
+# O service worker e o registro sempre conferem se há versão nova.
+/sw.js
+  Cache-Control: no-cache
+/registerSW.js
+  Cache-Control: no-cache
+
+# Arquivos com hash no nome nunca mudam: podem ficar em cache por 1 ano.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

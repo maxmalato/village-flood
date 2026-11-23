@@ -1,5 +1,6 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { fileURLToPath } from 'node:url'
+import { readFileSync } from 'node:fs'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 
@@ -11,6 +12,18 @@ export default defineConfig({
   plugins: [
     // Caminho explícito: o Vitest roda a partir da raiz do monorepo.
     svelte({ configFile: dir('./svelte.config.js') }),
+    // Cabeçalhos de segurança e de cache para a Cloudflare (arquivo _headers na raiz do site).
+    {
+      name: 'cloudflare-headers',
+      apply: 'build',
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: '_headers',
+          source: readFileSync(dir('./cloudflare/_headers'), 'utf8'),
+        })
+      },
+    },
     // PWA: instalável e com o modo local funcionando offline depois do primeiro acesso.
     // O registro é um script gerado pelo plugin (sem workbox-window no pacote do jogo).
     VitePWA({
