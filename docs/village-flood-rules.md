@@ -190,7 +190,7 @@ Todos os valores desta tabela são **(inicial)**.
 
 - **Um aparelho:** todos em volta de um tablet ou notebook. Sem tela de "passe o aparelho", porque não há segredo.
 - **Vários aparelhos (online):** sala privada com código de 6 símbolos, como no Senhorio (sem senha: decisão de 22/11/2026). Cada pessoa vê o tabuleiro inteiro, o próprio papel e os botões de ação. Só o jogador da vez age.
-- **Mesa:** tabuleiro grande na TV ou notebook (assento de mesa, como no Senhorio), celulares como controle. Funciona como o modo online mais uma tela espelhada. A TV abre a sala e mostra o código, o QR code e o endereço; quem entra primeiro pelo celular organiza a sala (dificuldade, bots, começar). A TV não joga nem comanda (decisão de 22/11/2026).
+- **Mesa:** tabuleiro grande na TV, notebook ou tablet (assento de mesa, como no Senhorio), celulares como controle; a opção de abrir a mesa não aparece no celular (decisão de 23/11/2026). Funciona como o modo online mais uma tela espelhada. A TV abre a sala e mostra o código, o QR code e o endereço; quem entra primeiro pelo celular organiza a sala (dificuldade, bots, começar). A TV não joga nem comanda (decisão de 22/11/2026).
 - **Opinar (ping):** fora da sua vez, o jogador toca numa quadra e escolhe "ir para cá", "cuidado" ou "pegar daqui". Máximo de 3 pings por jogador, apagados ao fim do turno. Pings não fazem parte do estado do jogo e têm limite de frequência.
 - **Desconexão:**
   1. A equipe é avisada ("Diego desconectou, o bot assumiu").
@@ -271,6 +271,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 23/11/2026: modo mesa só em tablet e telas maiores
+
+- **Decisão:** o botão "Abrir mesa (TV ou notebook)" da tela inicial só aparece em telas com pelo menos 768 px de largura e 500 px de altura (tablet em pé ou deitado, notebook, desktop, TV). No celular, em pé ou deitado, ele não aparece; o celular continua entrando na mesa como controle, pelo QR code ou pelo código.
+- **Motivo:** a tela da mesa é o tabuleiro grande para todos verem; num celular ela fica pequena demais e confunde quem só quer jogar.
 
 ### 23/11/2026: igreja e cais mais claros na legenda
 
