@@ -157,3 +157,39 @@ describe('eventMessages', () => {
     expect(result.alerts[0]).toContain('Ana foi apanhado pela água')
   })
 })
+
+describe('aviso de meta alcançada', () => {
+  /** Partida com `safe` moradores já salvos. */
+  function withSafe(safe: number, phase: GameState['phase'] = 'playing'): GameState {
+    const state = game()
+    return {
+      ...state,
+      phase,
+      residents: state.residents.map((r, i) => (i < safe ? { ...r, status: 'safe' as const } : r)),
+    }
+  }
+  const delivered = (n: number) => [
+    {
+      type: 'delivered' as const,
+      seat: 'seat-1',
+      residentIds: Array.from({ length: n }, (_, i) => `r${i}`),
+    },
+  ]
+  const alertsOf = (state: GameState, n: number) =>
+    eventMessages(delivered(n), seats, state, 'pt-BR').alerts
+
+  it('avisa para levar todos ao cais na jogada que alcança a meta', () => {
+    const goal = game().config.settings.goal
+    expect(alertsOf(withSafe(goal), 1)).toEqual([
+      'Meta alcançada! Agora levem todos os voluntários ao cais.',
+    ])
+    expect(alertsOf(withSafe(goal + 1), 2)).toHaveLength(1)
+  })
+
+  it('não avisa antes da meta, depois dela, nem com a partida encerrada', () => {
+    const goal = game().config.settings.goal
+    expect(alertsOf(withSafe(goal - 1), 1)).toEqual([])
+    expect(alertsOf(withSafe(goal + 1), 1)).toEqual([])
+    expect(alertsOf(withSafe(goal, 'won'), 1)).toEqual([])
+  })
+})

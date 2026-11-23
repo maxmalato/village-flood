@@ -536,5 +536,16 @@ export function eventMessages(
     (e) => e.type === 'resident-stranded' && e.cause === 'water',
   ).length
   if (stranded > 0) messages.push(t(locale, 'event.stranded', { n: stranded }))
+  // Meta alcançada nesta jogada: lembra que ainda falta levar todos ao cais (a vitória exige as
+  // duas coisas). Só avisa na jogada que cruza a meta, e não se a partida já acabou.
+  const delivered = events.reduce(
+    (n, e) => n + (e.type === 'delivered' ? e.residentIds.length : 0),
+    0,
+  )
+  if (delivered > 0 && state.phase === 'playing') {
+    const goal = state.config.settings.goal
+    const safe = countResidents(state).safe
+    if (safe >= goal && safe - delivered < goal) alerts.push(t(locale, 'event.goalReached'))
+  }
   return { messages, alerts }
 }
