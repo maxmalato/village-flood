@@ -272,6 +272,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 
 Decisão nova entra no topo, com data e motivo.
 
+### 24/11/2026: logo no título e revisão leve de interface
+
+- **Decisão:** (1) a logo (`assets/logo/logo-icon.svg`) aparece ao lado de "Enchente na Vila" na tela inicial, na partida e na TV da mesa, como imagem decorativa (o nome continua em texto no título); (2) o botão de som vira um ícone de alto-falante com nome fixo "Som" e estado ligado/desligado (`aria-pressed`), e o seletor de idioma mostra "Português" e "English"; (3) no celular, o papel de quem joga fica na mesma linha da vez ("Turno 1 · Sua vez, Ana · Bombeiro"); (4) no lobby local, "Remover assento" fica menor e à direita; (5) na tela final, "Voltar ao início" e "Copiar resumo" ficam lado a lado, abaixo de "Jogar de novo"; (6) o título da tela inicial acompanha a largura e cabe numa linha até em 320 px.
+- **Motivo:** pedido do dono do projeto (logo) e revisão de UI/UX para deixar as telas mais leves sem mudar o visual: menos linhas soltas no celular, ações secundárias menos chamativas e a ação principal em destaque. Alvos de toque continuam com 44 px.
+
 ### 23/11/2026: modo mesa só em tablet e telas maiores
 
 - **Decisão:** o botão "Abrir mesa (TV ou notebook)" da tela inicial só aparece em telas com pelo menos 768 px de largura e 500 px de altura (tablet em pé ou deitado, notebook, desktop, TV). No celular, em pé ou deitado, ele não aparece; o celular continua entrando na mesa como controle, pelo QR code ou pelo código.
