@@ -122,6 +122,7 @@ Deixa o projeto pronto para receber código.
 - Revisão de acessibilidade com testes novos (`e2e/a11y.e2e.ts`): alvos de toque de 44 px em todas as telas, jogada inteira pelo teclado, reduzir movimento e telas de menu em 320 px. A revisão achou e corrigiu rolagem lateral no lobby em tela estreita. axe-core nos dois temas em todas as telas.
 - Medições de desempenho com CPU 6× mais lenta e rede 3G, todas dentro das metas.
 - Telas grandes (a partir de 1400 px): o tabuleiro cresce até caber na altura da janela, com peões, ícones e números maiores (quadra de 83 px para 118 px num monitor Full HD), pedido do dono do projeto em 23/11/2026.
+- Igreja e cais mais claros na legenda e aviso "Meta alcançada! Agora levem todos os voluntários ao cais." (pedido do dono do projeto em 23/11/2026).
 - Checklist em `docs/quality-checklist.md`.
 - Three.js avaliado e deixado para a v2 (registro de decisões, 22/11/2026).
 - `README.md` e `README.en.md` finais.

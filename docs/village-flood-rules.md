@@ -93,7 +93,8 @@ Regra: a casa só ganha marca quando nenhum morador de origem dela está mais na
 
 ### Legenda
 
-- **Legenda rápida (sempre na tela):** só o essencial: as três quadras (seca, alagada, submersa), "Igreja: abrigo", "Cais: saída" e o botão "Ver legenda completa".
+- **Legenda rápida (sempre na tela):** só o essencial: as três quadras (seca, alagada, submersa), "Igreja: salva os moradores", "Cais: todos voltam no fim" e o botão "Ver legenda completa".
+- **Aviso de meta alcançada:** na jogada em que os salvos chegam à meta (e a partida ainda não acabou), a tela avisa "Meta alcançada! Agora levem todos os voluntários ao cais.".
 - **Legenda completa:** abre pelo botão "Legenda", presente no cabeçalho de todas as telas de jogo (mesa e celular). Reúne todos os símbolos em três grupos: **Quadras** (seca, alagada, submersa e o custo de andar), **Lugares** (igreja, cais, casa com ferido, casa vazia com ✓, casa vazia com ✗) e **Pessoas e avisos** (voluntário e anel dourado, "+1" de carregando, sugestão/ping, número dourado de custo). Começa com a frase "Como ler o mapa: o número no canto de cada quadra é a altura dela." e fecha com "Fechar" ou "Voltar ao jogo".
 - Na mesa, a TV mostra a legenda rápida e a completa em tela cheia em 3 colunas. No celular, a legenda completa ocupa a tela inteira.
 
@@ -269,6 +270,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 23/11/2026: igreja e cais mais claros na legenda
+
+- **Decisão:** a legenda completa passa a dizer "Igreja: Leve os moradores até aqui: quem chega fica a salvo (sem gastar ação)." e "Cais: Ponto de partida da equipe. Para vencer, salvem a meta e voltem todos para cá."; a legenda rápida, "Igreja: salva os moradores" e "Cais: todos voltam no fim"; e a tela avisa "Meta alcançada! Agora levem todos os voluntários ao cais." na jogada em que a meta é alcançada. Só textos da interface: as regras não mudam.
+- **Motivo:** "Entregue = salvo" era jargão, e a legenda não dizia que a vitória exige as duas coisas (meta salva e todos no cais). O momento em que a meta é alcançada é quando uma pessoa leiga pode achar que já venceu.
 
 ### 22/11/2026: acabamento (Etapa 6): sons, animações e Three.js
 
