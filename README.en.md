@@ -40,6 +40,8 @@ All documents are in Portuguese.
 - [Roadmap](docs/ROADMAP.md)
 - [Accessibility and performance checklist](docs/quality-checklist.md)
 - [Simulation reports](docs/simulation/)
+- [Publishing on Cloudflare](docs/deploy.md)
+- [Playtest guide](docs/playtests/README.md)
 - [Mockups](docs/mockups/)
 
 ## Structure
@@ -76,6 +78,7 @@ pnpm build          # build the interface and the server
 pnpm e2e            # E2E tests (Playwright + axe-core)
 pnpm simulate       # bot simulation (not part of pnpm test)
 pnpm format         # format the code with Prettier
+pnpm cf:deploy      # publish on Cloudflare (needs a login to your account)
 ```
 
 Before the first `pnpm e2e`, install the Playwright browser:
@@ -110,10 +113,15 @@ Then open `http://COMPUTER-IP:8787` on every device. Allow access only for priva
 
 For tests, `?botDelay=0&seed=42` in the URL makes the bots play instantly and fixes the seed.
 
+## Publishing
+
+The step-by-step guide to publish on Cloudflare (login, publishing, checks, custom domain and rolling back a version) is in [docs/deploy.md](docs/deploy.md) (in Portuguese).
+
 ## Security and privacy
 
 - The game only keeps nicknames: no accounts, analytics, tracking or external fonts. The QR code is generated on the device itself.
 - The server is the only source of truth and validates every action. Each seat token is stored only as a hash (SHA-256); each connection is limited to 40 messages per 10 s; a room expires after 12 h without activity.
+- The site is published with security headers: it only accepts files and connections from its own address, cannot be embedded in other sites, and does not send the referring address.
 - No secrets in the repository. The `.env.example` file only has fictitious values.
 - pnpm only installs versions published at least 1 day ago and only lets `esbuild` and `workerd` run install scripts. CI runs with read-only permission and uses actions pinned by commit SHA.
 

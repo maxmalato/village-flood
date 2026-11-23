@@ -17,7 +17,7 @@ A ordem é **motor, bots e simulação antes de qualquer tela**. Os números ain
 | 4 – Vários aparelhos (online) | Concluída | `v0.5-online` |
 | 5 – Mesa e PWA | Concluída | `v0.6-table-pwa` |
 | 6 – Acabamento | Concluída | `v0.9-polish` |
-| 7 – Calibração com partidas reais e publicação | Não iniciada | `v1.0` |
+| 7 – Calibração com partidas reais e publicação | Em andamento (branch `develop/release-prep`) | `v1.0` |
 
 ## Etapa 0 – Fundação
 
@@ -135,6 +135,13 @@ Deixa o projeto pronto para receber código.
 - Publicação na Cloudflare e tag `v1.0`.
 
 **Pronto quando:** taxas de vitória reais próximas das faixas alvo e nenhum ponto "a testar" sem decisão registrada.
+
+**Feito até agora (23/11/2026):**
+
+- Preparação para publicar: cabeçalhos de segurança e de cache (`apps/web/cloudflare/_headers`, com CSP), teste E2E do site servido pelo Worker com a CSP ativa, comando `pnpm cf:deploy` e o passo a passo em `docs/deploy.md`.
+- Roteiro e modelo de anotação das partidas de teste em `docs/playtests/README.md`.
+
+**Falta:** publicação na conta da Cloudflare (feita pelo dono do projeto), partidas com pessoas e ajustes nos dados, teste com leitor de tela e novo teste em aparelhos com HTTPS.
 
 ## Ideias para depois da Etapa 6
 
