@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatCode } from '@village-flood/kit'
   import { errorText, t, type Locale } from '../i18n.ts'
+  import Logo from './Logo.svelte'
 
   let {
     locale,
@@ -28,7 +29,7 @@
 </script>
 
 <main class="home">
-  <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
+  <h1 class="brand" tabindex="-1"><Logo size={60} /><span>{t(locale, 'app.title')}</span></h1>
   <p class="tagline">{t(locale, 'app.tagline')}</p>
   {#if resumeCode}
     <button type="button" class="btn-primary" onclick={onresume}>
@@ -69,8 +70,18 @@
     flex-direction: column;
     gap: 16px;
   }
+  /* título e logo acompanham a largura: no celular, "Enchente na Vila" cabe numa linha */
   h1 {
-    font-size: 2.6rem;
+    font-size: clamp(1.6rem, 8vw, 2.6rem);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 3vw, 14px);
+  }
+  .brand :global(.logo) {
+    width: clamp(44px, 13vw, 60px);
+    height: auto;
   }
   .tagline {
     margin: 0;

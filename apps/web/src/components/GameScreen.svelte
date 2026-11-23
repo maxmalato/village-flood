@@ -4,6 +4,7 @@
   import type { GameController } from '../lib/controller.ts'
   import { actionTile, residentSummary, tileViews } from '../lib/view.ts'
   import ActionPanel from './ActionPanel.svelte'
+  import Logo from './Logo.svelte'
   import Board from './Board.svelte'
   import ForecastPanel from './ForecastPanel.svelte'
   import LegendDialog from './LegendDialog.svelte'
@@ -48,8 +49,13 @@
 <main class="game">
   <header>
     <div class="titles">
-      <h1 tabindex="-1">{t(locale, 'app.title')}</h1>
-      <p class="turn">{turnLine}</p>
+      <h1 class="brand" tabindex="-1"><Logo size={34} /><span>{t(locale, 'app.title')}</span></h1>
+      <div class="turn-row">
+        <p class="turn">{turnLine}</p>
+        {#if game.active}
+          <span class="role-tag">{t(locale, `role.${game.active.role}` as MessageKey)}</span>
+        {/if}
+      </div>
     </div>
     <div class="pills">
       <span class="pill accent">
@@ -90,9 +96,6 @@
 
   <div class="layout">
     <div class="main-col">
-      <p class="role-line">
-        {#if game.active}{t(locale, `role.${game.active.role}` as MessageKey)}{/if}
-      </p>
       <dl class="stats">
         <div>
           <dt>{t(locale, 'game.statRiver')}</dt>
@@ -208,10 +211,24 @@
     gap: 8px;
     min-width: 0;
   }
-  .role-line {
-    margin: 0;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .turn-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  /* papel de quem joga, na mesma linha da vez (no celular; no desktop o painel Equipe mostra) */
+  .role-tag {
     color: var(--muted);
     font-weight: 700;
+  }
+  .role-tag::before {
+    content: '· ';
   }
   .stats {
     margin: 0;
@@ -273,6 +290,10 @@
     h1 {
       font-size: 2.2rem;
     }
+    .brand :global(.logo) {
+      width: 44px;
+      height: 44px;
+    }
     .titles {
       flex-direction: row;
       align-items: baseline;
@@ -293,7 +314,7 @@
     }
     .stats,
     .compact-forecast,
-    .role-line,
+    .role-tag,
     .actions-mobile {
       display: none;
     }
