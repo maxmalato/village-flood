@@ -27,7 +27,9 @@ Copie a tabela para um arquivo `docs/playtests/AAAA-MM-DD.md` (um por dia de tes
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | local | Tranquilo | 3 + 1 | Bombeiro, Médica, Engenheiro, Vizinha (bot) | venceu | — | 18 | 9 | 1 | não |
 
-A tela final já mostra salvos, nível final e turno final.
+**Atalho:** na tela final, o botão **"Copiar resumo"** copia o modo, a dificuldade, os assentos, os papéis, o resultado, o turno final, os salvos, os ilhados, se alguém foi apanhado pela água e a duração, sem nomes, já com a linha pronta para esta tabela (falta só o número da partida). Sem HTTPS (por exemplo, jogando pela rede local), o navegador não deixa copiar sozinho: o texto aparece na tela para copiar à mão.
+
+Observações: no online, a duração e "apanhado pela água" contam só o que aquele aparelho viu; quem entrou no meio da partida vê a duração como "não registrada".
 
 ## Perguntas rápidas depois de cada partida
 
