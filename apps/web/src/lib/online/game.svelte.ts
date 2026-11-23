@@ -8,6 +8,7 @@ import { t, type Locale, type MessageKey } from '../../i18n.ts'
 import type { GameController, Hint, OnlineControls, PingView, SeatStats } from '../controller.ts'
 import { hintDifficulties } from '../game.svelte.ts'
 import { actionTile, eventMessages, seatColors, seatName, type SeatInfo } from '../view.ts'
+import { cueFor, sound } from '../sound.ts'
 import { RoomConnection } from './connection.svelte.ts'
 
 /** Assentos como a tela os mostra; o bot no lugar de quem caiu conta como bot. */
@@ -273,6 +274,10 @@ export class OnlineGame implements GameController {
   private record(events: readonly GameEvent[]) {
     const game = this.room?.game
     if (!game) return
+    // Na mesa, a TV toca os sons de todos; os celulares só avisam "sua vez" (sem eco na sala).
+    const cue = cueFor(events, this.isTable ? null : this.mySeat)
+    const tableInRoom = this.room?.table?.connected && !this.isTable
+    sound.play(tableInRoom && cue !== 'your-turn' ? null : cue)
     if (events.some((e) => e.type === 'turn-started')) {
       this.hint = null
       if (game.activeSeat !== this.mySeat) this.selected = null

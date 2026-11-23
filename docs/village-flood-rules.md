@@ -93,7 +93,8 @@ Regra: a casa só ganha marca quando nenhum morador de origem dela está mais na
 
 ### Legenda
 
-- **Legenda rápida (sempre na tela):** só o essencial: as três quadras (seca, alagada, submersa), "Igreja: abrigo", "Cais: saída" e o botão "Ver legenda completa".
+- **Legenda rápida (sempre na tela):** só o essencial: as três quadras (seca, alagada, submersa), "Igreja: salva os moradores", "Cais: todos voltam no fim" e o botão "Ver legenda completa".
+- **Aviso de meta alcançada:** na jogada em que os salvos chegam à meta (e a partida ainda não acabou), a tela avisa "Meta alcançada! Agora levem todos os voluntários ao cais.".
 - **Legenda completa:** abre pelo botão "Legenda", presente no cabeçalho de todas as telas de jogo (mesa e celular). Reúne todos os símbolos em três grupos: **Quadras** (seca, alagada, submersa e o custo de andar), **Lugares** (igreja, cais, casa com ferido, casa vazia com ✓, casa vazia com ✗) e **Pessoas e avisos** (voluntário e anel dourado, "+1" de carregando, sugestão/ping, número dourado de custo). Começa com a frase "Como ler o mapa: o número no canto de cada quadra é a altura dela." e fecha com "Fechar" ou "Voltar ao jogo".
 - Na mesa, a TV mostra a legenda rápida e a completa em tela cheia em 3 colunas. No celular, a legenda completa ocupa a tela inteira.
 
@@ -228,7 +229,7 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 17. ~~Desfazer depois do Alerta de temporal.~~ **Decidido (20/11/2026):** o alerta é um ponto sem volta e limpa o histórico do turno (seção 7).
 18. ~~Valores fora do `RoleParams`.~~ **Decidido (20/11/2026):** todos os números vão para os dados; só a estrutura das regras fica no código. O schema completo será apresentado para aprovação no início da Etapa 1, antes de implementar.
 19. ~~Tipos sem definição na especificação.~~ **Decidido (20/11/2026):** `SeatId`, `Snapshot`, `Ctx` e `Result` serão propostos e aprovados no início da Etapa 1. O motor continua puro: sem relógio e sem acesso a nada externo.
-20. ~~Three.js no acabamento.~~ **Decidido (20/11/2026):** a v1 é em SVG; o 3D só entra se for avaliado e aprovado na Etapa 6 (ver Registro de decisões).
+20. ~~Three.js no acabamento.~~ **Decidido (20/11/2026):** a v1 é em SVG; o 3D só entra se for avaliado e aprovado na Etapa 6 (ver Registro de decisões). **Avaliado (22/11/2026):** a v1 fica sem 3D; ideia para a v2.
 21. **Ajustes de tela vistos nos mockups.** Situação em 20/11/2026 (Etapa 3): o "+1" com dois sentidos foi resolvido (ferido: caixa de primeiros socorros vermelha com o número; carregando: ícone de pessoa com o número, em fundo escuro); o painel "Equipe" mostra a ordem real dos assentos; a contagem do bot e a sobreposição de textos em "Opinar" ficam para a Etapa 4 (telas online). Situação em 22/11/2026 (Etapa 4): o aviso acompanha o servidor ("perdeu a conexão; se não voltar a tempo, um bot joga" e só depois "um bot está jogando"), sem contagem visível por enquanto; em "Opinar", nada fica colado: a vez aparece no cabeçalho e o painel de sugestões tem título próprio ("Sugerir para …"); o "+1" de quem carrega aparece igual em todas as telas, porque todas usam o mesmo componente. Pontos originais:
     - O "+1" tem dois sentidos: na casa (borda vermelha), número de feridos; no voluntário (fundo escuro), carregando 1 morador. A diferença é quase só de cor e posição. Avaliar um símbolo diferente para ferido, porque os estados não podem depender só de cor.
     - Ordem dos turnos: no painel "Equipe" da mesa a ordem é Bruno, Lia, Carla, Diego; nas telas "Bot assumiu" e "Diego volta", depois do Bruno (T13) vem o Diego (T14) e depois a Lia (T15). O painel deve mostrar a ordem real dos assentos.
@@ -269,6 +270,17 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 ## 16. Registro de decisões
 
 Decisão nova entra no topo, com data e motivo.
+
+### 23/11/2026: igreja e cais mais claros na legenda
+
+- **Decisão:** a legenda completa passa a dizer "Igreja: Leve os moradores até aqui: quem chega fica a salvo (sem gastar ação)." e "Cais: Ponto de partida da equipe. Para vencer, salvem a meta e voltem todos para cá."; a legenda rápida, "Igreja: salva os moradores" e "Cais: todos voltam no fim"; e a tela avisa "Meta alcançada! Agora levem todos os voluntários ao cais." na jogada em que a meta é alcançada. Só textos da interface: as regras não mudam.
+- **Motivo:** "Entregue = salvo" era jargão, e a legenda não dizia que a vitória exige as duas coisas (meta salva e todos no cais). O momento em que a meta é alcançada é quando uma pessoa leiga pode achar que já venceu.
+
+### 22/11/2026: acabamento (Etapa 6): sons, animações e Three.js
+
+- **Decisão:** (1) **sons** curtos sintetizados no navegador (Web Audio), sem arquivos nem dependência nova, **ligados por padrão**, com o botão "Som" no topo de todas as telas, lembrado no aparelho; cada jogada toca só o som mais importante (vitória, derrota, voluntário apanhado, ilhado, entrega, água, chuva, cura, saco de areia, rádio, passo); no online, "sua vez" toca só no aparelho de quem vai jogar; com a mesa na sala, a TV toca os sons e os celulares só avisam "sua vez"; (2) **animações** curtas em CSS (água chegando na quadra, peão entrando, anel pulsando em quem joga, avisos chegando), todas desligadas com "reduzir movimento"; (3) **Three.js fica fora da v1**: o tabuleiro continua em HTML/CSS e o 3D vira ideia para a v2.
+- **Motivo (Three.js):** das três condições do registro de 20/11/2026, a primeira já não se cumpre bem. Uma cena mínima do Three.js 0.187 (renderizador, câmera, luz e uma malha), empacotada e minificada, tem 537 KB (133 KB com gzip), mais de 1,5 vez o jogo inteiro (86 KB com gzip), e exige WebGL, que nos navegadores de Smart TV costuma ser lento ou limitado. A acessibilidade (rótulo por quadra, teclado, leitor de tela) teria de continuar numa camada HTML por cima do canvas, ou seja, duas versões do tabuleiro para manter. O tabuleiro atual já cumpre as metas de desempenho (ver `docs/quality-checklist.md`).
+- **Motivo (sons e animações):** sintetizar os sons garante a originalidade e não pesa no download; um som por jogada evita barulho com os bots jogando seguido.
 
 ### 22/11/2026: modo mesa e PWA (Etapa 5)
 

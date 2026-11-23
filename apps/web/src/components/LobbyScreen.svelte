@@ -164,6 +164,8 @@
     margin: 0;
     padding: 0;
     display: grid;
+    /* coluna que pode encolher: sem isso, a lista de papéis alargava a tela estreita */
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
   }
   .seat {

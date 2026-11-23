@@ -12,6 +12,7 @@
   import { OnlineGame } from './lib/online/game.svelte.ts'
   import { codeFromUrl, savedRoom } from './lib/online/link.ts'
   import { defaultSetup, type LocalSetup } from './lib/setup.ts'
+  import { sound } from './lib/sound.ts'
 
   type Screen = 'home' | 'lobby' | 'game' | 'online-entry' | 'online'
 
@@ -40,6 +41,7 @@
   let setup = $state<LocalSetup>(defaultSetup())
   let game = $state.raw<LocalGame | null>(null)
   let main: HTMLDivElement | undefined = $state()
+  let soundOn = $state(sound.enabled)
 
   // ---- Online ----
   let online = $state.raw<OnlineGame | null>(null)
@@ -155,6 +157,16 @@
 
 <div class="app" bind:this={main}>
   <header class="topbar">
+    <button
+      type="button"
+      class="btn btn-pill"
+      onclick={() => {
+        sound.setEnabled(!soundOn)
+        soundOn = sound.enabled
+      }}
+    >
+      {t(locale, soundOn ? 'app.soundOn' : 'app.soundOff')}
+    </button>
     <label>
       <span class="visually-hidden">{t(locale, 'app.language')}</span>
       <select bind:value={locale} aria-label={t(locale, 'app.language')}>
@@ -224,6 +236,7 @@
   .topbar {
     display: flex;
     justify-content: flex-end;
+    gap: 8px;
     padding: 8px 16px 0;
   }
   .connecting {

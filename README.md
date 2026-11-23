@@ -2,17 +2,42 @@
 
 [English version](README.en.md)
 
-Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas ou bots). Uma chuva forte faz o rio subir: a equipe leva os moradores até a igreja e, no fim, todos os voluntários embarcam no cais. A equipe ganha ou perde junta.
+Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas ou bots). Uma chuva forte faz o rio subir: a equipe leva os moradores até a igreja e, no fim, todos os voluntários embarcam no cais. A equipe ganha ou perde junta. Roda em celular, tablet, desktop e navegador de Smart TV, e pode ser instalado como app (PWA).
 
-Modos previstos: um aparelho, vários aparelhos (sala privada com código) e mesa (tabuleiro na TV ou notebook, celulares como controle). Roda como PWA em celular, tablet, desktop e Smart TV.
+> **Situação:** em desenvolvimento. Etapas 0 a 6 prontas. Falta a Etapa 7: partidas com pessoas para calibrar os números e a publicação na Cloudflare (`v1.0`). Veja o [roadmap](docs/ROADMAP.md).
 
-> **Situação:** em desenvolvimento. Etapas 0 a 5 prontas: dá para jogar **neste aparelho**, **online, cada pessoa no seu aparelho** (sala privada com código de 6 símbolos e QR code) ou em **modo mesa** (tabuleiro na TV ou notebook, celulares como controle), de 2 a 4 voluntários, com bots completando a equipe. O jogo pode ser instalado (PWA) e o modo neste aparelho funciona sem internet. A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado. Os números do jogo foram calibrados com simulação (ver [docs/simulation](docs/simulation/)). Veja o [roadmap](docs/ROADMAP.md).
+## Como jogar
+
+- Cada voluntário tem um papel com uma habilidade: Bombeiro, Barqueira, Engenheiro, Médica, Radialista ou Vizinha.
+- Na sua vez, você tem **3 ações**: andar, pegar morador, curar, pôr saco de areia e as ações dos papéis. Dá para desfazer até encerrar o turno.
+- Ao encerrar o turno, cai uma carta de chuva e o rio sobe. Quadras baixas alagam e depois submergem; moradores que ficam na água se ferem e acabam ilhados.
+- **Vitória:** salvar a meta de moradores (levando-os à igreja) e reunir todos os voluntários no cais. **Derrota:** moradores ilhados demais ou o rio chegando ao topo.
+- Três dificuldades: Tranquilo (com o botão "Dica"), Normal e Tempestade. A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado.
+
+Regras completas em [docs/village-flood-rules.md](docs/village-flood-rules.md).
+
+## Modos
+
+- **Neste aparelho:** todos em volta da mesma tela. Bots completam a equipe. Funciona sem internet depois do primeiro acesso.
+- **Online:** "Criar sala online" gera um código de 6 símbolos, um link (`?sala=CODIGO`) e um QR code; os outros usam "Entrar com código" ou abrem o link. Fora da sua vez, você sugere jogadas (Ir para cá, Cuidado, Pegar daqui). Se alguém cair, um bot joga no lugar até a pessoa voltar; o aparelho reconecta sozinho.
+- **Mesa:** "Abrir mesa (TV ou notebook)" mostra o tabuleiro grande, e cada pessoa joga pelo celular (entra pelo QR code). Quem entra primeiro organiza a sala. A legenda completa abre na TV pelo controle remoto ou pelo botão "Mostrar legenda na TV" do celular.
+
+## Acessibilidade
+
+- Estados da água sem depender só de cor (número de altura, ondas e hachura); marcas ✓ e ✗ nas casas; sugestões com forma própria.
+- Alvos de toque de pelo menos 44 px, contraste mínimo de 4,5:1 nos temas claro e escuro, foco visível, partida inteira pelo teclado, rótulo em cada quadra e eventos anunciados para leitores de tela.
+- Animações curtas, desligadas quando o aparelho pede "reduzir movimento". Sons curtos, com o botão "Som" no topo de todas as telas.
+- Português (Brasil) e inglês.
+
+Checklist e medições em [docs/quality-checklist.md](docs/quality-checklist.md).
 
 ## Documentação
 
-- [Regras](docs/village-flood-rules.md), com o registro de decisões no fim
+- [Regras](docs/village-flood-rules.md), com os pontos em aberto e o registro de decisões no fim
 - [Especificação técnica](docs/village-flood-tech-spec.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Checklist de acessibilidade e desempenho](docs/quality-checklist.md)
+- [Relatórios de simulação](docs/simulation/)
 - [Mockups](docs/mockups/)
 
 ## Estrutura
@@ -22,12 +47,12 @@ Monorepo pnpm com arquitetura limpa: as dependências apontam para dentro, e o m
 | Pasta               | Conteúdo                                                                                         |
 | ------------------- | ------------------------------------------------------------------------------------------------ |
 | `packages/engine`   | Motor de regras em TypeScript puro, sem I/O. Os números do jogo ficam em `packages/engine/data/` |
-| `packages/protocol` | Tipos das mensagens entre cliente e servidor                                                     |
-| `packages/kit`      | Salas, assentos, reconexão e modo mesa, agnóstico de jogo                                        |
-| `packages/bots`     | Bots (`botMove` e `suggest`)                                                                     |
+| `packages/protocol` | Mensagens e ações entre cliente e servidor, validadas com Zod                                    |
+| `packages/kit`      | Salas, assentos, reconexão, pings e modo mesa, agnóstico de jogo                                 |
+| `packages/bots`     | Bots (`botMove` e `suggest`), só com informação pública                                          |
 | `packages/sim`      | Simulação em lote com bots                                                                       |
 | `apps/web`          | Interface (Svelte 5 + Vite, PWA)                                                                 |
-| `apps/server`       | Servidor de salas (Cloudflare Worker + Durable Object)                                           |
+| `apps/server`       | Servidor de salas (Cloudflare Worker + um Durable Object por sala)                               |
 
 ## Requisitos
 
@@ -57,28 +82,37 @@ Antes do primeiro `pnpm e2e`, instale o navegador do Playwright:
 pnpm --filter @village-flood/web exec playwright install chromium
 ```
 
-Para jogar no navegador (modo de desenvolvimento), rode o comando abaixo e abra o endereço que ele mostrar:
+## Jogar em casa
+
+Para desenvolver (a página recarrega a cada mudança), rode a interface e, para online e mesa, o servidor de salas num segundo terminal. O site encaminha `/api` para o servidor (porta 8787):
 
 ```bash
 pnpm --filter @village-flood/web dev
 ```
 
-Para jogar online em casa (modo de desenvolvimento), rode também o servidor de salas, num segundo terminal. O site encaminha `/api` para ele (porta 8787):
-
 ```bash
 pnpm --filter @village-flood/server dev
 ```
 
-Para o modo mesa, abra o jogo na TV ou no notebook e escolha "Abrir mesa (TV ou notebook)": a tela mostra o código e o QR code, e quem entra primeiro pelo celular organiza a sala. A legenda completa abre na TV pelo controle remoto ou pelo botão "Mostrar legenda na TV" do celular.
+Para testar com vários aparelhos na mesma rede Wi-Fi, gere o site e suba o servidor aberto para a rede. Ele serve o site e as salas na mesma porta:
 
-Na tela inicial, "Criar sala online" gera o código e o link (`?sala=CODIGO`); quem recebe usa "Entrar com código" ou abre o link. Se a conexão cair, o aparelho volta sozinho para o mesmo assento.
+```bash
+pnpm --filter @village-flood/web build
+```
 
-No lobby local, escolha a dificuldade, os papéis e quem é bot. Na partida, toque numa quadra para ver as ações; no Tranquilo, "Dica" mostra a jogada que o bot faria. Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
+```bash
+pnpm --filter @village-flood/server exec wrangler dev --ip 0.0.0.0 --port 8787
+```
+
+Depois abra `http://IP-DO-COMPUTADOR:8787` em todos os aparelhos. Libere o acesso só para rede privada no firewall e feche o servidor ao terminar. Pela rede local, sem HTTPS, a instalação como app e o botão "Copiar link" não funcionam; o resto, sim.
+
+Para testes, `?botDelay=0&seed=42` na URL faz os bots jogarem na hora e fixa a semente.
 
 ## Segurança e privacidade
 
+- O jogo guarda só apelidos: sem contas, analytics, rastreamento ou fontes externas. O QR code é gerado no próprio aparelho.
+- O servidor é a única fonte da verdade e valida toda ação. O token de cada assento fica guardado só como hash (SHA-256); cada conexão tem limite de 40 mensagens por 10 s; a sala expira depois de 12 h sem atividade.
 - Nenhum segredo no repositório. O arquivo `.env.example` tem só valores fictícios.
-- O jogo guarda só apelidos: sem contas, analytics ou rastreamento.
 - O pnpm só instala versões publicadas há pelo menos 1 dia e só deixa o `esbuild` e o `workerd` rodarem scripts de instalação. O CI roda com permissão só de leitura e usa actions fixadas pelo SHA do commit.
 
 ## Contribuição
@@ -87,4 +121,4 @@ A `main` é a versão publicada. Cada tarefa é feita numa branch `develop/nome-
 
 ## Originalidade
 
-Nome, arte, textos e sons são originais.
+Nome, arte, textos e sons são originais. Os sons são sintetizados no navegador, sem arquivos de áudio.

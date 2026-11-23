@@ -129,6 +129,25 @@
     color: var(--ink);
   }
 
+  /* Animações curtas: a água chegando e o peão entrando na quadra. Com "reduzir movimento"
+     no aparelho, a regra global em app.css desliga todas. */
+  .tile:global(.water-flooded) {
+    animation: flood-in 0.7s ease-out;
+  }
+  .tile:global(.water-submerged) {
+    animation: submerge-in 0.7s ease-out;
+  }
+  @keyframes flood-in {
+    from {
+      filter: brightness(1.4) saturate(1.3);
+    }
+  }
+  @keyframes submerge-in {
+    from {
+      filter: brightness(1.5) saturate(1.4);
+    }
+  }
+
   .reachable {
     box-shadow: inset 0 0 0 3px var(--accent);
   }
@@ -245,10 +264,30 @@
     line-height: 18px;
     text-align: center;
   }
+  .pawn {
+    animation: pawn-in 0.25s ease-out;
+  }
   .pawn.active {
     border: 3px solid var(--accent);
     line-height: 16px;
     z-index: 1;
+    /* anel pulsando devagar em quem joga (ajuda a achar o peão na TV) */
+    animation:
+      pawn-in 0.25s ease-out,
+      active-pulse 1.8s ease-in-out 0.25s infinite;
+  }
+  @keyframes pawn-in {
+    from {
+      transform: scale(0.6);
+      opacity: 0.4;
+    }
+  }
+  @keyframes active-pulse {
+    50% {
+      box-shadow:
+        0 0 0 1.5px var(--cream),
+        0 0 0 5px rgba(242, 184, 75, 0.55);
+    }
   }
   /* 3 ou 4 voluntários na mesma quadra: peões menores e mais sobrepostos, sem sair da quadra. */
   .many .pawn {
@@ -368,6 +407,58 @@
       height: 22px;
       line-height: 22px;
       font-size: 0.875rem;
+    }
+  }
+
+  /* Telas grandes: as quadras crescem, e os peões, ícones e números crescem junto. */
+  @media (min-width: 1400px) and (min-height: 760px) {
+    .height {
+      min-width: 24px;
+      height: 24px;
+      line-height: 24px;
+      font-size: 1rem;
+    }
+    .icon {
+      width: 40px;
+      height: 40px;
+    }
+    .icon :global(svg) {
+      width: 26px;
+      height: 26px;
+    }
+    .pawn {
+      width: 38px;
+      height: 38px;
+      line-height: 34px;
+      font-size: 1.2rem;
+    }
+    .pawn.active {
+      line-height: 32px;
+    }
+    .many .pawn {
+      width: 32px;
+      height: 32px;
+      line-height: 29px;
+      font-size: 1rem;
+    }
+    .many .pawn.active {
+      line-height: 28px;
+    }
+    .badge,
+    .mark,
+    .cost {
+      height: 26px;
+      min-width: 26px;
+      line-height: 22px;
+      font-size: 1rem;
+    }
+    .cost {
+      line-height: 26px;
+    }
+    .ping {
+      height: 22px;
+      font-size: 0.85rem;
+      line-height: 16px;
     }
   }
 </style>

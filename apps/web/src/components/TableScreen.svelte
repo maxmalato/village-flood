@@ -328,6 +328,7 @@
     font-size: 1.1rem;
   }
   .alert {
+    animation: notice-in 0.3s ease-out;
     margin: 0;
     padding: 10px 14px;
     border-radius: 14px;
@@ -336,6 +337,7 @@
     font-weight: 800;
   }
   .banner {
+    animation: notice-in 0.3s ease-out;
     margin: 0 0 6px;
     padding: 8px 14px;
     border-radius: 14px;

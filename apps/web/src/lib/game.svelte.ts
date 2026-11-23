@@ -13,6 +13,7 @@ import {
 import type { Locale } from '../i18n.ts'
 import type { GameController, Hint, SeatStats } from './controller.ts'
 import type { LocalSetup } from './setup.ts'
+import { cueFor, sound } from './sound.ts'
 import { actionTile, eventMessages, seatColors, type SeatInfo } from './view.ts'
 
 /**
@@ -132,6 +133,7 @@ export class LocalGame implements GameController {
   }
 
   private record(events: readonly GameEvent[]) {
+    sound.play(cueFor(events))
     const { messages, alerts } = eventMessages(events, this.seats, this.state, this.locale)
     this.messages = messages
     if (alerts.length > 0) this.alert = alerts.join(' ')
