@@ -53,3 +53,41 @@ test('modo mesa só aparece em tablet e telas maiores', async ({ browser }, info
     await context.close()
   }
 })
+
+test.describe('como jogar', () => {
+  test.use({ locale: 'pt-BR' })
+
+  test('"Como jogar" abre na tela inicial, rola por dentro e fecha', async ({ page }) => {
+    await page.goto('/')
+    const open = page.getByRole('button', { name: 'Como jogar' })
+    await open.click()
+    const dialog = page.getByRole('dialog', { name: 'Como jogar' })
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: 'Vitória e derrota' })).toBeVisible()
+
+    // a janela cabe na tela; o texto rola dentro dela, com o cabeçalho fixo
+    const viewport = page.viewportSize()
+    const box = await dialog.boundingBox()
+    expect(box && viewport && box.height <= viewport.height).toBe(true)
+    const region = dialog.getByRole('region', { name: 'Regras resumidas' })
+    const scrolls = await region.evaluate((el) => el.scrollHeight > el.clientHeight)
+    if (scrolls) {
+      await region.evaluate((el) => el.scrollTo(0, el.scrollHeight))
+      await expect(dialog.getByRole('button', { name: 'Fechar' })).toBeInViewport()
+    }
+
+    for (const colorScheme of ['dark', 'light'] as const) {
+      await page.emulateMedia({ colorScheme })
+      const results = await new AxeBuilder({ page }).analyze()
+      expect(results.violations, colorScheme).toEqual([])
+    }
+
+    // Esc fecha e devolve o foco ao botão que abriu; o botão final também fecha
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(open).toBeFocused()
+    await open.click()
+    await dialog.getByRole('button', { name: 'Entendi, vamos jogar' }).click()
+    await expect(dialog).toBeHidden()
+  })
+})

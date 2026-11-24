@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatCode } from '@village-flood/kit'
   import { errorText, t, type Locale } from '../i18n.ts'
+  import HowToDialog from './HowToDialog.svelte'
   import Logo from './Logo.svelte'
 
   let {
@@ -26,11 +27,15 @@
   } = $props()
 
   let online = $state(navigator.onLine)
+  let howToOpen = $state(false)
 </script>
 
 <main class="home">
   <h1 class="brand" tabindex="-1"><Logo size={60} /><span>{t(locale, 'app.title')}</span></h1>
   <p class="tagline">{t(locale, 'app.tagline')}</p>
+  <button type="button" class="btn btn-pill howto" onclick={() => (howToOpen = true)}>
+    {t(locale, 'howto.open')}
+  </button>
   {#if resumeCode}
     <button type="button" class="btn-primary" onclick={onresume}>
       {t(locale, 'home.resume', { code: formatCode(resumeCode) })}
@@ -58,6 +63,8 @@
   </div>
   {#if !online}<p class="soon" role="status">{t(locale, 'home.offline')}</p>{/if}
 </main>
+
+<HowToDialog {locale} open={howToOpen} onclose={() => (howToOpen = false)} />
 
 <svelte:window onoffline={() => (online = false)} ononline={() => (online = true)} />
 
@@ -87,6 +94,9 @@
     margin: 0;
     font-size: 1.15rem;
     font-weight: 700;
+  }
+  .howto {
+    align-self: flex-start;
   }
   .card {
     background: var(--panel);
