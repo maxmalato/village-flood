@@ -12,9 +12,30 @@ const room: VillageRoomView = {
   status: 'playing',
   host: 'seat-1',
   seats: [
-    { seat: 'seat-1', name: 'Ana', kind: 'human', profile: 'firefighter', presence: 'connected' },
-    { seat: 'seat-2', name: 'Bruno', kind: 'human', profile: 'medic', presence: 'bot' },
-    { seat: 'seat-3', name: 'Carla', kind: 'bot', profile: 'engineer', presence: 'connected' },
+    {
+      seat: 'seat-1',
+      name: 'Ana',
+      kind: 'human',
+      profile: 'firefighter',
+      presence: 'connected',
+      takeoverInMs: null,
+    },
+    {
+      seat: 'seat-2',
+      name: 'Bruno',
+      kind: 'human',
+      profile: 'medic',
+      presence: 'bot',
+      takeoverInMs: null,
+    },
+    {
+      seat: 'seat-3',
+      name: 'Carla',
+      kind: 'bot',
+      profile: 'engineer',
+      presence: 'connected',
+      takeoverInMs: null,
+    },
   ],
   config: { difficulty: 'easy' },
   game: null,
@@ -92,5 +113,44 @@ describe('iniciais', () => {
   it('bots da sala online têm iniciais diferentes', async () => {
     const { initialOf } = await import('../view.ts')
     expect(['Bot 1', 'Bot 2', 'Ana', ' bruno'].map(initialOf)).toEqual(['B1', 'B2', 'A', 'B'])
+  })
+})
+
+describe('enquanto você estava fora', () => {
+  it('resume o que mudou desde o último retrato da mesma sala', async () => {
+    const { awaySummary, snapshotOf } = await import('./away.ts')
+    const seats = seatsOf(room, 'seat-1')
+    const start = newGame({
+      difficulty: 'easy',
+      seed: 3,
+      seats: seats.map((s) => ({ seat: s.seat, role: s.role })),
+      variation: { scenario: 0, mirrored: false },
+    })
+    const before = snapshotOf('K7P4QX', start)
+    const later = {
+      ...start,
+      turn: 5,
+      riverLevel: 4,
+      residents: start.residents.map((r, i) =>
+        i < 2
+          ? { ...r, status: 'safe' as const }
+          : i === 2
+            ? { ...r, status: 'stranded' as const }
+            : r,
+      ),
+    }
+    expect(awaySummary(before, 'K7P4QX', later)).toEqual({
+      fromTurn: 1,
+      toTurn: 5,
+      levelFrom: 0,
+      levelTo: 4,
+      saved: 2,
+      stranded: 1,
+    })
+    // mesmo turno, outra sala, partida nova ou sem retrato: nada a mostrar
+    expect(awaySummary(before, 'K7P4QX', start)).toBeNull()
+    expect(awaySummary(before, 'AAAAAA', later)).toBeNull()
+    expect(awaySummary({ ...before, turn: 9 }, 'K7P4QX', later)).toBeNull()
+    expect(awaySummary(null, 'K7P4QX', later)).toBeNull()
   })
 })

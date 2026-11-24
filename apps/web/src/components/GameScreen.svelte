@@ -4,6 +4,8 @@
   import type { GameController } from '../lib/controller.ts'
   import { actionTile, residentSummary, tileViews } from '../lib/view.ts'
   import ActionPanel from './ActionPanel.svelte'
+  import AwayCountdown from './AwayCountdown.svelte'
+  import AwaySummaryCard from './AwaySummaryCard.svelte'
   import Logo from './Logo.svelte'
   import Board from './Board.svelte'
   import ForecastPanel from './ForecastPanel.svelte'
@@ -92,6 +94,15 @@
         <p class="banner">{errorText(locale, game.online.error, { n: MAX_PINGS_PER_TURN })}</p>
       {/if}
     </div>
+    <AwayCountdown seats={game.online.awaySeats} {locale} />
+    {#if game.online.awaySummary}
+      {@const online = game.online}
+      <AwaySummaryCard
+        summary={game.online.awaySummary}
+        {locale}
+        ondismiss={() => online.dismissAway()}
+      />
+    {/if}
   {/if}
 
   <div class="layout">
