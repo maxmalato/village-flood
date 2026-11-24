@@ -8,6 +8,8 @@
   --muted: #c9d8e3;
   --accent: #f2b84b;
   --accent-text: #f2b84b;
+  /* contorno dourado de destaque (ex.: botão Como jogar) */
+  --accent-line: #f2b84b;
   --border: #8fa6bb;
   --border-muted: #5b7388;
   --card-bg: #f3ebd8;
@@ -45,6 +47,7 @@
     --muted: #34495c;
     --accent: #f2b84b;
     --accent-text: #7a4b00;
+    --accent-line: #a8700a;
     --border: #5b7388;
     --border-muted: #8fa6bb;
     --card-bg: #16364a;

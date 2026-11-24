@@ -2,6 +2,7 @@
   import EndScreen from './components/EndScreen.svelte'
   import GameScreen from './components/GameScreen.svelte'
   import HomeScreen from './components/HomeScreen.svelte'
+  import HowToDialog from './components/HowToDialog.svelte'
   import LobbyScreen from './components/LobbyScreen.svelte'
   import OnlineEntry from './components/OnlineEntry.svelte'
   import OnlineLobby from './components/OnlineLobby.svelte'
@@ -42,6 +43,7 @@
   let game = $state.raw<LocalGame | null>(null)
   let main: HTMLDivElement | undefined = $state()
   let soundOn = $state(sound.enabled)
+  let howToOpen = $state(false)
 
   // ---- Online ----
   let online = $state.raw<OnlineGame | null>(null)
@@ -189,6 +191,12 @@
         {/if}
       </svg>
     </button>
+    <!-- "Como jogar": "?" no celular e o nome a partir do tablet; o nome acessível é sempre o
+         texto completo. Contorno dourado fixo para chamar a atenção de quem chega. -->
+    <button type="button" class="btn btn-pill howto" onclick={() => (howToOpen = true)}>
+      <span class="howto-icon" aria-hidden="true">?</span>
+      <span class="howto-label">{t(locale, 'howto.open')}</span>
+    </button>
     <label>
       <span class="visually-hidden">{t(locale, 'app.language')}</span>
       <select bind:value={locale} aria-label={t(locale, 'app.language')}>
@@ -198,6 +206,8 @@
       </select>
     </label>
   </header>
+
+  <HowToDialog {locale} open={howToOpen} onclose={() => (howToOpen = false)} />
 
   {#if screen === 'home'}
     <HomeScreen
@@ -274,6 +284,40 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  .howto {
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-line) 25%, transparent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .howto-icon {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  /* celular: só o "?" num botão redondo de 44 px; o nome fica para leitores de tela */
+  @media (max-width: 767px) {
+    .howto {
+      width: 44px;
+      padding: 0;
+    }
+    .howto-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+  /* tablet e maiores: o nome por extenso */
+  @media (min-width: 768px) {
+    .howto-icon {
+      display: none;
+    }
   }
   .app :global(h1) {
     outline: none;

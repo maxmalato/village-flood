@@ -47,7 +47,7 @@ const ptBR = {
   'roleInfo.firefighter': 'Anda em quadra alagada por 1 ação.',
   'roleInfo.boat-pilot':
     'Entra em quadra submersa e carrega 2 moradores (+1 ação por passo com 2). A água não a apanha.',
-  'roleInfo.engineer': 'Põe saco de areia por 1 ação, na quadra dela ou numa vizinha.',
+  'roleInfo.engineer': 'Põe saco de areia por 1 ação, na quadra dele ou numa vizinha.',
   'roleInfo.medic': 'Cura feridos ao lado sem gastar ação e pega ferido por 1.',
   'roleInfo.radio-host': 'Mostra a previsão da chuva e, por 1 ação, dá 1 ação extra ao próximo.',
   'roleInfo.neighbor': 'Anda também na diagonal.',
@@ -255,6 +255,46 @@ const ptBR = {
   'end.again': 'Jogar de novo',
   'end.home': 'Voltar ao início',
 
+  'howto.open': 'Como jogar',
+  'howto.title': 'Como jogar',
+  'howto.intro': 'Jogo cooperativo: todos jogam juntos contra a enchente.',
+  'howto.close': 'Fechar',
+  'howto.ok': 'Entendi, vamos jogar',
+  'howto.region': 'Regras resumidas',
+  'howto.goalTitle': 'Objetivo',
+  'howto.goal1':
+    'A chuva faz o rio subir. Levem os moradores das casas até a igreja: quem chega lá fica a salvo.',
+  'howto.goal2': 'A meta é salvar de {min} a {max} moradores, conforme a dificuldade.',
+  'howto.goal3': 'Depois, todos os voluntários voltam para o cais. A equipe ganha ou perde junta.',
+  'howto.turnTitle': 'Sua vez',
+  'howto.turn1': 'Você tem {n} ações. Toque numa quadra para ver o que dá para fazer nela.',
+  'howto.turn2':
+    'Andar para uma quadra vizinha custa {dry} ação na seca e {flooded} na alagada. Na submersa, só a Barqueira entra.',
+  'howto.turn3':
+    'Pegar um morador custa {healthy} ação ({injured} se ele estiver ferido). Ao entrar na igreja, quem você carrega é entregue sozinho, sem gastar ação.',
+  'howto.turn4': 'Errou? Use "Desfazer" até encerrar o turno.',
+  'howto.turn5': 'Quando terminar, toque em "Encerrar". As ações que sobrarem se perdem.',
+  'howto.waterTitle': 'A chuva e o rio',
+  'howto.water1': 'Ao fim de cada turno cai uma carta de chuva e o nível do rio sobe.',
+  'howto.water2':
+    'O número no canto de cada quadra é a altura dela: quanto mais baixa, mais cedo alaga e depois fica submersa. A água vem do rio, à esquerda, e avança pelas quadras vizinhas.',
+  'howto.water3':
+    'Quando a casa alaga, os moradores se ferem; quando fica submersa, eles ficam ilhados e não podem mais ser salvos. Morador carregado está protegido da água.',
+  'howto.water4':
+    'Um saco de areia ({n} ações; o Engenheiro paga menos) faz uma quadra aguentar a água por mais tempo.',
+  'howto.water5':
+    'Não termine o turno numa quadra que pode ficar submersa: o voluntário é levado ao cais, perde o próximo turno e os moradores que carregava ficam ilhados (a Barqueira não corre esse risco).',
+  'howto.rolesTitle': 'Papéis',
+  'howto.roles1': 'Cada voluntário tem um papel diferente, com uma habilidade:',
+  'howto.endTitle': 'Vitória e derrota',
+  'howto.end1': 'Vitória: a meta de moradores salvos e todos os voluntários no cais.',
+  'howto.end2': 'Derrota: {n} moradores ilhados ou o rio chegando ao nível {max}.',
+  'howto.end3': 'Na derrota, a tela final mostra uma dica para a próxima partida.',
+  'howto.tipsTitle': 'Dicas',
+  'howto.tips1': 'Comecem pelas casas mais baixas, que alagam primeiro.',
+  'howto.tips2': 'Na partida, o botão "Legenda" mostra o que cada símbolo significa.',
+  'howto.tips3': 'No Tranquilo, o botão "Dica" mostra a jogada que o bot faria.',
+
   'summary.copy': 'Copiar resumo',
   'summary.copied': 'Resumo copiado. Cole no roteiro das partidas de teste.',
   'summary.copyFailed': 'Não deu para copiar automaticamente. Selecione o texto abaixo e copie.',
@@ -438,7 +478,7 @@ const en: Record<MessageKey, string> = {
   'roleInfo.firefighter': 'Walks into flooded tiles for 1 action.',
   'roleInfo.boat-pilot':
     'Enters submerged tiles and carries 2 residents (+1 action per step with 2). The water never sweeps her.',
-  'roleInfo.engineer': 'Places a sandbag for 1 action, on her tile or a neighboring one.',
+  'roleInfo.engineer': 'Places a sandbag for 1 action, on their own tile or a neighboring one.',
   'roleInfo.medic': 'Heals nearby injured residents for free and picks up injured ones for 1.',
   'roleInfo.radio-host':
     'Shows the rain forecast and, for 1 action, gives 1 extra action to the next.',
@@ -645,6 +685,46 @@ const en: Record<MessageKey, string> = {
   'end.mostCallsText': '{name} made {n} call(s).',
   'end.again': 'Play again',
   'end.home': 'Back to the start',
+
+  'howto.open': 'How to play',
+  'howto.title': 'How to play',
+  'howto.intro': 'A co-op game: everyone plays together against the flood.',
+  'howto.close': 'Close',
+  'howto.ok': 'Got it, let’s play',
+  'howto.region': 'Rules in short',
+  'howto.goalTitle': 'Goal',
+  'howto.goal1':
+    'The rain makes the river rise. Bring the residents from their houses to the church: whoever gets there is safe.',
+  'howto.goal2': 'The goal is to save {min} to {max} residents, depending on the difficulty.',
+  'howto.goal3': 'Then every volunteer goes back to the dock. The team wins or loses together.',
+  'howto.turnTitle': 'Your turn',
+  'howto.turn1': 'You have {n} actions. Tap a tile to see what you can do there.',
+  'howto.turn2':
+    'Moving to a neighboring tile costs {dry} action on a dry tile and {flooded} on a flooded one. Only the Boat pilot enters an underwater tile.',
+  'howto.turn3':
+    'Picking up a resident costs {healthy} action ({injured} if injured). When you enter the church, whoever you carry is dropped off on their own, at no cost.',
+  'howto.turn4': 'Made a mistake? Use "Undo" until you end the turn.',
+  'howto.turn5': 'When you are done, tap "End". Leftover actions are lost.',
+  'howto.waterTitle': 'The rain and the river',
+  'howto.water1': 'At the end of each turn a rain card is drawn and the river level rises.',
+  'howto.water2':
+    'The number in the corner of each tile is its height: the lower it is, the sooner it floods and then goes underwater. The water comes from the river on the left and spreads through neighboring tiles.',
+  'howto.water3':
+    'When a house floods, its residents get injured; when it goes underwater, they are stranded and can no longer be saved. Residents being carried are safe from the water.',
+  'howto.water4':
+    'A sandbag ({n} actions; the Engineer pays less) makes a tile hold back the water for longer.',
+  'howto.water5':
+    'Do not end your turn on a tile that may go underwater: the volunteer is taken to the dock, loses the next turn and the residents they carried are stranded (the Boat pilot is not at risk).',
+  'howto.rolesTitle': 'Roles',
+  'howto.roles1': 'Each volunteer has a different role, with an ability:',
+  'howto.endTitle': 'Victory and defeat',
+  'howto.end1': 'Victory: the goal of saved residents and every volunteer at the dock.',
+  'howto.end2': 'Defeat: {n} stranded residents or the river reaching level {max}.',
+  'howto.end3': 'On a defeat, the final screen shows a tip for the next game.',
+  'howto.tipsTitle': 'Tips',
+  'howto.tips1': 'Start with the lowest houses, which flood first.',
+  'howto.tips2': 'During the game, the "Legend" button shows what each symbol means.',
+  'howto.tips3': 'On Calm, the "Hint" button shows the move the bot would make.',
 
   'summary.copy': 'Copy summary',
   'summary.copied': 'Summary copied. Paste it into the playtest guide.',

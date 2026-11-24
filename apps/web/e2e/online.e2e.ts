@@ -21,7 +21,7 @@ async function createRoom(browser: Browser, name: string) {
   await page.getByRole('button', { name: 'Criar sala online' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Criar sala online')
   await page.getByLabel('Seu apelido').fill(name)
-  await page.getByText('Tranquilo').click()
+  await page.getByRole('radio', { name: /^Tranquilo/ }).check()
   await page.getByRole('button', { name: 'Criar sala', exact: true }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sala online')
   const code = (await page.locator('.code').innerText()).replace('·', '')

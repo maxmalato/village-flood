@@ -14,7 +14,7 @@ A **cooperative** board game for the browser, for 2 to 4 seats (people or bots).
 - **Victory:** save the goal number of residents (by bringing them to the church) and gather every volunteer at the dock. **Defeat:** too many stranded residents, or the river reaching the top.
 - Three difficulties: Calm (with the "Hint" button), Normal and Storm. Each game draws which houses get the extra residents and whether the map is mirrored.
 
-Full rules in [docs/village-flood-rules.md](docs/village-flood-rules.md) (in Portuguese).
+In the game, the **"How to play"** button at the top of every screen (a "?" on phones) shows this summary. Full rules in [docs/village-flood-rules.md](docs/village-flood-rules.md) (in Portuguese).
 
 ## Modes
 

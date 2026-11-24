@@ -272,6 +272,11 @@ Registrada para depois que a v1 estiver finalizada. Ideia: cada carta de chuva t
 
 Decisão nova entra no topo, com data e motivo.
 
+### 24/11/2026: tela "Como jogar"
+
+- **Decisão:** o botão "Como jogar" fica no topo de todas as telas, entre o som e o idioma: um "?" redondo no celular e o nome por extenso a partir do tablet (768 px), sempre com um contorno dourado leve e fixo. Abre as regras resumidas em seções (objetivo, sua vez, a chuva e o rio, papéis, vitória e derrota, dicas), com rolagem dentro da janela; os números vêm dos dados do jogo.
+- **Motivo:** pedido do dono do projeto: a ajuda fica a um toque em qualquer momento, inclusive durante a partida, sem ocupar espaço na tela inicial; o contorno dourado chama a atenção de quem chega. No tema claro, o contorno usa um dourado mais escuro, para manter contraste de pelo menos 3:1.
+
 ### 24/11/2026: logo no título e revisão leve de interface
 
 - **Decisão:** (1) a logo (`assets/logo/logo-icon.svg`) aparece ao lado de "Enchente na Vila" na tela inicial, na partida e na TV da mesa, como imagem decorativa (o nome continua em texto no título); (2) o botão de som vira um ícone de alto-falante com nome fixo "Som" e estado ligado/desligado (`aria-pressed`), e o seletor de idioma mostra "Português" e "English"; (3) no celular, o papel de quem joga fica na mesma linha da vez ("Turno 1 · Sua vez, Ana · Bombeiro"); (4) no lobby local, "Remover assento" fica menor e à direita; (5) na tela final, "Voltar ao início" e "Copiar resumo" ficam lado a lado, abaixo de "Jogar de novo"; (6) o título da tela inicial acompanha a largura e cabe numa linha até em 320 px.

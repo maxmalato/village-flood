@@ -12,7 +12,7 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck",
-    "build": "pnpm -r build",
+    "build": "pnpm --filter @village-flood/web build && pnpm --filter @village-flood/server build",
     "e2e": "pnpm --filter @village-flood/web e2e",
     "simulate": "pnpm --filter @village-flood/sim simulate",
     "cf:deploy": "pnpm build && pnpm --filter @village-flood/server exec wrangler deploy"
