@@ -14,7 +14,7 @@ Jogo de tabuleiro **cooperativo** para o navegador, de 2 a 4 assentos (pessoas o
 - **Vitória:** salvar a meta de moradores (levando-os à igreja) e reunir todos os voluntários no cais. **Derrota:** moradores ilhados demais ou o rio chegando ao topo.
 - Três dificuldades: Tranquilo (com o botão "Dica"), Normal e Tempestade. A cada partida, o jogo sorteia em quais casas ficam os moradores extras e se o mapa aparece espelhado.
 
-No jogo, o botão **"Como jogar"** da tela inicial mostra este resumo. Regras completas em [docs/village-flood-rules.md](docs/village-flood-rules.md).
+No jogo, o botão **"Como jogar"** no topo de todas as telas (um "?" no celular) mostra este resumo. Regras completas em [docs/village-flood-rules.md](docs/village-flood-rules.md).
 
 ## Modos
 
