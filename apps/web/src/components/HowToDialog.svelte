@@ -17,38 +17,43 @@
 </script>
 
 <dialog bind:this={dialog} class="howto" aria-labelledby="howto-title" {onclose}>
-  <div class="head">
-    <div>
-      <h2 id="howto-title">{t(locale, 'howto.title')}</h2>
-      <p class="intro">{t(locale, 'howto.intro')}</p>
+  <!-- conteúdo só existe com a janela aberta (o diálogo fica no topo de todas as telas) -->
+  {#if open}
+    <div class="head">
+      <div>
+        <h2 id="howto-title">{t(locale, 'howto.title')}</h2>
+        <p class="intro">{t(locale, 'howto.intro')}</p>
+      </div>
+      <button type="button" class="btn btn-pill close" onclick={onclose}>
+        {t(locale, 'howto.close')}
+      </button>
     </div>
-    <button type="button" class="btn btn-pill close" onclick={onclose}>
-      {t(locale, 'howto.close')}
-    </button>
-  </div>
 
-  <!-- Região rolável: entra na ordem do Tab para rolar pelo teclado (setas). -->
-  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <div class="body" tabindex="0" role="region" aria-label={t(locale, 'howto.region')}>
-    {#each sections as section (section.title)}
-      <section class="card">
-        <h3>{t(locale, section.title)}</h3>
-        <ul>
-          {#each section.items as item (item.key)}
-            <li>
-              {#if item.role}
-                <strong>{t(locale, item.role.name)}:</strong>
-                {t(locale, item.role.info)}
-              {:else}
-                {t(locale, item.key, item.params)}
-              {/if}
-            </li>
-          {/each}
-        </ul>
-      </section>
-    {/each}
-    <button type="button" class="btn-primary ok" onclick={onclose}>{t(locale, 'howto.ok')}</button>
-  </div>
+    <!-- Região rolável: entra na ordem do Tab para rolar pelo teclado (setas). -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <div class="body" tabindex="0" role="region" aria-label={t(locale, 'howto.region')}>
+      {#each sections as section (section.title)}
+        <section class="card">
+          <h3>{t(locale, section.title)}</h3>
+          <ul>
+            {#each section.items as item (item.key)}
+              <li>
+                {#if item.role}
+                  <strong>{t(locale, item.role.name)}:</strong>
+                  {t(locale, item.role.info)}
+                {:else}
+                  {t(locale, item.key, item.params)}
+                {/if}
+              </li>
+            {/each}
+          </ul>
+        </section>
+      {/each}
+      <button type="button" class="btn-primary ok" onclick={onclose}>
+        {t(locale, 'howto.ok')}
+      </button>
+    </div>
+  {/if}
 </dialog>
 
 <style>

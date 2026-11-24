@@ -90,4 +90,41 @@ test.describe('como jogar', () => {
     await dialog.getByRole('button', { name: 'Entendi, vamos jogar' }).click()
     await expect(dialog).toBeHidden()
   })
+
+  test('botão no topo: "?" no celular, nome a partir do tablet, sempre com contorno dourado', async ({
+    browser,
+  }, info) => {
+    test.skip(info.project.name !== 'desktop', 'testa vários aparelhos de uma vez')
+    const cases = [
+      { name: 'celular', options: devices['Pixel 7'], text: '?' },
+      { name: 'tablet', options: devices['iPad Mini'], text: 'Como jogar' },
+      { name: 'desktop', options: { viewport: { width: 1366, height: 768 } }, text: 'Como jogar' },
+    ]
+    for (const { name, options, text } of cases) {
+      const context = await browser.newContext({ ...options, locale: 'pt-BR' })
+      const page = await context.newPage()
+      await page.goto('/?botDelay=0&seed=42&scenario=0&mirror=0')
+      const button = page.locator('.topbar').getByRole('button', { name: 'Como jogar' })
+      await expect(button, name).toBeVisible()
+      const icon = button.locator('.howto-icon')
+      const label = await button.locator('.howto-label').boundingBox()
+      if (text === '?') {
+        await expect(icon, name).toBeVisible()
+        expect(Math.round((await button.boundingBox())?.width ?? 0), name).toBe(44)
+        expect(label?.width ?? 0, name).toBeLessThanOrEqual(1)
+      } else {
+        await expect(icon, name).toBeHidden()
+        expect(label?.width ?? 0, name).toBeGreaterThan(40)
+      }
+      const border = await button.evaluate((el) => getComputedStyle(el).borderTopColor)
+      // dourado do tema escuro ou o dourado mais escuro do tema claro (contraste ≥ 3:1)
+      expect(['rgb(242, 184, 75)', 'rgb(168, 112, 10)'], name).toContain(border)
+      // fica no topo também durante a partida
+      await page.getByRole('button', { name: 'Jogar neste aparelho' }).click()
+      await page.getByRole('button', { name: 'Começar a partida' }).click()
+      await button.click()
+      await expect(page.getByRole('dialog', { name: 'Como jogar' }), name).toBeVisible()
+      await context.close()
+    }
+  })
 })
