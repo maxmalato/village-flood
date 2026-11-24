@@ -224,6 +224,7 @@ describe('partida', () => {
       kind: 'human',
       profile: 'red',
       presence: 'connected',
+      takeoverInMs: null,
     })
   })
 })
@@ -356,5 +357,21 @@ describe('modo mesa', () => {
       overlay: null,
     })
     expect(parseClientMessage('{"type":"table-overlay","overlay":3}')).toBeNull()
+  })
+})
+
+describe('prazo do bot na visão da sala', () => {
+  it('mostra quanto falta para o bot assumir a vez de quem caiu, e some quando ele assume', () => {
+    let room = started()
+    // seat-1 tem a vez e cai: o prazo começa a correr
+    room = okRecord(disconnect(def, room, 'seat-1', 100, timings))
+    const away = viewOf(room, 100).seats[0]
+    expect(away?.presence).toBe('away')
+    expect(away?.takeoverInMs).toBe(timings.takeoverMs)
+    expect(viewOf(room, 100 + timings.takeoverMs - 1).seats[0]?.takeoverInMs).toBe(1)
+    // quem caiu fora da vez não tem prazo: o bot entra no início da vez dela
+    expect(viewOf(room, 100).seats[1]?.takeoverInMs).toBeNull()
+    room = okRecord(tick(def, room, 100 + timings.takeoverMs, timings))
+    expect(viewOf(room, 100 + timings.takeoverMs).seats[0]?.takeoverInMs).toBeNull()
   })
 })
