@@ -34,7 +34,7 @@ export default defineConfig({
       // teste não esperar 20 s pelo bot. O site chega a ele pelo proxy /api do Vite.
       command:
         'pnpm --filter @village-flood/server exec wrangler dev --port 8787 --ip 127.0.0.1 ' +
-        '--var TAKEOVER_MS:1500 --var BOT_STEP_MS:60 --persist-to .wrangler/e2e',
+        '--var TAKEOVER_MS:3000 --var BOT_STEP_MS:60 --persist-to .wrangler/e2e',
       url: 'http://127.0.0.1:8787/api/health',
       reuseExistingServer: !process.env.CI,
       env: { WRANGLER_SEND_METRICS: 'false' },

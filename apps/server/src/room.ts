@@ -259,7 +259,7 @@ export class Room extends DurableObject<Env> {
   }
 
   private view(): VillageRoomView {
-    return viewOf(this.record as Record_)
+    return viewOf(this.record as Record_, Date.now())
   }
 
   private seatOf(ws: WebSocket): SeatId | null {

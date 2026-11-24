@@ -7,6 +7,7 @@
   import { roomLink } from '../lib/online/link.ts'
   import { MAX_SEATS } from '../lib/setup.ts'
   import { initialOf, residentSummary, seatName, tileViews } from '../lib/view.ts'
+  import AwayCountdown from './AwayCountdown.svelte'
   import Board from './Board.svelte'
   import Logo from './Logo.svelte'
   import EndScreen from './EndScreen.svelte'
@@ -143,6 +144,7 @@
         <p class="banner">{errorText(locale, game.error, { n: MAX_PINGS_PER_TURN })}</p>
       {/if}
     </div>
+    <AwayCountdown seats={game.awaySeats} {locale} />
 
     <div class="layout">
       <Board

@@ -3,6 +3,7 @@
 import type { Plan } from '@village-flood/bots'
 import type { Action, GameState, SeatId } from '@village-flood/engine'
 import type { PingKind } from '@village-flood/protocol'
+import type { AwaySummary } from './online/away.ts'
 import type { SeatInfo } from './view.ts'
 
 export interface SeatStats {
@@ -39,6 +40,11 @@ export interface OnlineControls {
   readonly error: string | null
   /** A conexão caiu e está tentando de novo. */
   readonly reconnecting: boolean
+  /** Quem está sem conexão e, se a vez é dele, quando o bot assume (ms, relógio local). */
+  readonly awaySeats: readonly { seat: SeatId; name: string; deadline: number | null }[]
+  /** "Enquanto você estava fora": o que mudou desde a última vez que este aparelho viu. */
+  readonly awaySummary: AwaySummary | null
+  dismissAway(): void
   /** Modo mesa (sala com TV conectada): abrir e fechar a legenda completa na TV. */
   readonly table: { readonly legendOpen: boolean; setLegend(open: boolean): void } | null
   ping(target: string, kind: PingKind): void

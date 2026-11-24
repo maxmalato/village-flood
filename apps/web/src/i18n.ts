@@ -255,6 +255,17 @@ const ptBR = {
   'end.again': 'Jogar de novo',
   'end.home': 'Voltar ao início',
 
+  'away.countdown': '{name} está sem conexão. O bot assume a vez em',
+  'away.waiting': '{name} está sem conexão. Se não voltar até a próxima vez, o bot assume.',
+  'away.title': 'Enquanto você estava fora',
+  'away.turns': 'Do turno {from} ao turno {to}.',
+  'away.levelRose': 'O rio subiu do nível {from} para o {to}.',
+  'away.levelSame': 'O rio continuou no nível {to}.',
+  'away.saved': '{n} morador(es) salvo(s).',
+  'away.stranded': '{n} morador(es) ilhado(s).',
+  'away.nothing': 'Nenhum morador foi salvo ou ilhado.',
+  'away.ok': 'Entendi',
+
   'howto.open': 'Como jogar',
   'howto.title': 'Como jogar',
   'howto.intro': 'Jogo cooperativo: todos jogam juntos contra a enchente.',
@@ -685,6 +696,18 @@ const en: Record<MessageKey, string> = {
   'end.mostCallsText': '{name} made {n} call(s).',
   'end.again': 'Play again',
   'end.home': 'Back to the start',
+
+  'away.countdown': '{name} is disconnected. The bot takes the turn in',
+  'away.waiting':
+    '{name} is disconnected. If they are not back by their next turn, the bot takes over.',
+  'away.title': 'While you were away',
+  'away.turns': 'From turn {from} to turn {to}.',
+  'away.levelRose': 'The river rose from level {from} to {to}.',
+  'away.levelSame': 'The river stayed at level {to}.',
+  'away.saved': '{n} resident(s) saved.',
+  'away.stranded': '{n} resident(s) stranded.',
+  'away.nothing': 'No residents were saved or stranded.',
+  'away.ok': 'Got it',
 
   'howto.open': 'How to play',
   'howto.title': 'How to play',

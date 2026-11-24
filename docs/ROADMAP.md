@@ -87,7 +87,7 @@ Deixa o projeto pronto para receber código.
 - `apps/web`: criar sala, entrar com código ou link (`?sala=`), lobby online (código, link, papéis livres, dificuldade, bots), a mesma tela da partida (interface `GameController`), sugestões com forma própria na quadra, avisos de queda, bot e volta, reconexão automática pelo token guardado no aparelho.
 - E2E com dois navegadores contra o servidor local (`wrangler dev`), axe-core nos temas claro e escuro.
 
-**Ficou para depois:** QR code do convite (precisa de dependência nova, pedir aprovação), resumo "Enquanto você estava fora" e contagem regressiva visível até o bot assumir. Os destaques da tela final contam só os eventos que o aparelho viu (quem entrou de novo no meio da partida vê números menores).
+**Ficou para depois:** QR code do convite (precisa de dependência nova, pedir aprovação), resumo "Enquanto você estava fora" e contagem regressiva visível até o bot assumir. (Situação em 24/11/2026: os três já entraram; o QR code na Etapa 5, a contagem e o resumo na Etapa 7.) Os destaques da tela final contam só os eventos que o aparelho viu (quem entrou de novo no meio da partida vê números menores).
 
 ## Etapa 5 – Mesa e PWA
 
@@ -143,6 +143,7 @@ Deixa o projeto pronto para receber código.
 - Publicação automática: o workflow `Deploy` publica na Cloudflare depois de cada CI verde na `main` (segredos no environment `production` do GitHub).
 - Modo mesa só em tablet e telas maiores (decisão de 23/11/2026).
 - Logo ao lado do nome do jogo e revisão leve de interface (decisão de 24/11/2026).
+- Online: contagem regressiva até o bot assumir a vez de quem caiu (também na TV da mesa) e o cartão "Enquanto você estava fora" para quem volta (24/11/2026).
 - Tela "Como jogar" no topo de todas as telas ("?" no celular, o nome a partir do tablet, sempre com contorno dourado): regras resumidas em seções, com rolagem dentro da janela e os números lidos dos dados do jogo (pedido do dono do projeto em 24/11/2026).
 - Botão "Copiar resumo" na tela final, com a linha pronta para a tabela do roteiro, sem nomes (pedido do dono do projeto em 23/11/2026).
 

@@ -9,6 +9,7 @@ import type { GameController, Hint, OnlineControls, PingView, SeatStats } from '
 import { hintDifficulties } from '../game.svelte.ts'
 import { actionTile, eventMessages, seatColors, seatName, type SeatInfo } from '../view.ts'
 import { cueFor, sound } from '../sound.ts'
+import { awaySummary, loadSnapshot, saveSnapshot, snapshotOf, type AwaySummary } from './away.ts'
 import { RoomConnection } from './connection.svelte.ts'
 
 /** Assentos como a tela os mostra; o bot no lugar de quem caiu conta como bot. */
@@ -41,6 +42,12 @@ export class OnlineGame implements GameController {
   startedAt = $state<number | null>(null)
   /** Último turno visto, para notar uma partida nova (jogar de novo). */
   private lastTurn: number | null = null
+  /** Prazo (relógio deste aparelho) para o bot assumir a vez de quem caiu. */
+  deadlines = $state.raw<Record<SeatId, number>>({})
+  /** O que mudou enquanto este aparelho estava fora da sala. */
+  away = $state.raw<AwaySummary | null>(null)
+  /** Na primeira visão da sala depois de entrar ou voltar, compara com o último retrato. */
+  private checkAway = true
   locale: Locale
 
   constructor(code: string, who: { token: string } | { name: string }, locale: Locale) {
@@ -49,6 +56,10 @@ export class OnlineGame implements GameController {
       onUpdate: (events) => this.record(events),
       onNotice: (notice, room) => this.announce(notice, room),
       onError: (code, detail) => this.fail(code, detail),
+      onRoom: (room) => this.seen(room),
+      onWelcome: () => {
+        this.checkAway = true
+      },
     })
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- getters do objeto abaixo
     const game = this
@@ -70,6 +81,15 @@ export class OnlineGame implements GameController {
       },
       get reconnecting() {
         return game.connection.status === 'reconnecting'
+      },
+      get awaySeats() {
+        return game.awaySeats
+      },
+      get awaySummary() {
+        return game.away
+      },
+      dismissAway: () => {
+        this.away = null
       },
       get table() {
         return game.room?.table?.connected && !game.isTable
@@ -267,7 +287,31 @@ export class OnlineGame implements GameController {
     this.connection.send({ type: 'unping', index })
   }
 
+  /** Quem está sem conexão agora (e o prazo do bot, se a vez é dele). */
+  get awaySeats(): { seat: SeatId; name: string; deadline: number | null }[] {
+    return this.seats
+      .filter((s) => s.presence === 'away')
+      .map((s) => ({ seat: s.seat, name: s.name, deadline: this.deadlines[s.seat] ?? null }))
+  }
+
   // ---------- mensagens do servidor ----------
+
+  /** Cada visão nova da sala: prazos do bot, resumo de quem voltou e o retrato da partida. */
+  private seen(room: VillageRoomView) {
+    const now = Date.now()
+    const deadlines: Record<SeatId, number> = {}
+    for (const s of room.seats) {
+      if (s.takeoverInMs !== null) deadlines[s.seat] = now + s.takeoverInMs
+    }
+    this.deadlines = deadlines
+    const game = room.game
+    if (!game || room.status !== 'playing' || this.isTable) return
+    if (this.checkAway) {
+      this.checkAway = false
+      this.away = awaySummary(loadSnapshot(), room.code, game)
+    }
+    saveSnapshot(snapshotOf(room.code, game))
+  }
 
   private clearError() {
     this.error = null

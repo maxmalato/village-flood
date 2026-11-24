@@ -11,6 +11,10 @@ export interface ConnectionHandlers {
   onUpdate?(events: readonly GameEvent[], room: VillageRoomView, by: SeatId | null): void
   onNotice?(notice: Notice, room: VillageRoomView): void
   onError?(code: string, detail?: string): void
+  /** Toda visão nova da sala (room, update ou notice), depois de guardada. */
+  onRoom?(room: VillageRoomView): void
+  /** Entrou ou voltou à sala (também depois de uma reconexão). */
+  onWelcome?(): void
 }
 
 /** Recusas na entrada que não adianta repetir: a conexão para e a tela mostra o motivo. */
@@ -119,16 +123,20 @@ export class RoomConnection {
           token: message.token,
           ...(message.seat === TABLE_SEAT ? { table: true } : {}),
         })
+        this.handlers.onWelcome?.()
         return
       case 'room':
         this.room = message.room
+        this.handlers.onRoom?.(message.room)
         return
       case 'update':
         this.room = message.room
+        this.handlers.onRoom?.(message.room)
         this.handlers.onUpdate?.(message.events, message.room, message.by)
         return
       case 'notice':
         this.room = message.room
+        this.handlers.onRoom?.(message.room)
         this.handlers.onNotice?.(message.notice, message.room)
         return
       case 'error':

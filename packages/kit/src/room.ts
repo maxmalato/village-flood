@@ -90,6 +90,11 @@ export interface RoomView<S, C, P> {
     readonly kind: 'human' | 'bot'
     readonly profile: P
     readonly presence: Presence
+    /**
+     * Quanto falta (ms) para o bot assumir a vez de quem caiu, contado no momento da mensagem;
+     * null se não há prazo correndo. Relativo, para não depender do relógio de cada aparelho.
+     */
+    readonly takeoverInMs: number | null
   }[]
   readonly config: C
   readonly game: S | null
@@ -125,17 +130,21 @@ export function createRoom<S, C, P>(
   }
 }
 
-export function viewOf<S, C, P>(record: RoomRecord<S, C, P>): RoomView<S, C, P> {
+export function viewOf<S, C, P>(
+  record: RoomRecord<S, C, P>,
+  now = record.lastActivity,
+): RoomView<S, C, P> {
   return {
     code: record.code,
     status: record.status,
     host: record.host,
-    seats: record.seats.map(({ seat, name, kind, profile, presence }) => ({
+    seats: record.seats.map(({ seat, name, kind, profile, presence, takeoverAt }) => ({
       seat,
       name,
       kind,
       profile,
       presence,
+      takeoverInMs: takeoverAt === null ? null : Math.max(0, takeoverAt - now),
     })),
     config: record.config,
     game: record.game,

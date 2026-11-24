@@ -110,6 +110,11 @@ test('lobby, partida, sugestão, queda com bot e volta', async ({ browser }) => 
   // Bruno cai na própria vez: aviso, e depois do prazo o bot joga até a vez voltar à Ana
   await bruno.page.close()
   await expect(ana.page.getByText('Bruno perdeu a conexão.', { exact: false })).toBeVisible()
+  // contagem regressiva até o bot assumir a vez de quem caiu
+  await expect(
+    ana.page.getByText('Bruno está sem conexão. O bot assume a vez em', { exact: false }),
+  ).toBeVisible()
+  await expect(ana.page.locator('.clock')).toHaveText(/^0:0[0-3]$/)
   await expect(ana.page.getByText('Um bot está jogando no lugar de Bruno.')).toBeVisible()
   await expect(turnLine(ana.page)).toHaveText(/Sua vez, Ana/, { timeout: 30_000 })
 
@@ -119,6 +124,11 @@ test('lobby, partida, sugestão, queda com bot e volta', async ({ browser }) => 
   await expect(
     back.getByText('Você voltou. Assume no início do seu próximo turno', { exact: false }),
   ).toBeVisible()
+  // resumo do que aconteceu enquanto o Bruno estava fora
+  const away = back.getByRole('status').filter({ hasText: 'Enquanto você estava fora' })
+  await expect(away).toContainText('Do turno 2 ao turno 3.')
+  await away.getByRole('button', { name: 'Entendi' }).click()
+  await expect(away).toBeHidden()
   await expect(
     ana.page.getByText('Bruno voltou e assume no início do próximo turno.'),
   ).toBeVisible()
