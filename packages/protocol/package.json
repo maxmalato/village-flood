@@ -13,6 +13,6 @@
   "dependencies": {
     "@village-flood/engine": "workspace:*",
     "@village-flood/kit": "workspace:*",
-    "zod": "^4.6.6"
+    "zod": "^4.6.7"
   }
 }
